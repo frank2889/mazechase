@@ -5,7 +5,7 @@ import {LobbyService} from "./generated/lobby/v1/lobby_pb.ts";
 
 export function getBaseUrl() {
     if (import.meta.env.DEV) {
-        const devUrl = "http://localhost:11300"
+        const devUrl = "http://localhost:8080"
         console.log(`Application is running in Debug mode using ${devUrl}`);
         return devUrl
     } else {
@@ -20,6 +20,7 @@ export function getBaseUrl() {
 
 const transport = createConnectTransport({
     baseUrl: getBaseUrl(),
+    credentials: "include", // Include cookies with all requests
 });
 
 export const authClient = createClient(AuthService, transport);

@@ -46,11 +46,15 @@ func setupServer(baseUrl, frontendPath string) error {
 	}(rootCloser)
 
 	cor := cors.New(cors.Options{
-		AllowedOrigins:      []string{"*"},
+		AllowOriginFunc: func(origin string) bool {
+			// Allow all origins for now - the cookie is set with same-site lax so it's safe
+			return true
+		},
+		AllowCredentials:    true,
 		AllowPrivateNetwork: true,
 		AllowedMethods:      connectcors.AllowedMethods(),
-		AllowedHeaders:      append(connectcors.AllowedHeaders(), user.AuthHeaderKey),
-		ExposedHeaders:      connectcors.ExposedHeaders(),
+		AllowedHeaders:      append(connectcors.AllowedHeaders(), user.AuthHeaderKey, "Cookie"),
+		ExposedHeaders:      append(connectcors.ExposedHeaders(), "Set-Cookie"),
 	})
 
 	log.Info().Str("port", baseUrl).Msg("listening on:")

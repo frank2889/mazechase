@@ -1,0 +1,41 @@
+name: Release
+on:
+  push:
+    branches:
+      - release
+
+jobs:
+  tag-release:
+    name: tag-release
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write # to be able to publish a GitHub release
+      issues: write # to be able to comment on released issues
+      pull-requests: write # to be able to comment on released pull requests
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: "lts/*"
+      - name: install plugins
+        run: npm install @semantic-release/git @semantic-release/changelog -D
+
+      - name: Release
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: npx semantic-release
+
+      # workflows cant start other workflows (thanks GitHub)
+      # https://www.michaelpollmeier.com/2025/5/github-actions-trigger-one-workflow-from-another
+      # https://github.com/orgs/community/discussions/27028
+      - name: Trigger build workflow
+        run: |
+          curl -X POST \
+            -H "Accept: application/vnd.github+json" \
+            -H "Authorization: Bearer ${{ secrets.RELEASE_TOKEN }}" \
+            https://api.github.com/repos/${{ github.repository }}/actions/workflows/docker.yml/dispatches \
+            -d '{"ref": "${{ github.ref_name }}"}'

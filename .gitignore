@@ -1,0 +1,15 @@
+/.test_assets
+/.idea
+/bin
+.env
+mazechase.db
+*.db
+spec/generated
+/**/web*
+appdata
+/core/cmd/server/dist/
+node_modules/
+dist/
+coverage/
+.DS_Store
+*.log

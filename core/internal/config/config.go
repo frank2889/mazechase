@@ -64,17 +64,27 @@ func loadLobbyLimit() int {
 }
 
 func loadServerPort() int {
-	const defaultPort = 11300
-	envVal, ok := os.LookupEnv("SERVER_PORT")
-	if !ok {
-		return defaultPort
+	const defaultPort = 8080 // Default for cloud platforms like DigitalOcean
+	
+	// Check PORT first (standard for cloud platforms)
+	envVal, ok := os.LookupEnv("PORT")
+	if ok {
+		port, err := strconv.Atoi(envVal)
+		if err == nil {
+			return port
+		}
 	}
-
-	port, err := strconv.Atoi(envVal)
-	if err != nil {
-		return defaultPort
+	
+	// Fallback to SERVER_PORT
+	envVal, ok = os.LookupEnv("SERVER_PORT")
+	if ok {
+		port, err := strconv.Atoi(envVal)
+		if err == nil {
+			return port
+		}
 	}
-	return port
+	
+	return defaultPort
 }
 
 func getBaseDir() string {

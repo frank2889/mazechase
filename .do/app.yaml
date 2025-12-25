@@ -12,14 +12,14 @@ services:
       branch: main
       deploy_on_push: true
     dockerfile_path: Dockerfile
-    http_port: 11300
+    http_port: 8080
     instance_count: 1
     instance_size_slug: basic-xxs
     routes:
       - path: /
     envs:
       - key: PORT
-        value: "11300"
+        value: "8080"
       - key: DB_PATH
         value: "/app/appdata/mazechase.db"
       - key: LOG_LEVEL

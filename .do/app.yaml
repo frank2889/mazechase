@@ -3,22 +3,20 @@ name: mazechase
 region: ams
 
 # DigitalOcean App Platform configuration for MazeChase
+# Deploy: doctl apps create --spec .do/app.yaml
 
 services:
-  # Go Backend
-  - name: api
+  - name: mazechase
     github:
-      repo: YOUR_GITHUB_USERNAME/mazechase
+      repo: frank2889/mazechase
       branch: main
       deploy_on_push: true
-    source_dir: /core
     dockerfile_path: Dockerfile
     http_port: 11300
     instance_count: 1
-    instance_size_slug: professional-xs
+    instance_size_slug: basic-xxs
     routes:
-      - path: /api
-      - path: /ws
+      - path: /
     envs:
       - key: PORT
         value: "11300"
@@ -27,23 +25,4 @@ services:
       - key: LOG_LEVEL
         value: "info"
       - key: LOBBY_LIMIT
-        value: "10"
-
-  # Astro Frontend (Static)
-  - name: web
-    github:
-      repo: YOUR_GITHUB_USERNAME/mazechase
-      branch: main
-      deploy_on_push: true
-    source_dir: /ui-web
-    build_command: npm install && npm run build
-    output_dir: dist
-    routes:
-      - path: /
-
-# Database (optional - SQLite is embedded)
-# Uncomment for PostgreSQL:
-# databases:
-#   - name: mazechase-db
-#     engine: PG
-#     version: "15"
+        value: "50"

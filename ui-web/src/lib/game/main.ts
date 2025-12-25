@@ -1,8 +1,22 @@
 import {connectToWebSocket, setGame, waitForGameState} from "./connection.ts";
 import {GameScene} from "./game.ts";
 import {showError} from "./utils.ts";
+import {guestLogin} from "../auth.ts";
+
+// Auto login as guest before starting game
+async function ensureLoggedIn() {
+    try {
+        await guestLogin();
+    } catch (e) {
+        // Already logged in, continue
+        console.log("Already logged in or guest login failed:", e);
+    }
+}
 
 export async function initGame() {
+    // Ensure user is logged in (as guest if needed)
+    await ensureLoggedIn();
+    
     connectToWebSocket()
     console.log("Waiting for game state")
     await waitForGameState()

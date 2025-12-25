@@ -49,7 +49,7 @@ func getConfigDir(baseDir string) string {
 }
 
 func loadLobbyLimit() int {
-	const defaultLobbyLimit = 3
+	const defaultLobbyLimit = 100 // Increased for more lobbies
 
 	limit, ok := os.LookupEnv("LOBBY_LIMIT")
 	if !ok {

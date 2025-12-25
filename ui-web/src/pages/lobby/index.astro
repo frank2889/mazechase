@@ -3,6 +3,21 @@ import Layout from "../../layouts/Layout.astro";
 import LobbyComponent from "../../components/Lobby";
 ---
 
-<Layout title="Lobby">
+<Layout title="MazeChase - Lobby">
     <LobbyComponent client:load/>
 </Layout>
+
+<script>
+    import { guestLogin } from '../../lib/auth';
+    
+    // Auto login as guest when visiting lobby
+    async function autoGuestLogin() {
+        try {
+            await guestLogin();
+        } catch (e) {
+            console.log('Already logged in:', e);
+        }
+    }
+    
+    autoGuestLogin();
+</script>

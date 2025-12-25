@@ -2,11 +2,11 @@ FROM node:24-alpine AS web
 
 WORKDIR /web/
 
-COPY ui-web/package.json ui-web/package-lock.json /
+COPY ui-web/package.json ui-web/package-lock.json ./
 
-RUN npm i
+RUN npm ci
 
-COPY ui-web .
+COPY ui-web/ .
 
 RUN npm run build
 
@@ -21,21 +21,30 @@ RUN apk update &&  \
 WORKDIR /app
 
 #  deps caching
-COPY core/go.mod core/go.sum /
+COPY core/go.mod core/go.sum ./
 RUN go mod download
 
 COPY core/ .
 
 RUN go build -ldflags "-s -w"  \
-      -o multipacman  \
+      -o mazechase  \
     ./cmd/server
 
 FROM alpine:latest
 
+# Install ca-certificates for HTTPS
+RUN apk add --no-cache ca-certificates
+
 WORKDIR /app/
+
+# Create data directory for SQLite database
+RUN mkdir -p /app/appdata
 
 COPY --from=web /web/dist ./dist
 
-COPY --from=go_builder /app/multipacman .
+COPY --from=go_builder /app/mazechase .
 
-ENTRYPOINT ["./multipacman"]
+# Default port
+EXPOSE 11300
+
+ENTRYPOINT ["./mazechase"]

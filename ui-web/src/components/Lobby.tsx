@@ -6,7 +6,7 @@ import Snackbar, {type SnackbarMessage} from "./Snackbar.tsx";
 
 const LobbyComponent: Component = () => {
     const [currentUser, setCurrentUser] = createSignal<string | null>(null);
-    const welcomeMessage = "Let's play a game ";
+    const welcomeMessage = "Welkom ";
 
     const [lobbies, setLobbies] = createSignal<Lobby[]>([]);
     const [loading, setLoading] = createSignal(false);
@@ -275,6 +275,7 @@ interface LobbyCardProps {
 
 const LobbyCard: Component<LobbyCardProps> = (props) => {
     let cardRef: HTMLDivElement | undefined;
+    const [copied, setCopied] = createSignal(false);
 
     const handleLobbyDelete = async (): Promise<void> => {
         const lobby = props.lobby;
@@ -297,54 +298,78 @@ const LobbyCard: Component<LobbyCardProps> = (props) => {
         handleLobbyDelete();
     };
 
+    const getShareLink = () => {
+        const baseUrl = window.location.origin;
+        return `${baseUrl}/game?lobby=${props.lobby.ID}`;
+    };
+
+    const copyShareLink = async () => {
+        try {
+            await navigator.clipboard.writeText(getShareLink());
+            setCopied(true);
+            props.showSnackbar?.('Link gekopieerd! Deel met vrienden 🎮', 'success');
+            setTimeout(() => setCopied(false), 2000);
+        } catch (err) {
+            // Fallback for Safari
+            const textArea = document.createElement('textarea');
+            textArea.value = getShareLink();
+            document.body.appendChild(textArea);
+            textArea.select();
+            document.execCommand('copy');
+            document.body.removeChild(textArea);
+            setCopied(true);
+            props.showSnackbar?.('Link gekopieerd! Deel met vrienden 🎮', 'success');
+            setTimeout(() => setCopied(false), 2000);
+        }
+    };
+
     return (
         <div
             ref={cardRef}
-            class="lobby-card w-60 h-48 p-4 rounded-lg shadow-lg bg-white/10 backdrop-blur-md border border-white/20"
+            class="lobby-card w-60 h-56 p-4 rounded-lg shadow-lg bg-white/10 backdrop-blur-md border border-white/20"
         >
             {/* Lobby Name */}
             <h3 class="text-white text-lg font-semibold mb-2">
                 {props.lobby.lobbyName}
             </h3>
 
+            {/* Lobby Code for sharing */}
+            <div class="bg-gray-800 rounded px-2 py-1 mb-2 text-center">
+                <span class="text-yellow-400 font-mono text-sm">Code: #{props.lobby.ID}</span>
+            </div>
+
             {/* Lobby Details */}
-            <div class="lobby-details text-white/90 text-sm mb-4 space-y-1 flex-1">
+            <div class="lobby-details text-white/90 text-sm mb-3 space-y-1 flex-1">
                 <div class="flex items-center">
-                    <span class="text-white/70 font-medium">Creator:</span>
-                    <span class="ml-2">{props.lobby.ownerName}</span>
-                </div>
-
-                <div class="flex items-center">
-                    <span class="text-white/70 font-medium">Players:</span>
+                    <span class="text-white/70 font-medium">Spelers:</span>
                     <span class="ml-2">{props.lobby.playerCount.toString()}/4</span>
-                </div>
-
-                <div class="flex items-center">
-                    <span class="text-white/70 font-medium">Created:</span>
-                    <span
-                        class="ml-2 cursor-help border-b border-dotted border-white/50"
-                        title={new Date(props.lobby.createdAt).toLocaleString()}
-                    >
-                        {getRelativeTime(props.lobby.createdAt)}
-                    </span>
                 </div>
             </div>
 
             {/* Action Buttons */}
-            <div class="flex justify-between items-center">
-                <button
-                    onClick={props.onJoin}
-                    class="join-btn bg-blue-500/80 hover:bg-blue-500 text-white px-4 py-2 rounded transition-colors backdrop-blur-sm"
-                >
-                    Join
-                </button>
+            <div class="flex flex-col gap-2">
+                <div class="flex justify-between items-center">
+                    <button
+                        onClick={props.onJoin}
+                        class="join-btn bg-green-500/80 hover:bg-green-500 text-white px-4 py-2 rounded transition-colors backdrop-blur-sm font-bold"
+                    >
+                        ▶ Spelen
+                    </button>
+
+                    <button
+                        onClick={copyShareLink}
+                        class={`px-3 py-2 rounded transition-colors backdrop-blur-sm ${copied() ? 'bg-green-600 text-white' : 'bg-blue-500/80 hover:bg-blue-500 text-white'}`}
+                    >
+                        {copied() ? '✓ Gekopieerd!' : '🔗 Deel'}
+                    </button>
+                </div>
 
                 <Show when={props.lobby.ownerName === props.currentUser}>
                     <button
                         onClick={handleDeleteClick}
-                        class="delete-btn bg-red-500/80 hover:bg-red-500 text-white px-4 py-2 rounded transition-colors backdrop-blur-sm"
+                        class="delete-btn bg-red-500/60 hover:bg-red-500 text-white px-4 py-1 rounded transition-colors backdrop-blur-sm text-sm"
                     >
-                        Delete
+                        Verwijder
                     </button>
                 </Show>
             </div>

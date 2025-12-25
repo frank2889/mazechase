@@ -3,13 +3,13 @@ package pkg
 import (
 	"context"
 	"encoding/json"
-	"fmt"
 	"net/http"
 	"runtime"
 	"sync"
 	"sync/atomic"
 	"time"
 
+	"github.com/rs/zerolog"
 	"github.com/rs/zerolog/log"
 )
 
@@ -279,6 +279,3 @@ func (sl *StructuredLogger) GameEvent(eventType string, data map[string]interfac
 	
 	event.Msg("game_event")
 }
-
-// zerolog import alias
-type zerolog = struct{}

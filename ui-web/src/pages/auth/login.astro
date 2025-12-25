@@ -2,18 +2,19 @@
 import Layout from "../../layouts/Layout.astro";
 ---
 
-<Layout title="Login">
+<Layout title="Login - MazeChase">
     <div class="min-h-screen flex items-center justify-center p-4">
         <div class="flex flex-col items-center w-full max-w-md">
-            <h1 class="text-gray-300 text-5xl font-bold mb-8 text-center tracking-wider drop-shadow-lg">
-                MULTI-PACMAN
+            <h1 class="text-yellow-400 text-5xl font-bold mb-2 text-center tracking-wider drop-shadow-lg">
+                🎮 MazeChase
             </h1>
+            <p class="text-gray-400 mb-8">Log in om te spelen</p>
 
             <div class="bg-gray-900 bg-opacity-95 border-4 border-gray-400 rounded-lg p-8 w-full shadow-2xl backdrop-blur-sm">
                 <form id="login-form" class="space-y-6">
                     <div class="space-y-2">
                         <label class="block text-gray-300 text-xl font-bold text-center" for="username">
-                            Username
+                            Gebruikersnaam
                         </label>
                         <input
                                 class="w-full px-4 py-3 text-lg font-semibold text-center border-2 border-gray-400 rounded bg-gray-400 text-black focus:outline-none focus:border-gray-500 focus:ring-2 focus:ring-gray-500"
@@ -27,7 +28,7 @@ import Layout from "../../layouts/Layout.astro";
 
                     <div class="space-y-2">
                         <label class="block text-gray-300 text-xl font-bold text-center" for="password">
-                            Password
+                            Wachtwoord
                         </label>
                         <input
                                 class="w-full px-4 py-3 text-lg font-semibold text-center border-2 border-gray-400 rounded bg-gray-400 text-black focus:outline-none focus:border-gray-500 focus:ring-2 focus:ring-gray-500"
@@ -43,9 +44,9 @@ import Layout from "../../layouts/Layout.astro";
                         <button
                                 type="submit"
                                 id="login-btn"
-                                class="w-full bg-black text-gray-300 border-4 border-gray-400 text-2xl font-bold py-4 px-8 rounded hover:bg-gray-800 hover:text-gray-100 hover:border-gray-300 transition-all duration-300 hover:scale-105 hover:shadow-lg disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100"
+                                class="w-full bg-green-600 text-white border-4 border-green-400 text-2xl font-bold py-4 px-8 rounded hover:bg-green-500 transition-all duration-300 hover:scale-105 hover:shadow-lg disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100"
                         >
-                            <span id="login-text">LOGIN</span>
+                            <span id="login-text">INLOGGEN</span>
                             <span id="login-spinner" class="hidden">
                                 <svg class="animate-spin h-6 w-6 mx-auto" fill="none" viewBox="0 0 24 24">
                                     <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor"
@@ -58,34 +59,20 @@ import Layout from "../../layouts/Layout.astro";
                     </div>
                 </form>
 
-                <div class="mt-8 text-center">
+                <div class="mt-6 text-center">
+                    <p class="text-gray-400 mb-3">Nog geen account?</p>
                     <a href="/auth/register">
                         <button
                                 type="button"
-                                class="bg-black text-gray-300 border-4 border-gray-400 text-2xl font-bold py-4 px-8 rounded hover:bg-gray-800 hover:text-gray-100 hover:border-gray-300 transition-all duration-300 hover:scale-105 hover:shadow-lg"
+                                class="w-full bg-blue-600 text-white border-4 border-blue-400 text-xl font-bold py-3 px-8 rounded hover:bg-blue-500 transition-all duration-300 hover:scale-105"
                         >
-                            REGISTER
+                            REGISTREREN
                         </button>
                     </a>
                 </div>
 
-                <div class="mt-8 text-center">
-                    <button
-                            type="button"
-                            id="guest-btn"
-                            class="bg-black text-gray-300 border-4 border-gray-400 text-2xl font-bold py-4 px-8 rounded hover:bg-gray-800 hover:text-gray-100 hover:border-gray-300 transition-all duration-300 hover:scale-105 hover:shadow-lg disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100"
-                            onclick="onGuestLogin()"
-                    >
-                        <span id="guest-text">GUEST LOGIN</span>
-                        <span id="guest-spinner" class="hidden">
-                            <svg class="animate-spin h-6 w-6 mx-auto" fill="none" viewBox="0 0 24 24">
-                                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor"
-                                        stroke-width="4"></circle>
-                                <path class="opacity-75" fill="currentColor"
-                                      d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                            </svg>
-                        </span>
-                    </button>
+                <div class="mt-4 text-center">
+                    <a href="/" class="text-gray-500 hover:text-gray-300 text-sm">← Terug naar home</a>
                 </div>
             </div>
         </div>
@@ -93,10 +80,9 @@ import Layout from "../../layouts/Layout.astro";
 </Layout>
 
 <script>
-    import {guestLogin, login} from "../../lib/auth";
+    import {login} from "../../lib/auth";
 
     let isLoginLoading = false;
-    let isGuestLoading = false;
 
     const setLoginLoading = (loading: boolean) => {
         isLoginLoading = loading;
@@ -121,25 +107,6 @@ import Layout from "../../layouts/Layout.astro";
         }
     };
 
-    const setGuestLoading = (loading: boolean) => {
-        isGuestLoading = loading;
-        const btn = document.getElementById('guest-btn') as HTMLButtonElement;
-        const text = document.getElementById('guest-text');
-        const spinner = document.getElementById('guest-spinner');
-
-        if (btn && text && spinner) {
-            btn.disabled = loading;
-
-            if (loading) {
-                text.classList.add('hidden');
-                spinner.classList.remove('hidden');
-            } else {
-                text.classList.remove('hidden');
-                spinner.classList.add('hidden');
-            }
-        }
-    };
-
     const onLogin = async (e: Event) => {
         e.preventDefault();
 
@@ -150,7 +117,8 @@ import Layout from "../../layouts/Layout.astro";
         const passwordInput = document.getElementById('password') as HTMLInputElement;
 
         if (!usernameInput || !passwordInput) {
-            alert('Form elements not found');
+            alert('Formulier niet gevonden');
+            setLoginLoading(false);
             return;
         }
 
@@ -158,42 +126,23 @@ import Layout from "../../layouts/Layout.astro";
         const password = passwordInput.value.trim();
 
         if (!username || !password) {
-            alert('Please enter both username and password');
+            alert('Vul gebruikersnaam en wachtwoord in');
+            setLoginLoading(false);
             return;
         }
 
         const {err} = await login(username, password);
 
         if (err) {
-            alert('Login failed. Please try again.');
+            alert('Login mislukt: ' + err);
+            setLoginLoading(false);
             return;
         } else {
             window.location.assign("/lobby");
         }
-
-        setLoginLoading(false);
     };
 
-    async function onGuestLogin() {
-        if (isGuestLoading) return;
-        setGuestLoading(true);
-
-        const {val, err} = await guestLogin();
-
-        console.log("guest login err: ", err, "val", val);
-        if (err) {
-            alert('Guest Login failed. Please try again.');
-        } else {
-            window.location.assign("/lobby");
-        }
-
-        setGuestLoading(false);
-    }
-
-    (window as any).onGuestLogin = onGuestLogin;
-
     document.addEventListener('DOMContentLoaded', () => {
-
         const form = document.getElementById('login-form');
         if (form) {
             form.addEventListener('submit', onLogin);

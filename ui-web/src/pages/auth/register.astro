@@ -2,92 +2,102 @@
 import Layout from "../../layouts/Layout.astro";
 ---
 
-<Layout title="Register">
+<Layout title="Account Aanmaken - MazeChase">
     <div class="min-h-screen flex items-center justify-center p-4">
         <div class="flex flex-col items-center w-full max-w-md">
-            <!-- Title outside the box -->
-            <h1 class="text-gray-300 text-5xl font-bold mb-8 text-center tracking-wider drop-shadow-lg">
-                Register
-            </h1>
+            <!-- Logo en titel -->
+            <div class="text-center mb-8">
+                <h1 class="text-5xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-green-400 to-blue-500 mb-2">
+                    🎮 MazeChase
+                </h1>
+                <p class="text-gray-400 text-lg">Maak je account aan</p>
+            </div>
 
-            <!-- Opaque box containing form -->
-            <div class="bg-gray-900 bg-opacity-95 border-4 border-gray-400 rounded-lg p-8 w-full shadow-2xl backdrop-blur-sm">
-                <form id="register-form" class="space-y-6">
+            <!-- Registratie box -->
+            <div class="bg-gray-900/95 border-2 border-green-500/50 rounded-2xl p-8 w-full shadow-2xl shadow-green-500/10 backdrop-blur-sm">
+                <form id="register-form" class="space-y-5">
                     <div class="space-y-2">
-                        <label class="block text-gray-300 text-xl font-bold text-center" for="username">
-                            Username
+                        <label class="block text-gray-300 text-lg font-semibold" for="username">
+                            👤 Gebruikersnaam
                         </label>
                         <input
-                                class="w-full px-4 py-3 text-lg font-semibold text-center border-2 border-gray-400 rounded bg-gray-400 text-black focus:outline-none focus:border-gray-500 focus:ring-2 focus:ring-gray-500"
+                                class="w-full px-4 py-3 text-lg font-semibold border-2 border-gray-600 rounded-lg bg-gray-800 text-white placeholder-gray-500 focus:outline-none focus:border-green-500 focus:ring-2 focus:ring-green-500/50 transition-all"
                                 type="text"
                                 id="username"
                                 name="username"
+                                placeholder="Kies een naam"
                                 maxlength="50"
                                 required
                         >
                     </div>
 
                     <div class="space-y-2">
-                        <label class="block text-gray-300 text-xl font-bold text-center" for="password">
-                            Password
+                        <label class="block text-gray-300 text-lg font-semibold" for="password">
+                            🔒 Wachtwoord
                         </label>
                         <input
-                                class="w-full px-4 py-3 text-lg font-semibold text-center border-2 border-gray-400 rounded bg-gray-400 text-black focus:outline-none focus:border-gray-500 focus:ring-2 focus:ring-gray-500"
+                                class="w-full px-4 py-3 text-lg font-semibold border-2 border-gray-600 rounded-lg bg-gray-800 text-white placeholder-gray-500 focus:outline-none focus:border-green-500 focus:ring-2 focus:ring-green-500/50 transition-all"
                                 type="password"
                                 id="password"
                                 name="password"
+                                placeholder="Minimaal 4 tekens"
                                 maxlength="50"
                                 required
                         >
                     </div>
 
                     <div class="space-y-2">
-                        <label class="block text-gray-300 text-xl font-bold text-center" for="password-verify">
-                            Verify Password
+                        <label class="block text-gray-300 text-lg font-semibold" for="password-verify">
+                            🔒 Bevestig Wachtwoord
                         </label>
                         <input
-                                class="w-full px-4 py-3 text-lg font-semibold text-center border-2 border-gray-400 rounded bg-gray-400 text-black focus:outline-none focus:border-gray-500 focus:ring-2 focus:ring-gray-500"
+                                class="w-full px-4 py-3 text-lg font-semibold border-2 border-gray-600 rounded-lg bg-gray-800 text-white placeholder-gray-500 focus:outline-none focus:border-green-500 focus:ring-2 focus:ring-green-500/50 transition-all"
                                 type="password"
                                 id="password-verify"
                                 name="password-verify"
+                                placeholder="Herhaal wachtwoord"
                                 maxlength="50"
                                 required
                         >
                     </div>
 
-                    <div class="pt-4">
+                    <div class="pt-2">
                         <button
                                 type="submit"
                                 id="register-btn"
-                                class="w-full bg-black text-gray-300 border-4 border-gray-400 text-2xl font-bold py-4 px-8 rounded hover:bg-gray-800 hover:text-gray-100 hover:border-gray-300 transition-all duration-300 hover:scale-105 hover:shadow-lg disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100"
+                                class="w-full bg-gradient-to-r from-green-600 to-green-500 text-white text-xl font-bold py-4 px-8 rounded-xl hover:from-green-500 hover:to-green-400 transition-all duration-300 hover:scale-[1.02] hover:shadow-lg hover:shadow-green-500/30 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100 flex items-center justify-center"
                         >
-                            <span id="register-text">REGISTER</span>
+                            <span id="register-text">✨ ACCOUNT AANMAKEN</span>
                             <div id="register-spinner" class="hidden flex items-center justify-center">
-                                <svg class="animate-spin -ml-1 mr-3 h-6 w-6 text-gray-300"
+                                <svg class="animate-spin h-6 w-6 text-white"
                                      xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
                                     <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor"
                                             stroke-width="4"></circle>
                                     <path class="opacity-75" fill="currentColor"
                                           d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
                                 </svg>
-                                Registering...
+                                <span class="ml-2">Bezig...</span>
                             </div>
                         </button>
                     </div>
                 </form>
 
-                <div class="mt-8 text-center">
-                    <a href="/auth/login">
+                <div class="mt-6 pt-6 border-t border-gray-700">
+                    <p class="text-center text-gray-400 mb-4">Al een account?</p>
+                    <a href="/auth/login" class="block">
                         <button
                                 type="button"
-                                class="bg-black text-gray-300 border-4 border-gray-400 text-2xl font-bold py-4 px-8 rounded hover:bg-gray-800 hover:text-gray-100 hover:border-gray-300 transition-all duration-300 hover:scale-105 hover:shadow-lg"
+                                class="w-full bg-gray-800 text-blue-400 border-2 border-blue-500/50 text-lg font-bold py-3 px-6 rounded-xl hover:bg-blue-500/20 hover:border-blue-400 transition-all duration-300"
                         >
-                            LOGIN
+                            🔑 INLOGGEN
                         </button>
                     </a>
                 </div>
-
             </div>
+            
+            <a href="/" class="mt-6 text-gray-500 hover:text-gray-300 transition-colors">
+                ← Terug naar home
+            </a>
         </div>
     </div>
 </Layout>
@@ -133,7 +143,7 @@ import Layout from "../../layouts/Layout.astro";
         const passwordVerifyInput = document.getElementById('password-verify') as HTMLInputElement;
 
         if (!usernameInput || !passwordInput || !passwordVerifyInput) {
-            alert('Form elements not found');
+            alert('Formulier niet gevonden');
             setRegisterLoading(false);
             return;
         }
@@ -143,25 +153,41 @@ import Layout from "../../layouts/Layout.astro";
         const passwordVerify = passwordVerifyInput.value.trim();
 
         if (!username || !password || !passwordVerify) {
-            alert('Please enter all required fields');
+            alert('Vul alle velden in');
+            setRegisterLoading(false);
+            return;
+        }
+
+        if (username.length < 2) {
+            alert('Gebruikersnaam moet minimaal 2 tekens zijn');
+            setRegisterLoading(false);
+            return;
+        }
+
+        if (password.length < 4) {
+            alert('Wachtwoord moet minimaal 4 tekens zijn');
             setRegisterLoading(false);
             return;
         }
 
         if (password !== passwordVerify) {
-            alert('Passwords do not match');
+            alert('Wachtwoorden komen niet overeen');
             setRegisterLoading(false);
             return;
         }
 
         const {err} = await register(username, password, passwordVerify);
         if (err) {
-            alert('Registration failed. Please try again.');
+            if (err.includes('exists') || err.includes('taken')) {
+                alert('Deze gebruikersnaam is al in gebruik');
+            } else {
+                alert('Registratie mislukt: ' + err);
+            }
+            setRegisterLoading(false);
         } else {
+            alert('Account aangemaakt! Je kunt nu inloggen.');
             window.location.assign("/auth/login");
         }
-
-        setRegisterLoading(false);
     };
 
     document.addEventListener('DOMContentLoaded', () => {

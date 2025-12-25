@@ -8,13 +8,12 @@ import (
 
 type SpriteType string
 
-// Character types for 4-player MazeChase
-// Each player gets their own unique character
+// Character types - keeping original names for compatibility
 const (
-	Player1 SpriteType = "player1" // Blue Runner
-	Player2 SpriteType = "player2" // Red Runner
-	Player3 SpriteType = "player3" // Green Runner
-	Player4 SpriteType = "player4" // Orange Runner
+	Ghost1 SpriteType = "gh0"
+	Ghost2 SpriteType = "gh1"
+	Ghost3 SpriteType = "gh2"
+	Pacman SpriteType = "pacman"
 )
 
 func NewPlayerEntity(userId uint, username string) *PlayerEntity {

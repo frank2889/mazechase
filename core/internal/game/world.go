@@ -25,7 +25,7 @@ func NewWorldState() *World {
 	return &World{
 		MatchStarted:        false,
 		IsPoweredUp:         false,
-		CharactersList:      []SpriteType{Player1, Player2, Player3, Player4},
+		CharactersList:      []SpriteType{Ghost1, Ghost2, Ghost3, Pacman},
 		ConnectedPlayers:    &pkg.Map[string, *melody.Session]{},
 		PelletsCoordEaten:   NewCordList(),
 		PowerUpsCoordsEaten: NewCordList(),

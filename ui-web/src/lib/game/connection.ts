@@ -168,8 +168,7 @@ function handlePellet(json: any) {
     console.log(gameScene?.pelletLayer.tilesDrawn)
 
     if (gameScene?.pelletLayer.tilesDrawn === 0) {
-        gameScene!.gameOver = true
-        gameScene!.gameOverText.setText("Pacman wins")
+        gameScene.showGameOver('Pacman', 'Alle pellets verzameld!');
     }
 }
 
@@ -203,12 +202,22 @@ function handlePlayerKilled(json: any) {
     console.log(`spriteId ${spriteId} killed`)
     gameScene?.allSprites[spriteId]!.playerInfo!.destroy()
     gameScene?.allSprites[spriteId]!.userNameText!.setText("") // username empty
+    
+    // Check if current player was killed
+    const currentSpriteId = getSpriteID();
+    if (spriteId === currentSpriteId && gameScene) {
+        gameScene.spectatingText.visible = true;
+    }
 }
 
 
 function handleGameOver(msg: any) {
     console.log(`game over: ${msg.reason}`)
-    gameScene!.gameOver = true
+    if (gameScene) {
+        const winner = msg.winner || 'Onbekend';
+        const reason = msg.reason || 'Game beëindigd';
+        gameScene.showGameOver(winner, reason);
+    }
 }
 
 

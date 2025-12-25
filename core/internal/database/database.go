@@ -22,7 +22,7 @@ func InitDB() *gorm.DB {
 	}
 
 	// Migrate the schema
-	err = db.AutoMigrate(user.User{}, lobby.Lobby{})
+	err = db.AutoMigrate(user.User{}, user.Score{}, lobby.Lobby{})
 	if err != nil {
 		log.Fatal().Err(err).Msgf("failed to migrate database")
 	}

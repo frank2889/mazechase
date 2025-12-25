@@ -3,6 +3,7 @@ import type {Lobby} from "../lib/generated/lobby/v1/lobby_pb.ts";
 import {addLobby, deleteLobby, getRelativeTime, listLobbies} from "../lib/lobby.ts";
 import {getUserInfo, logout} from "../lib/auth.ts";
 import Snackbar, {type SnackbarMessage} from "./Snackbar.tsx";
+import {GAME_MODES, type GameMode} from "../lib/game/modes.ts";
 
 const LobbyComponent: Component = () => {
     const [currentUser, setCurrentUser] = createSignal<string | null>(null);
@@ -13,6 +14,9 @@ const LobbyComponent: Component = () => {
     const [hasLoadedLobbies, setHasLoadedLobbies] = createSignal(false);
     const [newLobbyName, setNewLobbyName] = createSignal("");
     const [isCreatingLobby, setIsCreatingLobby] = createSignal(false);
+    const [selectedMode, setSelectedMode] = createSignal<GameMode>('classic');
+    const [joinCode, setJoinCode] = createSignal("");
+    const [showLeaderboard, setShowLeaderboard] = createSignal(false);
 
     let refreshInterval: NodeJS.Timeout | null = null;
 
@@ -97,8 +101,15 @@ const LobbyComponent: Component = () => {
         }
     };
 
-    const handleJoinLobby = (lobbyId: string) => {
-        window.location.assign(`/game?lobby=${lobbyId}`);
+    const handleJoinLobby = (lobbyId: string, mode: GameMode = selectedMode()) => {
+        window.location.assign(`/game?lobby=${lobbyId}&mode=${mode}`);
+    };
+
+    const handleJoinByCode = () => {
+        const code = joinCode().trim();
+        if (code) {
+            handleJoinLobby(code);
+        }
     };
 
     const handleLogout = (): void => {
@@ -147,12 +158,21 @@ const LobbyComponent: Component = () => {
 
             {/* Header */}
             <div class="relative flex justify-center items-center pt-10 pb-6 px-6">
-                <h1 class="text-gray-300 text-5xl font-bold tracking-wider drop-shadow-lg">
-                    Lobby
+                <h1 class="text-transparent bg-clip-text bg-gradient-to-r from-yellow-400 to-orange-500 text-5xl font-bold tracking-wider drop-shadow-lg">
+                    🎮 MazeChase
                 </h1>
 
+                <div class="absolute left-20 flex gap-3">
+                    <button
+                        onClick={() => setShowLeaderboard(true)}
+                        class="bg-yellow-500 hover:bg-yellow-400 text-black font-semibold py-2 px-4 rounded-lg shadow-lg transition-colors duration-200"
+                    >
+                        🏆 Leaderboard
+                    </button>
+                </div>
+
                 <div class="absolute right-20 flex flex-col items-center">
-                    <div class="text-gray-300 font-medium text-lg mb-5">
+                    <div class="text-gray-300 font-medium text-lg mb-3">
                         {welcomeMessage}
                         {currentUser() && (<span class="text-blue-400 font-bold">{currentUser()}</span>)}
                     </div>
@@ -160,10 +180,27 @@ const LobbyComponent: Component = () => {
                         onClick={handleLogout}
                         class="bg-red-500 hover:bg-red-600 text-white font-semibold py-2 px-4 rounded-lg shadow-lg transition-colors duration-200 ease-in-out"
                     >
-                        Logout
+                        Uitloggen
                     </button>
                 </div>
             </div>
+
+            {/* Leaderboard Modal */}
+            <Show when={showLeaderboard()}>
+                <div class="fixed inset-0 bg-black/80 flex items-center justify-center z-50" onClick={() => setShowLeaderboard(false)}>
+                    <div class="bg-gray-900 rounded-2xl p-6 max-w-md w-full mx-4 border-2 border-yellow-500/50" onClick={(e) => e.stopPropagation()}>
+                        <div class="flex justify-between items-center mb-6">
+                            <h2 class="text-2xl font-bold text-yellow-400">🏆 Leaderboard</h2>
+                            <button onClick={() => setShowLeaderboard(false)} class="text-gray-400 hover:text-white text-2xl">×</button>
+                        </div>
+                        <div class="text-center py-8 text-gray-400">
+                            <div class="text-4xl mb-4">🎮</div>
+                            <p>Leaderboard wordt bijgehouden na je eerste game!</p>
+                            <p class="text-sm mt-2 text-gray-500">Speel een potje om je score te registreren.</p>
+                        </div>
+                    </div>
+                </div>
+            </Show>
 
             {/* Main Content */}
             <div class="px-6 pb-6">
@@ -196,14 +233,61 @@ const LobbyComponent: Component = () => {
                     </Show>
                 </div>
 
+                {/* Game Mode Selection */}
+                <div class="max-w-2xl mx-auto mb-6">
+                    <h3 class="text-gray-300 text-xl font-semibold mb-3 text-center">🎮 Kies Speelmodus</h3>
+                    <div class="grid grid-cols-3 gap-3">
+                        <For each={Object.values(GAME_MODES)}>
+                            {(mode) => (
+                                <button
+                                    onClick={() => setSelectedMode(mode.id)}
+                                    class={`p-4 rounded-lg border-2 transition-all ${
+                                        selectedMode() === mode.id
+                                            ? 'border-yellow-400 bg-yellow-400/20 scale-105'
+                                            : 'border-gray-600 bg-gray-800/50 hover:border-gray-500'
+                                    }`}
+                                >
+                                    <div class="text-3xl mb-1">{mode.icon}</div>
+                                    <div class="text-white font-bold">{mode.nameNL}</div>
+                                    <div class="text-gray-400 text-xs mt-1">{mode.descriptionNL}</div>
+                                </button>
+                            )}
+                        </For>
+                    </div>
+                </div>
+
+                {/* Join by Code */}
+                <div class="max-w-md mx-auto mb-6">
+                    <div class="p-4 rounded-lg shadow-lg bg-blue-900/30 backdrop-blur-md border border-blue-500/30">
+                        <div class="text-gray-300 text-lg font-semibold mb-2">🔗 Join met Code</div>
+                        <div class="flex gap-2">
+                            <input
+                                type="text"
+                                placeholder="Voer lobby code in..."
+                                value={joinCode()}
+                                onInput={(e) => setJoinCode(e.currentTarget.value)}
+                                onKeyPress={(e) => e.key === 'Enter' && handleJoinByCode()}
+                                class="flex-1 px-4 py-2 bg-gray-700 text-white border border-gray-600 rounded-lg focus:outline-none focus:border-blue-500"
+                            />
+                            <button
+                                onClick={handleJoinByCode}
+                                disabled={!joinCode().trim()}
+                                class="px-4 py-2 bg-blue-500 hover:bg-blue-600 disabled:bg-gray-600 disabled:cursor-not-allowed text-white font-semibold rounded-lg"
+                            >
+                                Join
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
                 {/* Create Lobby Section */}
                 <div class="max-w-md mx-auto mb-8">
                     <div class="p-6 rounded-lg shadow-lg bg-white/10 backdrop-blur-md border border-white/20">
                         <div class="flex gap-3 items-center">
-                            <div class="text-gray-300 text-2xl font-semibold">Create</div>
+                            <div class="text-gray-300 text-xl font-semibold">➕ Maak Lobby</div>
                             <input
                                 type="text"
-                                placeholder="lobby name"
+                                placeholder="lobby naam"
                                 value={newLobbyName()}
                                 onInput={(e) => setNewLobbyName(e.currentTarget.value)}
                                 onKeyPress={handleKeyPress}
@@ -215,7 +299,7 @@ const LobbyComponent: Component = () => {
                                 disabled={!newLobbyName().trim() || isCreatingLobby()}
                                 class="px-6 py-2 bg-green-500 hover:bg-green-600 disabled:bg-gray-600 disabled:cursor-not-allowed text-white font-semibold rounded-lg transition-colors duration-200 ease-in-out"
                             >
-                                <Show when={isCreatingLobby()} fallback="Create">
+                                <Show when={isCreatingLobby()} fallback="Maak">
                                     <svg class="animate-spin h-4 w-4" xmlns="http://www.w3.org/2000/svg"
                                          fill="none" viewBox="0 0 24 24">
                                         <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor"
@@ -234,13 +318,14 @@ const LobbyComponent: Component = () => {
                     when={lobbies().length > 0}
                     fallback={
                         <div class="text-center py-12">
-                            <div class="text-gray-400 text-xl">No lobbies available</div>
+                            <div class="text-gray-400 text-xl">Geen lobbies beschikbaar</div>
                             <div class="text-gray-500 text-sm mt-2">
-                                Create a new lobby to get started!
+                                Maak een nieuwe lobby om te beginnen!
                             </div>
                         </div>
                     }
                 >
+                    <h3 class="text-gray-300 text-xl font-semibold mb-3 text-center">📋 Actieve Lobbies</h3>
                     <div class="px-10 grid gap-4 grid-cols-1
                                 sm:grid-cols-2
                                 md:grid-cols-3
@@ -252,7 +337,8 @@ const LobbyComponent: Component = () => {
                                 <LobbyCard
                                     lobby={lobby}
                                     currentUser={currentUser() ?? ""}
-                                    onJoin={() => handleJoinLobby(lobby.ID.toString())}
+                                    selectedMode={selectedMode()}
+                                    onJoin={() => handleJoinLobby(lobby.ID.toString(), selectedMode())}
                                     refreshLobby={loadLobbies}
                                     showSnackbar={showSnackbar}
                                 />
@@ -268,6 +354,7 @@ const LobbyComponent: Component = () => {
 interface LobbyCardProps {
     lobby: Lobby;
     currentUser: string;
+    selectedMode: GameMode;
     onJoin: () => void;
     refreshLobby: () => Promise<void>;
     showSnackbar: (message: string, type: 'success' | 'error' | 'info' | 'warning', duration?: number) => void;
@@ -288,7 +375,7 @@ const LobbyCard: Component<LobbyCardProps> = (props) => {
             props.showSnackbar?.(`Failed to delete lobby: ${err || 'Unknown error'}`, 'error');
         } else {
             // Show success snackbar
-            props.showSnackbar?.(`Lobby "${lobby.lobbyName}" deleted successfully`, 'info');
+            props.showSnackbar?.(`Lobby "${lobby.lobbyName}" verwijderd`, 'info');
         }
 
         await props.refreshLobby();
@@ -300,14 +387,15 @@ const LobbyCard: Component<LobbyCardProps> = (props) => {
 
     const getShareLink = () => {
         const baseUrl = window.location.origin;
-        return `${baseUrl}/game?lobby=${props.lobby.ID}`;
+        return `${baseUrl}/game?lobby=${props.lobby.ID}&mode=${props.selectedMode}`;
     };
 
     const copyShareLink = async () => {
+        const mode = GAME_MODES[props.selectedMode];
         try {
             await navigator.clipboard.writeText(getShareLink());
             setCopied(true);
-            props.showSnackbar?.('Link gekopieerd! Deel met vrienden 🎮', 'success');
+            props.showSnackbar?.(`Link gekopieerd! (${mode.icon} ${mode.nameNL})`, 'success');
             setTimeout(() => setCopied(false), 2000);
         } catch (err) {
             // Fallback for Safari
@@ -318,7 +406,7 @@ const LobbyCard: Component<LobbyCardProps> = (props) => {
             document.execCommand('copy');
             document.body.removeChild(textArea);
             setCopied(true);
-            props.showSnackbar?.('Link gekopieerd! Deel met vrienden 🎮', 'success');
+            props.showSnackbar?.(`Link gekopieerd! (${mode.icon} ${mode.nameNL})`, 'success');
             setTimeout(() => setCopied(false), 2000);
         }
     };

@@ -9,6 +9,7 @@ import {
     sendPowerUpMessage
 } from "./connection.ts";
 import {delay} from "./utils.ts";
+import {getGameMode, getGameModeConfig, SCORE_VALUES, type GameMode} from "./modes.ts";
 
 import Phaser from 'phaser';
 
@@ -39,9 +40,13 @@ export class GameScene extends Phaser.Scene {
 
     gameOverText!: Text;
     spectatingText!: Text
+    scoreText!: Text;
+    modeText!: Text;
 
     gameOver = false
     isRedirecting = true
+    currentScore = 0;
+    gameMode: GameMode = 'classic';
 
     allSprites: { [key: string]: Ghost | Pacman } = {
         "pacman": {
@@ -84,6 +89,7 @@ export class GameScene extends Phaser.Scene {
 
     constructor() {
         super({key: 'GameScene'});
+        this.gameMode = getGameMode();
     }
 
     preload(): void {
@@ -94,6 +100,7 @@ export class GameScene extends Phaser.Scene {
 
     create(): void {
         console.log('Creating scene...');
+        const modeConfig = getGameModeConfig();
 
         this.cursors = this.input.keyboard!.createCursorKeys();
         this.createMap()
@@ -103,15 +110,27 @@ export class GameScene extends Phaser.Scene {
 
         // Set up the "Game Ended" text
         const textStyle = {fontFamily: 'Arial', fontSize: 48, color: '#00ffc7'};
-        this.gameOverText = this.add.text(700, 450, 'Game Ended', textStyle);
+        this.gameOverText = this.add.text(700, 450, 'Game Over!', textStyle);
         this.gameOverText.setOrigin(0.5);
-        this.gameOverText.visible = false; // Initially hide the text
+        this.gameOverText.visible = false;
 
         // Set up the "Spectating" text
-        const spectatingTextStyle = {fontFamily: 'Arial', fontSize: 48, color: '#00ffc7'};
-        this.spectatingText = this.add.text(800, 30, 'You were eaten... spectating', spectatingTextStyle);
+        const spectatingTextStyle = {fontFamily: 'Arial', fontSize: 32, color: '#ff6b6b'};
+        this.spectatingText = this.add.text(800, 30, 'Je bent gevangen... toekijken', spectatingTextStyle);
         this.spectatingText.setOrigin(0.5);
-        this.spectatingText.visible = false; // Initially hide the text
+        this.spectatingText.visible = false;
+
+        // Score display
+        const scoreStyle = {fontFamily: 'Arial', fontSize: 24, color: '#FFD700'};
+        this.scoreText = this.add.text(20, 20, 'Score: 0', scoreStyle);
+        this.scoreText.setScrollFactor(0);
+        this.scoreText.setDepth(100);
+
+        // Game mode display
+        const modeStyle = {fontFamily: 'Arial', fontSize: 18, color: '#00BFFF'};
+        this.modeText = this.add.text(20, 50, `${modeConfig.icon} ${modeConfig.nameNL}`, modeStyle);
+        this.modeText.setScrollFactor(0);
+        this.modeText.setDepth(100);
 
 
         const spriteID = getSpriteID();
@@ -377,6 +396,7 @@ export class GameScene extends Phaser.Scene {
     ) {
         let pel = pellet as Tile
         sendPelletMessage(pel.x, pel.y)
+        this.addScore(SCORE_VALUES.pellet);
     }
 
     powerUpCallBack(
@@ -387,6 +407,7 @@ export class GameScene extends Phaser.Scene {
         console.log(pow.x, pow.y)
 
         sendPowerUpMessage(pow.x, pow.y)
+        this.addScore(SCORE_VALUES.powerPellet);
     }
 
     pacmanGhostCollision(
@@ -398,6 +419,53 @@ export class GameScene extends Phaser.Scene {
         console.log('pacmanGhostCollision', ghostId)
 
         sendPacmanGhostMessage(ghostId)
+    }
+
+    addScore(points: number) {
+        this.currentScore += points;
+        this.scoreText.setText(`Score: ${this.currentScore}`);
+    }
+
+    showGameOver(winner: string, reason: string) {
+        this.gameOver = true;
+        this.gameOverText.setText(`🏆 ${winner} wint!`);
+        this.gameOverText.visible = true;
+        
+        // Show end game screen after short delay
+        setTimeout(() => {
+            this.showEndGameUI(winner, reason);
+        }, 2000);
+    }
+
+    showEndGameUI(winner: string, reason: string) {
+        // Create end game overlay
+        const overlay = document.createElement('div');
+        overlay.id = 'end-game-overlay';
+        overlay.innerHTML = `
+            <div style="position: fixed; inset: 0; background: rgba(0,0,0,0.9); display: flex; align-items: center; justify-content: center; z-index: 1000;">
+                <div style="background: #1a1a2e; border-radius: 16px; padding: 32px; max-width: 400px; text-align: center; border: 2px solid #ffd700;">
+                    <div style="font-size: 48px; margin-bottom: 16px;">🏆</div>
+                    <h1 style="color: #ffd700; font-size: 28px; margin-bottom: 8px;">Game Over!</h1>
+                    <p style="color: #888; margin-bottom: 16px;">${reason}</p>
+                    <div style="background: linear-gradient(to right, #ffd700, #ffaa00); padding: 16px; border-radius: 8px; margin-bottom: 24px;">
+                        <div style="color: #000; font-size: 14px;">Winnaar</div>
+                        <div style="color: #000; font-size: 24px; font-weight: bold;">${winner}</div>
+                    </div>
+                    <div style="background: #2a2a3e; padding: 12px; border-radius: 8px; margin-bottom: 24px;">
+                        <div style="color: #ffd700; font-size: 24px; font-weight: bold;">Score: ${this.currentScore}</div>
+                    </div>
+                    <div style="display: flex; gap: 12px;">
+                        <button onclick="window.location.reload()" style="flex: 1; background: #22c55e; color: white; padding: 12px; border: none; border-radius: 8px; font-weight: bold; cursor: pointer;">
+                            🔄 Opnieuw
+                        </button>
+                        <button onclick="window.location.href='/lobby'" style="flex: 1; background: #3b82f6; color: white; padding: 12px; border: none; border-radius: 8px; font-weight: bold; cursor: pointer;">
+                            🏠 Lobby
+                        </button>
+                    </div>
+                </div>
+            </div>
+        `;
+        document.body.appendChild(overlay);
     }
 
     addUsernameText(sprite: Phaser.Physics.Arcade.Sprite) {

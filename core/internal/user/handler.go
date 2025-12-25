@@ -23,20 +23,40 @@ func (a *Handler) Register(_ context.Context, c *connect.Request[v1.RegisterUser
 
 	if username == "" || password == "" || passwordVerify == "" {
 		log.Warn().Any("Msg", c.Msg).Msg("one or more fields are empty")
-		return nil, fmt.Errorf("empty fields")
+		return nil, fmt.Errorf("vul alle velden in")
 	}
 
 	// Ensure that the password & passwordVerify match
 	if password != passwordVerify {
-		return nil, fmt.Errorf("password mismatch")
+		return nil, fmt.Errorf("wachtwoorden komen niet overeen")
 	}
 
 	err := a.auth.Register(c.Msg.Username, c.Msg.Password, false)
 	if err != nil {
-		return nil, err
+		// Check for duplicate username
+		if err.Error() == "UNIQUE constraint failed: users.username" {
+			return nil, fmt.Errorf("gebruikersnaam is al in gebruik")
+		}
+		return nil, fmt.Errorf("registratie mislukt: %v", err)
 	}
 
-	return connect.NewResponse(&v1.RegisterUserResponse{}), nil
+	// Auto-login after registration - return user data with cookie
+	loginResp, err := a.loginWithCookie(username, password)
+	if err != nil {
+		log.Error().Err(err).Msg("Auto-login after registration failed")
+		return nil, fmt.Errorf("account aangemaakt, maar auto-login mislukt. Probeer handmatig in te loggen.")
+	}
+
+	// Create response with auth cookie
+	resp := connect.NewResponse(&v1.RegisterUserResponse{})
+	// Copy cookies from login response
+	for key, values := range loginResp.Header() {
+		for _, value := range values {
+			resp.Header().Add(key, value)
+		}
+	}
+
+	return resp, nil
 }
 
 func (a *Handler) Logout(_ context.Context, req *connect.Request[v1.Empty]) (*connect.Response[v1.Empty], error) {

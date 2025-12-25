@@ -178,15 +178,15 @@ import Layout from "../../layouts/Layout.astro";
 
         const {err} = await register(username, password, passwordVerify);
         if (err) {
-            if (err.includes('exists') || err.includes('taken')) {
+            if (err.includes('in gebruik') || err.includes('exists') || err.includes('taken')) {
                 alert('Deze gebruikersnaam is al in gebruik');
             } else {
                 alert('Registratie mislukt: ' + err);
             }
             setRegisterLoading(false);
         } else {
-            alert('Account aangemaakt! Je kunt nu inloggen.');
-            window.location.assign("/auth/login");
+            // Auto-login success - go directly to lobby
+            window.location.assign("/lobby");
         }
     };
 

@@ -8,16 +8,20 @@ import LobbyComponent from "../../components/Lobby";
 </Layout>
 
 <script>
-    import { guestLogin } from '../../lib/auth';
+    import { getUserInfo } from '../../lib/auth';
     
-    // Auto login as guest when visiting lobby
-    async function autoGuestLogin() {
+    // Check if user is logged in, redirect to login if not
+    async function checkAuth() {
         try {
-            await guestLogin();
+            const username = await getUserInfo();
+            if (!username) {
+                window.location.href = '/auth/login';
+            }
         } catch (e) {
-            console.log('Already logged in:', e);
+            console.log('Not logged in, redirecting...');
+            window.location.href = '/auth/login';
         }
     }
     
-    autoGuestLogin();
+    checkAuth();
 </script>

@@ -52,12 +52,12 @@ func (auth *Service) Login(username, inputPassword string) (*User, error) {
 
 	if result.Error != nil || user.Username == "" {
 		log.Error().Err(result.Error).Any("user", user).Msg("Failed to login")
-		return &User{}, fmt.Errorf("failed retrive user info")
+		return &User{}, fmt.Errorf("gebruiker niet gevonden")
 	}
 
 	if !checkPassword(inputPassword, user.Password) {
 		log.Error().Err(result.Error).Msg("invalid user/password")
-		return &User{}, fmt.Errorf("invalid user/password")
+		return &User{}, fmt.Errorf("onjuist wachtwoord")
 	}
 
 	finalUser, err := auth.newUserAuthToken(user.ID)
@@ -160,7 +160,7 @@ func (auth *Service) retrieveUser(username string) (User, error) {
 	// Check if the query was successful
 	if result.Error != nil {
 		log.Error().Err(result.Error).Msg("Failed to retrieve user")
-		return User{}, fmt.Errorf("unable to retrive user info")
+		return User{}, fmt.Errorf("gebruiker niet gevonden")
 	}
 
 	return user, nil

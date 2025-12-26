@@ -1,17 +1,28 @@
 # MazeChase - 50 Stappen naar een Speelbare Game
 
-## Huidige Status: Game Rendert, Maar Is Niet Speelbaar
+## Huidige Status: ✅ SPEELBAAR! Core Mechanics Werken
 
-**Kritieke Problemen:**
-1. ❌ Movement broken - frontend stuurt direction, backend verwacht x/y
-2. ❌ Geen collision detection - pellets, power-ups, spelers
-3. ❌ Entities renderen niet
-4. ❌ Score wordt niet bijgehouden
-5. ❌ Spawn posities niet geïnitialiseerd
+**Voltooide Features:**
+1. ✅ Server-side movement met direction input
+2. ✅ Wall collision detection met maze data  
+3. ✅ Pellet en power-up collision (server-side)
+4. ✅ Score tracking en UI display
+5. ✅ Spawn posities geïnitialiseerd
+6. ✅ Power-up timer (8 seconden) met auto-broadcast
+7. ✅ Continuous keyboard + touch movement
+8. ✅ Bot AI met chase/flee gedrag
+9. ✅ Game over screen met scores en medals
+10. ✅ Power-up countdown UI
+
+**Nog te doen:**
+- 🟡 Entity rendering (dynamic world entities)
+- 🟡 Audio effecten
+- 🟡 A* pathfinding voor bots
+- 🟡 Performance optimalisatie
 
 ---
 
-## FASE 1: MOVEMENT FIXEN (Stappen 1-8)
+## FASE 1: MOVEMENT FIXEN (Stappen 1-8) ✅ VOLTOOID
 
 ### 🔴 Stap 1: Server-Side Movement Handler
 **File:** `core/internal/game/handler.go`

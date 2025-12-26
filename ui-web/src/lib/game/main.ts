@@ -153,8 +153,20 @@ async function start3DGame() {
             setupTouchControls(container);
         }
         
+        // Initialize audio system on first user interaction
+        const { initAudio, playSound } = await import('./audio');
+        document.addEventListener('click', initAudio, { once: true });
+        document.addEventListener('keydown', initAudio, { once: true });
+        document.addEventListener('touchstart', initAudio, { once: true });
+        
+        // Play game start sound
+        playSound('game_start');
+        
         // Subscribe to game events from server
         setupGameEventHandlers();
+        
+        // Add audio toggle button
+        addAudioToggle();
         
         // Add FPS counter for debugging
         addFPSCounter();
@@ -400,100 +412,141 @@ function setupTouchControls(container: HTMLElement) {
  * Setup handlers for game events from WebSocket
  */
 function setupGameEventHandlers() {
-    subscribeGameEvents({
-        onPlayerMove: (spriteId: string, x: number, y: number) => {
-            if (game3d) {
-                game3d.updatePlayerPositionPixels(spriteId, x, y);
+    // Import audio functions
+    import('./audio').then(({ playSound }) => {
+        subscribeGameEvents({
+            onPlayerMove: (spriteId: string, x: number, y: number) => {
+                if (game3d) {
+                    game3d.updatePlayerPositionPixels(spriteId, x, y);
+                }
+            },
+            onPelletEaten: (tileX: number, tileY: number) => {
+                if (game3d) {
+                    game3d.removePellet(tileX, tileY);
+                }
+                playSound('chomp');
+            },
+            onPowerUpEaten: (tileX: number, tileY: number, duration?: number) => {
+                if (game3d) {
+                    game3d.removePowerUp(tileX, tileY);
+                    game3d.setRunnerPoweredUp(true);
+                }
+                showPowerUpTimer(duration || 8);
+                playSound('power_pellet');
+            },
+            onPowerUpEnd: () => {
+                if (game3d) {
+                    game3d.setRunnerPoweredUp(false);
+                }
+                hidePowerUpTimer();
+            },
+            onPlayerCaught: (runnerId: string, _chaserId: string) => {
+                console.log(`Player ${runnerId} was caught!`);
+                if (game3d) {
+                    game3d.hidePlayer(runnerId);
+                }
+                playSound('death');
+            },
+            onPlayerJoin: (spriteId: string, username: string) => {
+                console.log(`Player ${username} joined as ${spriteId}`);
+                if (game3d) {
+                    game3d.setPlayerName(spriteId, username);
+                }
+            },
+            onPlayerLeave: (spriteId: string) => {
+                console.log(`Player ${spriteId} left`);
+                if (game3d) {
+                    game3d.hidePlayer(spriteId);
+                }
+            },
+            onGameOver: (winner: string, scores: Record<string, number>) => {
+                console.log(`Game over! Winner: ${winner}`, scores);
+                stopGameTimer();
+                showGameOver(winner, scores);
+            },
+            onScoreUpdate: (scores: Record<string, number>) => {
+                updateScoreDisplay(scores);
+            },
+            
+            // Dynamic world event handlers
+            onPhaseChange: (phase: string, zones) => {
+                console.log(`Phase changed to: ${phase}`);
+                if (game3d) {
+                    game3d.onPhaseChange(phase, zones);
+                }
+                updatePhaseUI(phase);
+            },
+            onPhaseUpdate: (phase: string, progress: number) => {
+                if (game3d) {
+                    game3d.onPhaseUpdate(phase, progress);
+                }
+                updatePhaseProgressUI(phase, progress);
+            },
+            onMazeUpdate: (update) => {
+                console.log('Maze update:', update);
+                if (game3d) {
+                    game3d.onMazeUpdate(update);
+                }
+            },
+            onEntitiesUpdate: (entities) => {
+                if (game3d) {
+                    game3d.onEntitiesUpdate(entities);
+                }
+            },
+            onEntityNear: (entityId: string, warning: boolean) => {
+                if (warning) {
+                    showEntityWarning(entityId);
+                }
+            },
+            onEntityCollision: (entityId: string, entityType: string, caught: boolean) => {
+                console.log(`Entity collision: ${entityId} (${entityType}), caught: ${caught}`);
+                if (caught) {
+                    showCaughtByEntity(entityType);
+                }
+            },
+            onDynamicStateSync: (state) => {
+                console.log('Dynamic state sync:', state);
+                if (game3d) {
+                    game3d.initDynamicState(state);
+                }
             }
-        },
-        onPelletEaten: (tileX: number, tileY: number) => {
-            if (game3d) {
-                game3d.removePellet(tileX, tileY);
-            }
-        },
-        onPowerUpEaten: (tileX: number, tileY: number, duration?: number) => {
-            if (game3d) {
-                game3d.removePowerUp(tileX, tileY);
-                game3d.setRunnerPoweredUp(true);
-            }
-            showPowerUpTimer(duration || 8);
-        },
-        onPowerUpEnd: () => {
-            if (game3d) {
-                game3d.setRunnerPoweredUp(false);
-            }
-            hidePowerUpTimer();
-        },
-        onPlayerCaught: (runnerId: string, _chaserId: string) => {
-            console.log(`Player ${runnerId} was caught!`);
-            if (game3d) {
-                game3d.hidePlayer(runnerId);
-            }
-        },
-        onPlayerJoin: (spriteId: string, username: string) => {
-            console.log(`Player ${username} joined as ${spriteId}`);
-            if (game3d) {
-                game3d.setPlayerName(spriteId, username);
-            }
-        },
-        onPlayerLeave: (spriteId: string) => {
-            console.log(`Player ${spriteId} left`);
-            if (game3d) {
-                game3d.hidePlayer(spriteId);
-            }
-        },
-        onGameOver: (winner: string, scores: Record<string, number>) => {
-            console.log(`Game over! Winner: ${winner}`, scores);
-            stopGameTimer();
-            showGameOver(winner, scores);
-        },
-        onScoreUpdate: (scores: Record<string, number>) => {
-            updateScoreDisplay(scores);
-        },
-        
-        // Dynamic world event handlers
-        onPhaseChange: (phase: string, zones) => {
-            console.log(`Phase changed to: ${phase}`);
-            if (game3d) {
-                game3d.onPhaseChange(phase, zones);
-            }
-            updatePhaseUI(phase);
-        },
-        onPhaseUpdate: (phase: string, progress: number) => {
-            if (game3d) {
-                game3d.onPhaseUpdate(phase, progress);
-            }
-            updatePhaseProgressUI(phase, progress);
-        },
-        onMazeUpdate: (update) => {
-            console.log('Maze update:', update);
-            if (game3d) {
-                game3d.onMazeUpdate(update);
-            }
-        },
-        onEntitiesUpdate: (entities) => {
-            if (game3d) {
-                game3d.onEntitiesUpdate(entities);
-            }
-        },
-        onEntityNear: (entityId: string, warning: boolean) => {
-            if (warning) {
-                showEntityWarning(entityId);
-            }
-        },
-        onEntityCollision: (entityId: string, entityType: string, caught: boolean) => {
-            console.log(`Entity collision: ${entityId} (${entityType}), caught: ${caught}`);
-            if (caught) {
-                showCaughtByEntity(entityType);
-            }
-        },
-        onDynamicStateSync: (state) => {
-            console.log('Dynamic state sync:', state);
-            if (game3d) {
-                game3d.initDynamicState(state);
-            }
-        }
+        });
     });
+}
+
+/**
+ * Add audio toggle button to UI
+ */
+function addAudioToggle() {
+    const toggleBtn = document.createElement('button');
+    toggleBtn.id = 'audio-toggle';
+    toggleBtn.innerHTML = '🔊';
+    toggleBtn.title = 'Toggle Audio';
+    toggleBtn.style.cssText = `
+        position: fixed;
+        bottom: 20px;
+        right: 20px;
+        width: 50px;
+        height: 50px;
+        border-radius: 50%;
+        background: rgba(0, 0, 0, 0.7);
+        border: 2px solid rgba(0, 255, 199, 0.5);
+        color: white;
+        font-size: 24px;
+        cursor: pointer;
+        z-index: 1000;
+        transition: all 0.2s;
+    `;
+    
+    toggleBtn.addEventListener('click', () => {
+        import('./audio').then(({ toggleAudio }) => {
+            const enabled = toggleAudio();
+            toggleBtn.innerHTML = enabled ? '🔊' : '🔇';
+            toggleBtn.style.opacity = enabled ? '1' : '0.5';
+        });
+    });
+    
+    document.body.appendChild(toggleBtn);
 }
 
 /**

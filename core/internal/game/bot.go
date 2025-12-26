@@ -98,9 +98,9 @@ func (bm *BotManager) createBotUnlocked(index int) *Bot {
 
 	// Broadcast bot join to other players
 	joinMsg := map[string]interface{}{
-		"type":     "join",
-		"username": botName,
-		"spriteId": string(spriteId),
+		"type":       "active",
+		"user":       botName,
+		"spriteType": string(spriteId),
 	}
 	if msgBytes, err := json.Marshal(joinMsg); err == nil {
 		bm.broadcast(msgBytes)
@@ -203,11 +203,11 @@ func (b *Bot) Start(broadcast func([]byte) error) {
 
 			// Broadcast position to all players
 			posMsg := map[string]interface{}{
-				"type":     "pos",
-				"spriteId": string(b.PlayerEntity.SpriteType),
-				"x":        newX,
-				"y":        newY,
-				"dir":      currentDir,
+				"type":       "pos",
+				"spriteType": string(b.PlayerEntity.SpriteType),
+				"x":          newX,
+				"y":          newY,
+				"dir":        currentDir,
 			}
 
 			if msgBytes, err := json.Marshal(posMsg); err == nil {

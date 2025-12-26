@@ -121,6 +121,15 @@ export class GameScene extends Phaser.Scene {
         this.initGhostsAnim()
         this.loadPlayers()
 
+        // Focus the game canvas for keyboard input
+        this.game.canvas.setAttribute('tabindex', '0');
+        this.game.canvas.focus();
+        
+        // Also focus on click
+        this.game.canvas.addEventListener('click', () => {
+            this.game.canvas.focus();
+        });
+
         // Set up the "Game Ended" text
         const textStyle = {fontFamily: 'Arial', fontSize: 48, color: '#00ffc7'};
         this.gameOverText = this.add.text(700, 450, 'Game Over!', textStyle);

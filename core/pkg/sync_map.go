@@ -44,3 +44,21 @@ func (m *Map[K, V]) GetValues() []V {
 	})
 	return values
 }
+
+func (m *Map[K, V]) GetKeys() []K {
+	var keys []K
+	m.m.Range(func(key, value any) bool {
+		keys = append(keys, key.(K))
+		return true
+	})
+	return keys
+}
+
+func (m *Map[K, V]) Len() int {
+	count := 0
+	m.m.Range(func(key, value any) bool {
+		count++
+		return true
+	})
+	return count
+}

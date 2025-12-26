@@ -18,11 +18,14 @@ type World struct {
 	CharactersList      []SpriteType
 	ChasersIdsEaten     []SpriteType
 	ConnectedPlayers    *pkg.Map[string, *melody.Session]
+	Spectators          *pkg.Map[string, *melody.Session]
 	PelletsCoordEaten   CoordList
 	PowerUpsCoordsEaten CoordList
 	worldLock           sync.Mutex
 	BotManager          *BotManager
 	botFillScheduled    bool
+	HostPlayerId        string
+	CountdownStarted    bool
 }
 
 func NewWorldState() *World {
@@ -31,6 +34,7 @@ func NewWorldState() *World {
 		IsPoweredUp:         false,
 		CharactersList:      []SpriteType{Chaser1, Chaser2, Chaser3, Runner},
 		ConnectedPlayers:    &pkg.Map[string, *melody.Session]{},
+		Spectators:          &pkg.Map[string, *melody.Session]{},
 		PelletsCoordEaten:   NewCordList(),
 		PowerUpsCoordsEaten: NewCordList(),
 		ChasersIdsEaten:     []SpriteType{},
@@ -38,6 +42,8 @@ func NewWorldState() *World {
 		gameOverChan:        make(chan string, 1),
 		BotManager:          nil, // Will be set when broadcast function is available
 		botFillScheduled:    false,
+		HostPlayerId:        "",
+		CountdownStarted:    false,
 	}
 }
 
@@ -82,6 +88,14 @@ func (w *World) Leave(player *PlayerEntity) {
 
 func (w *World) GetGameStateReport(secretToken, username, spriteId string, newPlayer *melody.Session) ([]byte, error) {
 	connectedMap := map[string]interface{}{}
+	playersList := []map[string]interface{}{}
+
+	// Get the requesting player's info
+	requestingPlayer, _ := getPlayerEntityFromSession(newPlayer)
+	var requestingPlayerId string
+	if requestingPlayer != nil {
+		requestingPlayerId = requestingPlayer.PlayerId
+	}
 
 	for _, otherPlayerSession := range w.ConnectedPlayers.GetValues() {
 		// Skip nil sessions (bots don't have real sessions)
@@ -99,18 +113,36 @@ func (w *World) GetGameStateReport(secretToken, username, spriteId string, newPl
 			"x":        otherPlayerEntity.X,
 			"y":        otherPlayerEntity.Y,
 		}
+
+		playersList = append(playersList, map[string]interface{}{
+			"playerId":   otherPlayerEntity.PlayerId,
+			"username":   otherPlayerEntity.Username,
+			"spriteType": otherPlayerEntity.SpriteType,
+			"isReady":    otherPlayerEntity.IsReady,
+			"isHost":     otherPlayerEntity.IsHost,
+		})
 	}
 
+	// Check if this player is the host
+	isHost := w.HostPlayerId != "" && w.HostPlayerId == requestingPlayerId
+
 	data := map[string]interface{}{
-		"type":          "state",
-		"chasersEaten":  w.ChasersIdsEaten,
-		"activePlayers": connectedMap,
-		"pelletsEaten":  w.PelletsCoordEaten.GetList(),
-		"powerUpsEaten": w.PowerUpsCoordsEaten.GetList(),
-		"secretToken":   secretToken,
-		"spriteId":      spriteId,
-		"spriteType":    spriteId,
-		"username":      username,
+		"type":           "state",
+		"chasersEaten":   w.ChasersIdsEaten,
+		"activePlayers":  connectedMap,
+		"playersList":    playersList,
+		"pelletsEaten":   w.PelletsCoordEaten.GetList(),
+		"powerUpsEaten":  w.PowerUpsCoordsEaten.GetList(),
+		"secretToken":    secretToken,
+		"spriteId":       spriteId,
+		"spriteType":     spriteId,
+		"username":       username,
+		"playerId":       requestingPlayerId,
+		"matchStarted":   w.MatchStarted,
+		"hostId":         w.HostPlayerId,
+		"isHost":         isHost,
+		"playerCount":    w.GetPlayerCount(),
+		"readyCount":     w.GetReadyCount(),
 	}
 	return json.Marshal(data)
 }
@@ -192,4 +224,61 @@ func (w *World) ChaserEatenAction(chaserID SpriteType) {
 	defer w.worldLock.Unlock()
 
 	w.ChasersIdsEaten = append(w.ChasersIdsEaten, chaserID)
+}
+
+// JoinAsSpectator adds a player as spectator (no sprite assigned)
+func (w *World) JoinAsSpectator(player *PlayerEntity, session *melody.Session) {
+	player.IsSpectator = true
+	player.SpriteType = ""
+	w.Spectators.Store(player.PlayerId, session)
+}
+
+// AreAllPlayersReady checks if all connected players are ready
+func (w *World) AreAllPlayersReady() bool {
+	if len(w.ConnectedPlayers.GetKeys()) == 0 {
+		return false
+	}
+
+	for _, session := range w.ConnectedPlayers.GetValues() {
+		if session == nil {
+			continue // Skip bots
+		}
+		player, err := getPlayerEntityFromSession(session)
+		if err != nil {
+			continue
+		}
+		if !player.IsReady && !player.IsBot {
+			return false
+		}
+	}
+	return true
+}
+
+// GetPlayerCount returns number of real players (not bots, not spectators)
+func (w *World) GetPlayerCount() int {
+	count := 0
+	for _, session := range w.ConnectedPlayers.GetValues() {
+		if session != nil {
+			count++
+		}
+	}
+	return count
+}
+
+// GetReadyCount returns number of ready players
+func (w *World) GetReadyCount() int {
+	count := 0
+	for _, session := range w.ConnectedPlayers.GetValues() {
+		if session == nil {
+			continue
+		}
+		player, err := getPlayerEntityFromSession(session)
+		if err != nil {
+			continue
+		}
+		if player.IsReady {
+			count++
+		}
+	}
+	return count
 }

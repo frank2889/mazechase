@@ -114,11 +114,11 @@ func getStartX(sprite SpriteType) float64 {
 	switch sprite {
 	case Runner:
 		return 110
-	case Chaser1:
-		return 723.5
-	case Chaser2:
+	case Chaser1: // ch0
 		return 670.17
-	case Chaser3:
+	case Chaser2: // ch1
+		return 723.5
+	case Chaser3: // ch2
 		return 776.83
 	default:
 		return 400

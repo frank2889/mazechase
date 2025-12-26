@@ -192,6 +192,132 @@ func EndPowerUpMessage(lobbyEntity *World) MessageHandler {
 	}
 }
 
+// ReadyToggleMessage toggles player ready status and broadcasts lobby status
+func ReadyToggleMessage() MessageHandler {
+	name := "ready"
+	return MessageHandler{
+		messageName: name,
+		handler: func(data MessageData) map[string]interface{} {
+			data.playerSession.IsReady = !data.playerSession.IsReady
+
+			// Return full lobby status so all clients get updated player list
+			players := []map[string]interface{}{}
+
+			for _, session := range data.world.ConnectedPlayers.GetValues() {
+				if session == nil {
+					continue
+				}
+				player, err := getPlayerEntityFromSession(session)
+				if err != nil {
+					continue
+				}
+				players = append(players, map[string]interface{}{
+					"playerId":   player.PlayerId,
+					"username":   player.Username,
+					"spriteType": player.SpriteType,
+					"isReady":    player.IsReady,
+					"isHost":     player.IsHost,
+				})
+			}
+
+			return map[string]interface{}{
+				"type":         "lobbystatus",
+				"players":      players,
+				"playerCount":  data.world.GetPlayerCount(),
+				"readyCount":   data.world.GetReadyCount(),
+				"matchStarted": data.world.MatchStarted,
+				"hostId":       data.world.HostPlayerId,
+			}
+		},
+	}
+}
+
+// StartGameMessage allows host to start the game with countdown
+func StartGameMessage(manager *Manager) MessageHandler {
+	name := "startgame"
+	return MessageHandler{
+		messageName: name,
+		handler: func(data MessageData) map[string]interface{} {
+			// Only host can start
+			if !data.playerSession.IsHost {
+				return map[string]interface{}{
+					"type":  "error",
+					"error": "Alleen de host kan de game starten",
+				}
+			}
+
+			// Check if already started
+			if data.world.MatchStarted || data.world.CountdownStarted {
+				return nil
+			}
+
+			data.world.CountdownStarted = true
+
+			// Start countdown in goroutine
+			go func() {
+				for i := 3; i > 0; i-- {
+					countdownMsg := map[string]interface{}{
+						"type":  "countdown",
+						"count": i,
+					}
+					marshal, _ := json.Marshal(countdownMsg)
+					manager.broadcastAll(data.world, marshal)
+					time.Sleep(1 * time.Second)
+				}
+
+				// Game start!
+				data.world.MatchStarted = true
+				startMsg := map[string]interface{}{
+					"type": "gamestart",
+				}
+				marshal, _ := json.Marshal(startMsg)
+				manager.broadcastAll(data.world, marshal)
+			}()
+
+			return map[string]interface{}{
+				"type": "countdownstarted",
+			}
+		},
+	}
+}
+
+// LobbyStatusMessage returns current lobby status
+func LobbyStatusMessage() MessageHandler {
+	name := "lobbystatus"
+	return MessageHandler{
+		messageName: name,
+		handler: func(data MessageData) map[string]interface{} {
+			players := []map[string]interface{}{}
+
+			for _, session := range data.world.ConnectedPlayers.GetValues() {
+				if session == nil {
+					continue
+				}
+				player, err := getPlayerEntityFromSession(session)
+				if err != nil {
+					continue
+				}
+				players = append(players, map[string]interface{}{
+					"playerId":   player.PlayerId,
+					"username":   player.Username,
+					"spriteType": player.SpriteType,
+					"isReady":    player.IsReady,
+					"isHost":     player.IsHost,
+				})
+			}
+
+			return map[string]interface{}{
+				"type":          name,
+				"players":       players,
+				"playerCount":   data.world.GetPlayerCount(),
+				"readyCount":    data.world.GetReadyCount(),
+				"matchStarted":  data.world.MatchStarted,
+				"hostId":        data.world.HostPlayerId,
+			}
+		},
+	}
+}
+
 func getCoordFromMessage(msgInfo map[string]interface{}) (X float64, Y float64, err error) {
 	x, existsX := msgInfo["x"]
 	y, existsY := msgInfo["y"]

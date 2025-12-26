@@ -42,6 +42,9 @@ func RegisterGameWSHandler(mux *http.ServeMux, authService *user.Service, lobbyS
 			KillPlayer().WithMiddleware(CheckGameOverMiddleware),
 			PowerUpMessage(manager),
 			PelletMessage(),
+			ReadyToggleMessage(),
+			StartGameMessage(manager),
+			LobbyStatusMessage(),
 		),
 	}
 
@@ -78,11 +81,24 @@ func (h *WsHandler) HandleConnect(newPlayerSession *melody.Session) {
 
 	player := NewPlayerEntity(userInfo.ID, userInfo.Username)
 
-	err = world.Join(player, newPlayerSession)
-	if err != nil {
-		log.Error().Err(err).Msg("Unable to join lobby")
-		sendMessage(newPlayerSession, wsError(err))
-		return
+	// Check if lobby is full - join as spectator
+	if world.IsLobbyFull() {
+		world.JoinAsSpectator(player, newPlayerSession)
+		log.Info().Str("user", userInfo.Username).Msg("Player joined as spectator")
+	} else {
+		err = world.Join(player, newPlayerSession)
+		if err != nil {
+			log.Error().Err(err).Msg("Unable to join lobby")
+			sendMessage(newPlayerSession, wsError(err))
+			return
+		}
+
+		// First player becomes host
+		if world.HostPlayerId == "" {
+			world.HostPlayerId = player.PlayerId
+			player.IsHost = true
+			log.Info().Str("user", userInfo.Username).Msg("Player is now host")
+		}
 	}
 
 	newPlayerJson, err := player.ToJSON()
@@ -116,6 +132,9 @@ func (h *WsHandler) HandleConnect(newPlayerSession *melody.Session) {
 	// add new player count
 	broadCastSessions := world.ConnectedPlayers.GetValues()
 	h.lobbyService.UpdateLobbyPlayerCount(lobbyInfo.ID, len(broadCastSessions))
+
+	// Broadcast lobby status to all players
+	h.broadcastLobbyStatus(world)
 
 	// Schedule automatic bot fill after 10 seconds if this is the first player
 	// This gives time for other real players to join
@@ -217,4 +236,43 @@ func sendMessage(session *melody.Session, message []byte) {
 func wsError(err error) []byte {
 	marshal, _ := json.Marshal(map[string]string{"error": err.Error()})
 	return marshal
+}
+
+// broadcastLobbyStatus sends lobby status to all connected players
+func (h *WsHandler) broadcastLobbyStatus(world *World) {
+	players := []map[string]interface{}{}
+
+	for _, session := range world.ConnectedPlayers.GetValues() {
+		if session == nil {
+			continue
+		}
+		player, err := getPlayerEntityFromSession(session)
+		if err != nil {
+			continue
+		}
+		players = append(players, map[string]interface{}{
+			"playerId":   player.PlayerId,
+			"username":   player.Username,
+			"spriteType": player.SpriteType,
+			"isReady":    player.IsReady,
+			"isHost":     player.IsHost,
+		})
+	}
+
+	statusMsg := map[string]interface{}{
+		"type":         "lobbystatus",
+		"players":      players,
+		"playerCount":  world.GetPlayerCount(),
+		"readyCount":   world.GetReadyCount(),
+		"matchStarted": world.MatchStarted,
+		"hostId":       world.HostPlayerId,
+	}
+
+	marshal, err := json.Marshal(statusMsg)
+	if err != nil {
+		log.Error().Err(err).Msg("Unable to marshal lobby status")
+		return
+	}
+
+	pkg.Elog(h.manager.broadcastAll(world, marshal))
 }

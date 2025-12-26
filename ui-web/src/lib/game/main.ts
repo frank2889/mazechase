@@ -1,7 +1,8 @@
-import {connectToWebSocket, setGame, waitForGameState} from "./connection.ts";
+import {connectToWebSocket, setGame, waitForGameState, subscribeLobbyState} from "./connection.ts";
 import {GameScene} from "./game.ts";
 import {showError} from "./utils.ts";
 import {getUserInfo} from "../auth.ts";
+import {mountWaitingRoom, unmountWaitingRoom} from "./waiting-room.tsx";
 
 // Check if user is logged in before starting game
 async function checkAuth() {
@@ -49,12 +50,28 @@ export async function initGame() {
     // Check user is logged in with real account
     await checkAuth();
     
-    connectToWebSocket()
-    console.log("Waiting for game state")
-    await waitForGameState()
+    connectToWebSocket();
+    
+    // Mount waiting room UI
+    mountWaitingRoom();
+    
+    // Subscribe to lobby state to know when game starts
+    let gameInitialized = false;
+    const unsubscribe = subscribeLobbyState((state) => {
+        if (state.matchStarted && !gameInitialized) {
+            gameInitialized = true;
+            unmountWaitingRoom();
+            startPhaserGame();
+        }
+    });
+    
+    console.log("Waiting for game state");
+    await waitForGameState();
+}
 
-    const gameWithDep = new GameScene()
-    setGame(gameWithDep)
+async function startPhaserGame() {
+    const gameWithDep = new GameScene();
+    setGame(gameWithDep);
 
     const dims = getGameDimensions();
     

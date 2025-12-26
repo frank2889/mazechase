@@ -25,6 +25,9 @@ func NewPlayerEntity(userId uint, username string) *PlayerEntity {
 		X:           0,
 		Y:           0,
 		secretToken: user.CreateAuthToken(5),
+		IsReady:     false,
+		IsHost:      false,
+		IsSpectator: false,
 	}
 }
 
@@ -37,6 +40,9 @@ type PlayerEntity struct {
 	X           float64    `json:"x"`
 	Y           float64    `json:"y"`
 	Dir         string     `json:"dir"`
+	IsReady     bool       `json:"isReady"`
+	IsHost      bool       `json:"isHost"`
+	IsSpectator bool       `json:"isSpectator"`
 	secretToken string
 	IsBot       bool `json:"-"` // Not sent to client
 }
@@ -59,6 +65,9 @@ func (p *PlayerEntity) ToMap() map[string]interface{} {
 	playerMap["x"] = p.X
 	playerMap["y"] = p.Y
 	playerMap["dir"] = p.Dir
+	playerMap["isReady"] = p.IsReady
+	playerMap["isHost"] = p.IsHost
+	playerMap["isSpectator"] = p.IsSpectator
 	return playerMap
 }
 

@@ -346,6 +346,49 @@ function setupGameEventHandlers() {
         },
         onScoreUpdate: (scores: Record<string, number>) => {
             updateScoreDisplay(scores);
+        },
+        
+        // Dynamic world event handlers
+        onPhaseChange: (phase: string, zones) => {
+            console.log(`Phase changed to: ${phase}`);
+            if (game3d) {
+                game3d.onPhaseChange(phase, zones);
+            }
+            updatePhaseUI(phase);
+        },
+        onPhaseUpdate: (phase: string, progress: number) => {
+            if (game3d) {
+                game3d.onPhaseUpdate(phase, progress);
+            }
+            updatePhaseProgressUI(phase, progress);
+        },
+        onMazeUpdate: (update) => {
+            console.log('Maze update:', update);
+            if (game3d) {
+                game3d.onMazeUpdate(update);
+            }
+        },
+        onEntitiesUpdate: (entities) => {
+            if (game3d) {
+                game3d.onEntitiesUpdate(entities);
+            }
+        },
+        onEntityNear: (entityId: string, warning: boolean) => {
+            if (warning) {
+                showEntityWarning(entityId);
+            }
+        },
+        onEntityCollision: (entityId: string, entityType: string, caught: boolean) => {
+            console.log(`Entity collision: ${entityId} (${entityType}), caught: ${caught}`);
+            if (caught) {
+                showCaughtByEntity(entityType);
+            }
+        },
+        onDynamicStateSync: (state) => {
+            console.log('Dynamic state sync:', state);
+            if (game3d) {
+                game3d.initDynamicState(state);
+            }
         }
     });
 }
@@ -709,6 +752,194 @@ function addFPSCounter() {
             fpsDiv.textContent = `FPS: ${fps}`;
         }
     }, 250);
+}
+
+// ========================================
+// Dynamic World UI Functions
+// ========================================
+
+/**
+ * Update the phase indicator UI
+ */
+function updatePhaseUI(phase: string) {
+    let phaseIndicator = document.getElementById('phase-indicator');
+    
+    if (!phaseIndicator) {
+        phaseIndicator = document.createElement('div');
+        phaseIndicator.id = 'phase-indicator';
+        phaseIndicator.style.cssText = `
+            position: fixed;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(0, 0, 0, 0.7);
+            padding: 10px 20px;
+            border-radius: 25px;
+            color: white;
+            font-family: system-ui, sans-serif;
+            font-size: 16px;
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            transition: all 0.5s ease;
+        `;
+        document.body.appendChild(phaseIndicator);
+    }
+    
+    const phaseConfig: Record<string, { icon: string; color: string; name: string }> = {
+        day: { icon: '☀️', color: '#FFD700', name: 'DAG' },
+        dusk: { icon: '🌅', color: '#FF6B35', name: 'SCHEMERING' },
+        night: { icon: '🌙', color: '#4B0082', name: 'NACHT' },
+        dawn: { icon: '🌄', color: '#FF9F1C', name: 'DAGERAAD' }
+    };
+    
+    const config = phaseConfig[phase] || phaseConfig.day;
+    
+    phaseIndicator.innerHTML = `
+        <span style="font-size: 24px">${config.icon}</span>
+        <span style="color: ${config.color}; font-weight: bold">${config.name}</span>
+        <div id="phase-progress" style="
+            width: 100px;
+            height: 4px;
+            background: rgba(255,255,255,0.2);
+            border-radius: 2px;
+            overflow: hidden;
+        ">
+            <div id="phase-progress-bar" style="
+                width: 0%;
+                height: 100%;
+                background: ${config.color};
+                transition: width 0.5s ease;
+            "></div>
+        </div>
+    `;
+    
+    // Flash animation on phase change
+    phaseIndicator.style.animation = 'none';
+    phaseIndicator.offsetHeight;
+    phaseIndicator.style.animation = 'phaseFlash 0.5s ease';
+}
+
+/**
+ * Update phase progress bar
+ */
+function updatePhaseProgressUI(_phase: string, progress: number) {
+    const progressBar = document.getElementById('phase-progress-bar');
+    if (progressBar) {
+        progressBar.style.width = `${progress * 100}%`;
+    }
+}
+
+/**
+ * Show warning when entity is near
+ */
+function showEntityWarning(entityId: string) {
+    let warning = document.getElementById('entity-warning');
+    
+    if (!warning) {
+        warning = document.createElement('div');
+        warning.id = 'entity-warning';
+        warning.style.cssText = `
+            position: fixed;
+            bottom: 100px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(255, 50, 50, 0.9);
+            padding: 15px 30px;
+            border-radius: 10px;
+            color: white;
+            font-family: system-ui, sans-serif;
+            font-size: 18px;
+            font-weight: bold;
+            z-index: 1500;
+            animation: warningPulse 0.5s ease-in-out infinite;
+        `;
+        document.body.appendChild(warning);
+        
+        // Add animation style
+        if (!document.getElementById('warning-style')) {
+            const style = document.createElement('style');
+            style.id = 'warning-style';
+            style.textContent = `
+                @keyframes warningPulse {
+                    0%, 100% { opacity: 1; transform: translateX(-50%) scale(1); }
+                    50% { opacity: 0.7; transform: translateX(-50%) scale(1.05); }
+                }
+                @keyframes phaseFlash {
+                    0% { transform: translateX(-50%) scale(1.1); }
+                    100% { transform: translateX(-50%) scale(1); }
+                }
+            `;
+            document.head.appendChild(style);
+        }
+    }
+    
+    warning.textContent = '⚠️ GEVAAR NABIJ!';
+    warning.style.display = 'block';
+    
+    // Hide after a short time
+    setTimeout(() => {
+        if (warning) {
+            warning.style.display = 'none';
+        }
+    }, 1500);
+}
+
+/**
+ * Show caught by entity screen
+ */
+function showCaughtByEntity(entityType: string) {
+    const entityNames: Record<string, string> = {
+        hunter: 'Hunter',
+        scanner: 'Scanner', 
+        sweeper: 'Sweeper'
+    };
+    
+    const entityColors: Record<string, string> = {
+        hunter: '#ff3333',
+        scanner: '#ffaa00',
+        sweeper: '#aa33ff'
+    };
+    
+    const overlay = document.createElement('div');
+    overlay.id = 'caught-overlay';
+    overlay.innerHTML = `
+        <style>
+            #caught-overlay {
+                position: fixed;
+                inset: 0;
+                background: rgba(0, 0, 0, 0.9);
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                justify-content: center;
+                z-index: 2000;
+                color: white;
+                font-family: system-ui, sans-serif;
+                animation: fadeIn 0.3s ease;
+            }
+            @keyframes fadeIn {
+                from { opacity: 0; }
+                to { opacity: 1; }
+            }
+            #caught-overlay h1 {
+                font-size: 48px;
+                color: ${entityColors[entityType] || '#ff0000'};
+                margin-bottom: 20px;
+                text-shadow: 0 0 20px ${entityColors[entityType] || '#ff0000'};
+            }
+            #caught-overlay .entity-name {
+                font-size: 32px;
+                margin-bottom: 30px;
+                opacity: 0.8;
+            }
+        </style>
+        <h1>💀 GEVANGEN!</h1>
+        <div class="entity-name">Door een ${entityNames[entityType] || entityType}</div>
+    `;
+    
+    document.body.appendChild(overlay);
 }
 
 /**

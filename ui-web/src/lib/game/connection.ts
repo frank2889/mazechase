@@ -20,6 +20,59 @@ export interface GameEventHandlers {
     onScoreUpdate?: (scores: Record<string, number>) => void;
     onPlayerJoin?: (spriteId: string, username: string) => void;
     onPlayerLeave?: (spriteId: string) => void;
+    
+    // Dynamic world events
+    onPhaseChange?: (phase: string, zones: Zone[]) => void;
+    onPhaseUpdate?: (phase: string, progress: number) => void;
+    onMazeUpdate?: (update: MazeUpdate) => void;
+    onEntitiesUpdate?: (entities: DangerEntityData[]) => void;
+    onEntityNear?: (entityId: string, warning: boolean) => void;
+    onEntityCollision?: (entityId: string, entityType: string, caught: boolean) => void;
+    onDynamicStateSync?: (state: DynamicState) => void;
+}
+
+// Dynamic world types
+export interface Zone {
+    id: number;
+    type: 'safe' | 'neutral' | 'danger';
+    x: number;
+    y: number;
+    width: number;
+    height: number;
+    isActive: boolean;
+}
+
+export interface MazeUpdate {
+    type: 'wall_add' | 'wall_remove' | 'wall_move';
+    x: number;
+    y: number;
+    targetX?: number;
+    targetY?: number;
+    duration: number;
+}
+
+export interface DangerEntityData {
+    id: string;
+    type: 'hunter' | 'scanner' | 'sweeper';
+    state: 'patrol' | 'alert' | 'chase' | 'return' | 'dormant';
+    x: number;
+    y: number;
+    dir: string;
+    glow: number;
+    glowColor: string;
+    alert: number;
+    scanDirection?: number;
+    scanAngle?: number;
+    detectionRange?: number;
+}
+
+export interface DynamicState {
+    zones: {
+        zones: Zone[];
+        phase: string;
+        progress: number;
+    };
+    entities: DangerEntityData[];
 }
 
 let gameEventHandlers: GameEventHandlers = {};
@@ -93,7 +146,15 @@ let messageHandlers: { [key: string]: (json: any) => void } = {
     "gameover": handleGameOver,
     "lobbystatus": handleLobbyStatus,
     "countdown": handleCountdown,
-    "gamestart": handleGameStart
+    "gamestart": handleGameStart,
+    // Dynamic world handlers
+    "phase_change": handlePhaseChange,
+    "phase_update": handlePhaseUpdate,
+    "maze_update": handleMazeUpdate,
+    "entities_update": handleEntitiesUpdate,
+    "entity_near": handleEntityNear,
+    "entity_collision": handleEntityCollision,
+    "dynamic_state": handleDynamicState
 }
 
 // Reconnection state
@@ -420,11 +481,55 @@ function handleCountdown(json: any) {
     notifyLobbyStateListeners();
 }
 
-function handleGameStart(_json: any) {
+function handleGameStart(json: any) {
     console.log('Game starting!');
     lobbyState.matchStarted = true;
     lobbyState.countdown = null;
     notifyLobbyStateListeners();
+    
+    // Handle initial dynamic state if present
+    if (json.dynamicState) {
+        console.log('Received initial dynamic state:', json.dynamicState);
+        gameEventHandlers.onDynamicStateSync?.(json.dynamicState);
+    }
+}
+
+// Dynamic world handlers
+function handlePhaseChange(json: any) {
+    const data = json.data || json;
+    console.log('Phase change:', data.newPhase);
+    gameEventHandlers.onPhaseChange?.(data.newPhase, data.zones || []);
+}
+
+function handlePhaseUpdate(json: any) {
+    const data = json.data || json;
+    gameEventHandlers.onPhaseUpdate?.(data.phase, data.progress);
+}
+
+function handleMazeUpdate(json: any) {
+    const data = json.data || json;
+    console.log('Maze update:', data);
+    gameEventHandlers.onMazeUpdate?.(data);
+}
+
+function handleEntitiesUpdate(json: any) {
+    const data = json.data || json;
+    gameEventHandlers.onEntitiesUpdate?.(data);
+}
+
+function handleEntityNear(json: any) {
+    console.log('Entity near:', json.entityId);
+    gameEventHandlers.onEntityNear?.(json.entityId, json.warning);
+}
+
+function handleEntityCollision(json: any) {
+    console.log('Entity collision:', json);
+    gameEventHandlers.onEntityCollision?.(json.entityId, json.entityType, json.caught);
+    
+    // If caught, trigger game over
+    if (json.caught) {
+        gameEventHandlers.onPlayerCaught?.(prevGameState.spriteId, json.entityId);
+    }
 }
 
 // Send ready toggle message
@@ -443,4 +548,20 @@ export function sendStartGame() {
 export function requestLobbyStatus() {
     console.log('Requesting lobby status');
     sendWsMessage('lobbystatus', {});
+}
+
+// Request dynamic state sync
+export function requestDynamicState() {
+    console.log('Requesting dynamic state');
+    sendWsMessage('dynamic_state', {});
+}
+
+// Report entity collision (server verifies)
+export function sendEntityCollision(x: number, y: number) {
+    sendWsMessage('entity_collision', { x, y });
+}
+
+// Query current zone
+export function sendZoneQuery(x: number, y: number) {
+    sendWsMessage('zone_query', { x, y });
 }

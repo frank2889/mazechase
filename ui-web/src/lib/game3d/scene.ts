@@ -7,6 +7,10 @@ import { Maze3D, TileType, type MazeConfig } from './maze';
 import { Player3D, type SpriteType3D } from './player';
 import { loadTiledMap, gameToWorld3D, SPAWN_POSITIONS } from './tilemap-loader';
 import { ParticleManager } from './particles';
+import { EntityRenderer } from './entities';
+import { ZoneRenderer, type TimePhase } from './zones';
+import { DynamicMaze } from './dynamicMaze';
+import type { Zone, MazeUpdate, DangerEntityData, DynamicState } from '../game/connection';
 
 // Phaser tile size in pixels
 const PHASER_TILE_SIZE = 50;
@@ -29,6 +33,11 @@ export class Game3DScene {
     private mazeHeight: number = 0;
     private followPlayerId: string | null = null;
     private isRunning: boolean = false;
+    
+    // Dynamic game systems
+    private entityRenderer: EntityRenderer;
+    private zoneRenderer: ZoneRenderer;
+    private dynamicMaze: DynamicMaze;
 
     constructor(canvas: HTMLCanvasElement) {
         // Check WebGL support
@@ -39,6 +48,11 @@ export class Game3DScene {
         this.engine = new GameEngine({ canvas, antialias: true });
         this.maze = new Maze3D(this.engine.babylonScene);
         this.particles = new ParticleManager(this.engine.babylonScene);
+        
+        // Initialize dynamic game systems
+        this.entityRenderer = new EntityRenderer(this.engine.babylonScene, this.maze.getGlowLayer());
+        this.zoneRenderer = new ZoneRenderer(this.engine.babylonScene);
+        this.dynamicMaze = new DynamicMaze(this.engine.babylonScene);
     }
 
     /**
@@ -231,6 +245,107 @@ export class Game3DScene {
         }
     }
 
+    // ========================================
+    // Dynamic Game Systems
+    // ========================================
+
+    /**
+     * Initialize dynamic state from server
+     */
+    initDynamicState(state: DynamicState): void {
+        console.log('Initializing dynamic state:', state);
+        
+        // Initialize zones
+        if (state.zones?.zones) {
+            this.zoneRenderer.createZones(state.zones.zones);
+        }
+        
+        // Set initial phase
+        if (state.zones?.phase) {
+            this.zoneRenderer.setPhase(state.zones.phase as TimePhase);
+        }
+        
+        // Initialize entities
+        if (state.entities) {
+            this.entityRenderer.updateEntities(state.entities);
+        }
+    }
+
+    /**
+     * Handle phase change event
+     */
+    onPhaseChange(phase: string, zones: Zone[]): void {
+        this.zoneRenderer.setPhase(phase as TimePhase, zones);
+    }
+
+    /**
+     * Handle phase progress update
+     */
+    onPhaseUpdate(phase: string, progress: number): void {
+        this.zoneRenderer.updatePhaseProgress(phase as TimePhase, progress);
+    }
+
+    /**
+     * Handle maze update event
+     */
+    onMazeUpdate(update: MazeUpdate): void {
+        this.dynamicMaze.handleMazeUpdate(update);
+    }
+
+    /**
+     * Handle entities update
+     */
+    onEntitiesUpdate(entities: DangerEntityData[]): void {
+        this.entityRenderer.updateEntities(entities);
+    }
+
+    /**
+     * Get entity near player position (for collision warning)
+     */
+    getEntityNearPlayer(playerId: string): DangerEntityData | null {
+        const player = this.players.get(playerId);
+        if (!player) return null;
+        
+        const pos = player.getPosition();
+        return this.entityRenderer.getEntityNear(pos.x, pos.z);
+    }
+
+    /**
+     * Check if player is in safe zone
+     */
+    isPlayerInSafeZone(playerId: string): boolean {
+        const player = this.players.get(playerId);
+        if (!player) return false;
+        
+        const pos = player.getPosition();
+        return this.zoneRenderer.isInSafeZone(pos.x, pos.z);
+    }
+
+    /**
+     * Get current zone for player
+     */
+    getPlayerZone(playerId: string): Zone | null {
+        const player = this.players.get(playerId);
+        if (!player) return null;
+        
+        const pos = player.getPosition();
+        return this.zoneRenderer.getZoneAt(pos.x, pos.z);
+    }
+
+    /**
+     * Get current time phase
+     */
+    getCurrentPhase(): TimePhase {
+        return this.zoneRenderer.getCurrentPhase();
+    }
+
+    /**
+     * Check if there's a dynamic wall at position
+     */
+    hasDynamicWallAt(x: number, z: number): boolean {
+        return this.dynamicMaze.hasWallAt(x, z);
+    }
+
     /**
      * Start the game loop
      */
@@ -279,6 +394,9 @@ export class Game3DScene {
         this.players.forEach(player => player.dispose());
         this.players.clear();
         this.maze.dispose();
+        this.entityRenderer.dispose();
+        this.zoneRenderer.dispose();
+        this.dynamicMaze.dispose();
         this.engine.dispose();
     }
 

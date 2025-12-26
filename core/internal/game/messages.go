@@ -268,8 +268,25 @@ func StartGameMessage(manager *Manager) MessageHandler {
 
 				// Game start!
 				data.world.MatchStarted = true
+				
+				// Start dynamic systems with broadcast function
+				broadcastDynamic := func(msgType string, dynamicData interface{}) {
+					msg := map[string]interface{}{
+						"type": msgType,
+						"data": dynamicData,
+					}
+					marshal, err := json.Marshal(msg)
+					if err == nil {
+						manager.broadcastAll(data.world, marshal)
+					}
+				}
+				data.world.StartDynamicSystems(broadcastDynamic)
+				
+				// Send game start with initial dynamic state
+				dynamicState := data.world.GetDynamicState()
 				startMsg := map[string]interface{}{
-					"type": "gamestart",
+					"type":         "gamestart",
+					"dynamicState": dynamicState,
 				}
 				marshal, _ := json.Marshal(startMsg)
 				manager.broadcastAll(data.world, marshal)
@@ -334,4 +351,92 @@ func getCoordFromMessage(msgInfo map[string]interface{}) (X float64, Y float64, 
 	//}
 
 	return x.(float64), y.(float64), nil
+}
+
+// =========================================
+// Dynamic World Messages
+// =========================================
+
+// EntityCollisionMessage handles when a player collides with a danger entity
+func EntityCollisionMessage() MessageHandler {
+	name := "entity_collision"
+	return MessageHandler{
+		messageName: name,
+		handler: func(data MessageData) map[string]interface{} {
+			x, y, err := getCoordFromMessage(data.msgInfo)
+			if err != nil {
+				return nil
+			}
+			
+			// Check collision on server side
+			entity := data.world.CheckEntityCollision(x, y)
+			if entity == nil {
+				return nil
+			}
+			
+			// Determine effect based on zone and entity type
+			zone := data.world.GetCurrentZone(int(x), int(y))
+			
+			// In safe zones, entities don't kill (unless zone is inactive)
+			if zone != nil && zone.Type == ZoneSafe && zone.IsActive {
+				return map[string]interface{}{
+					"type":     "entity_near",
+					"entityId": entity.ID,
+					"warning":  true,
+				}
+			}
+			
+			// In danger zones or inactive safe zones - player caught!
+			return map[string]interface{}{
+				"type":       name,
+				"entityId":   entity.ID,
+				"entityType": entity.Type,
+				"caught":     true,
+			}
+		},
+	}
+}
+
+// ZoneQueryMessage returns the zone at a specific position
+func ZoneQueryMessage() MessageHandler {
+	name := "zone_query"
+	return MessageHandler{
+		messageName: name,
+		handler: func(data MessageData) map[string]interface{} {
+			x, y, err := getCoordFromMessage(data.msgInfo)
+			if err != nil {
+				return nil
+			}
+			
+			zone := data.world.GetCurrentZone(int(x), int(y))
+			if zone == nil {
+				return map[string]interface{}{
+					"type": name,
+					"zone": nil,
+				}
+			}
+			
+			return map[string]interface{}{
+				"type": name,
+				"zone": map[string]interface{}{
+					"id":       zone.ID,
+					"zoneType": zone.Type,
+					"isActive": zone.IsActive,
+				},
+			}
+		},
+	}
+}
+
+// DynamicStateMessage returns the full dynamic state for sync
+func DynamicStateMessage() MessageHandler {
+	name := "dynamic_state"
+	return MessageHandler{
+		messageName: name,
+		handler: func(data MessageData) map[string]interface{} {
+			state := data.world.GetDynamicState()
+			state["type"] = name
+			return state
+		},
+	}
 }

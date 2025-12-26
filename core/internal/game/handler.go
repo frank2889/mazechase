@@ -45,6 +45,10 @@ func RegisterGameWSHandler(mux *http.ServeMux, authService *user.Service, lobbyS
 			ReadyToggleMessage(),
 			StartGameMessage(manager),
 			LobbyStatusMessage(),
+			// Dynamic world messages
+			EntityCollisionMessage().WithMiddleware(CheckGameOverMiddleware),
+			ZoneQueryMessage(),
+			DynamicStateMessage(),
 		),
 	}
 

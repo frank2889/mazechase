@@ -63,6 +63,13 @@ export class Maze3D {
         this.glowLayer.intensity = 0.8;
     }
 
+    /**
+     * Get the glow layer for use by other systems
+     */
+    public getGlowLayer(): GlowLayer | null {
+        return this.glowLayer;
+    }
+
     private createMaterials(): void {
         // Wall material - dark blue/purple like the original
         this.wallMaterial = new StandardMaterial('wallMat', this.scene);

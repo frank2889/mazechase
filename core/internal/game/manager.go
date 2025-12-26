@@ -93,6 +93,9 @@ func (manager *Manager) getWorld(lobby *lobby.Lobby) (*World, error) {
 				newWorld.BotManager.StopAllBots()
 			}
 			
+			// Stop dynamic systems when game ends
+			newWorld.StopDynamicSystems()
+			
 			// endgame does not need any info
 			msg := EndGameMessage(gameOverInfo.Reason, gameOverInfo.Winner).handler(MessageData{})
 			marshal, err := json.Marshal(msg)

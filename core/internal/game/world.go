@@ -32,9 +32,22 @@ type World struct {
 	botFillScheduled    bool
 	HostPlayerId        string
 	CountdownStarted    bool
+	
+	// New dynamic game mechanics
+	DynamicWorld    *DynamicWorld
+	EntityManager   *EntityManager
+	MazeWidth       int
+	MazeHeight      int
 }
 
 func NewWorldState() *World {
+	// Default maze dimensions (will be updated when maze loads)
+	mazeWidth := 28
+	mazeHeight := 31
+	
+	dynamicWorld := NewDynamicWorld(mazeWidth, mazeHeight)
+	entityManager := NewEntityManager(mazeWidth, mazeHeight, dynamicWorld)
+	
 	return &World{
 		MatchStarted:        false,
 		IsPoweredUp:         false,
@@ -50,6 +63,10 @@ func NewWorldState() *World {
 		botFillScheduled:    false,
 		HostPlayerId:        "",
 		CountdownStarted:    false,
+		DynamicWorld:        dynamicWorld,
+		EntityManager:       entityManager,
+		MazeWidth:           mazeWidth,
+		MazeHeight:          mazeHeight,
 	}
 }
 
@@ -295,4 +312,78 @@ func (w *World) GetReadyCount() int {
 		}
 	}
 	return count
+}
+
+// StartDynamicSystems initializes and starts the zone and entity systems
+func (w *World) StartDynamicSystems(broadcastFunc func(msgType string, data interface{})) {
+	w.worldLock.Lock()
+	defer w.worldLock.Unlock()
+	
+	// Set broadcast functions
+	w.DynamicWorld.SetBroadcastFunc(broadcastFunc)
+	w.EntityManager.SetBroadcastFunc(broadcastFunc)
+	
+	// Set player position getter
+	w.EntityManager.SetGetPlayersFunc(w.getPlayerPositions)
+	
+	// Spawn initial entities
+	w.EntityManager.SpawnInitialEntities()
+	
+	// Start both systems
+	w.DynamicWorld.Start()
+	w.EntityManager.Start()
+}
+
+// StopDynamicSystems stops the zone and entity update loops
+func (w *World) StopDynamicSystems() {
+	if w.DynamicWorld != nil {
+		w.DynamicWorld.Stop()
+	}
+	if w.EntityManager != nil {
+		w.EntityManager.Stop()
+	}
+}
+
+// getPlayerPositions returns current player positions for entity AI
+func (w *World) getPlayerPositions() []PlayerPosition {
+	positions := make([]PlayerPosition, 0)
+	
+	for _, session := range w.ConnectedPlayers.GetValues() {
+		if session == nil {
+			continue
+		}
+		player, err := getPlayerEntityFromSession(session)
+		if err != nil {
+			continue
+		}
+		positions = append(positions, PlayerPosition{
+			ID: player.PlayerId,
+			X:  player.X,
+			Y:  player.Y,
+		})
+	}
+	
+	return positions
+}
+
+// GetDynamicState returns the current state of zones and entities for new players
+func (w *World) GetDynamicState() map[string]interface{} {
+	zonesJSON, _ := w.DynamicWorld.GetZonesJSON()
+	var zonesData map[string]interface{}
+	json.Unmarshal(zonesJSON, &zonesData)
+	
+	return map[string]interface{}{
+		"zones":    zonesData,
+		"entities": w.EntityManager.GetEntitiesJSON(),
+	}
+}
+
+// CheckEntityCollision checks if a player has collided with an entity
+func (w *World) CheckEntityCollision(playerX, playerY float64) *DangerEntity {
+	return w.EntityManager.CheckPlayerCollision(playerX, playerY)
+}
+
+// GetCurrentZone returns the zone at the player's position
+func (w *World) GetCurrentZone(x, y int) *Zone {
+	return w.DynamicWorld.GetZoneAt(x, y)
 }

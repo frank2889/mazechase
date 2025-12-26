@@ -2,6 +2,7 @@
   "dependencies": {
     "dotenv": "^17.2.3",
     "openai": "^6.15.0",
+    "puppeteer": "^24.34.0",
     "ws": "^8.18.3"
   },
   "name": "tests",

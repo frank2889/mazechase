@@ -1,0 +1,30 @@
+{
+  "timestamp": "2025-12-26T20:54:20.432Z",
+  "testers": [
+    {
+      "tester": "Emma",
+      "age": 8,
+      "screenshots": [],
+      "analyses": []
+    },
+    {
+      "tester": "Tim",
+      "age": 16,
+      "screenshots": [],
+      "analyses": []
+    },
+    {
+      "tester": "Sandra",
+      "age": 38,
+      "screenshots": [],
+      "analyses": []
+    },
+    {
+      "tester": "Marcus",
+      "age": 32,
+      "screenshots": [],
+      "analyses": []
+    }
+  ],
+  "designReport": "Om een Prioriteiten Rapport voor de visuele verbeteringen van MazeChase te maken, moeten we eerst de feedback van de testers analyseren. Aangezien de feedback niet is verstrekt, zal ik de structuur van het rapport schetsen en veronderstellingen maken over mogelijke feedback van de testers. Dit kan worden aangepast zodra de specifieke feedback beschikbaar is.\n\n### 🔴 KRITIEKE VISUELE ISSUES\n1. **Inconsistente Stijl**: Als er inconsistentie bestaat in het gebruik van stijlelementen, zoals verschillende stijlen van iconen en knoppen die niet bij elkaar passen, kan dit de game onprofessioneel maken.\n2. **Onleesbare Tekst**: Tekst die moeilijk te lezen is door slechte kleurcontrasten of te kleine lettergrootte.\n3. **Visuele Overbelasting**: Overmatig gebruik van visuele elementen waardoor de interface rommelig aanvoelt en het moeilijk is om belangrijke informatie te onderscheiden.\n\n### 🟡 BELANGRIJKE VERBETERINGEN\n1. **Verbeterde Navigatie**: Duidelijkere visuele aanwijzingen voor navigatie door het doolhof, zodat spelers gemakkelijker hun weg kunnen vinden.\n2. **Kleurcodering**: Gebruik van kleurcodering om verschillende elementen zoals doelen, obstakels en power-ups duidelijk te onderscheiden.\n3. **Feedback Mechanismen**: Visuele feedback (zoals lichteffecten of animaties) wanneer een speler een actie uitvoert of een fout maakt.\n\n### 🟢 POLISH & DETAILS\n1. **Achtergrondanimaties**: Subtiele animaties voor achtergrond-elementen die bijdragen aan een dynamische, maar niet afleidende, spelomgeving.\n2. **Gelaagdheid en Schaduwen**: Gebruik van schaduwen en lagen om diepte toe te voegen aan platte elementen zonder de eenvoud van het ontwerp te verliezen.\n3. **Gepersonaliseerde Avatars**: Opties voor spelers om hun avatar visueel aan te passen, waardoor ze zich meer verbonden voelen met het spel.\n\n### 🎨 STIJLGIDS AANBEVELINGEN\n- **Kleurenpalet Suggesties**: Gebruik een helder kleurenpalet met contrasterende kleuren voor verschillende elementen. Bijvoorbeeld, gebruik van primaire kleuren zoals blauw, rood, en geel, gecombineerd met aardetinten voor een warme uitstraling.\n- **Typografie Suggesties**: Kies voor een moderne sans-serif font zoals \"Montserrat\" of \"Raleway\" voor duidelijkheid en leesbaarheid.\n- **Iconografie Suggesties**: Simpele, duidelijke iconen met dikke contouren die gemakkelijk te begrijpen zijn, zelfs voor jongere spelers.\n- **Animatie Suggesties**: Korte, vloeiende animaties die de aandacht trekken zonder de speler te overweldigen. Bijvoorbeeld, een lichte bounce-effect bij het oppakken van items.\n\n### CONCRETE IMPLEMENTATIE TAKEN\n1. **Stijlconsistentie Beoordelen en Aanpassen**: Zorg ervoor dat alle visuele elementen dezelfde stijl en esthetiek volgen.\n2. **Leesbaarheid van Tekst Verbeteren**: Pas kleurcontrasten en lettergroottes aan voor betere zichtbaarheid.\n3. **Navigatiehulpmiddelen Ontwerpen**: Creëer duidelijke visuele aanwijzingen en markeringen om navigatie door het doolhof te vergemakkelijken.\n4. **Visuele Feedback Integreren**: Ontwikkel animaties en lichteffecten die spelers informeren over hun acties en spelstatus.\n5. **Iconen en Knoppen Herontwerpen**: Update iconen en knoppen om te voldoen aan de Kurzgesagt-stijl: platte vectoren met dikke contouren en geometrische vormen.\n\nMet deze aanpak kunnen we de visuele kwaliteit van MazeChase verbeteren, zodat het zowel professioneel aanvoelt als aantrekkelijk is voor spelers van alle leeftijden."
+}

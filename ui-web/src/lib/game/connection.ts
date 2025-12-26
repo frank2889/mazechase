@@ -100,9 +100,12 @@ export function connectToWebSocket() {
     if (lobbyId === null) {
         throw new Error("lobbyId must be provided");
     }
+    
+    // Check if solo mode
+    const isSingle = params.get('single') === 'true';
 
     const base = new URL(getBaseUrl())
-    const url = wssProtocol + base.host + `/api/game?lobby=${lobbyId}`;
+    const url = wssProtocol + base.host + `/api/game?lobby=${lobbyId}${isSingle ? '&single=true' : ''}`;
     ws = new WebSocket(url);
 
     ws.onopen = () => {

@@ -136,9 +136,18 @@ func (h *WsHandler) HandleConnect(newPlayerSession *melody.Session) {
 	// Broadcast lobby status to all players
 	h.broadcastLobbyStatus(world)
 
-	// Schedule automatic bot fill after 10 seconds if this is the first player
-	// This gives time for other real players to join
-	world.ScheduleBotFill(10)
+	// Check if this is a solo game - if so, immediately fill with bots
+	queryParams := newPlayerSession.Request.URL.Query()
+	isSinglePlayer := queryParams.Get("single") == "true"
+	
+	if isSinglePlayer && world.BotManager != nil {
+		log.Info().Msg("Solo mode: immediately filling with bots")
+		world.BotManager.FillWithBots()
+	} else {
+		// Schedule automatic bot fill after 10 seconds if this is the first player
+		// This gives time for other real players to join
+		world.ScheduleBotFill(10)
+	}
 }
 
 func (h *WsHandler) HandleDisconnect(s *melody.Session) {

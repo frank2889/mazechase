@@ -50,23 +50,49 @@ export async function initGame() {
     // Check user is logged in with real account
     await checkAuth();
     
+    // Check if this is a solo game
+    const params = new URLSearchParams(window.location.search);
+    const isSoloGame = params.get('single') === 'true';
+    
     connectToWebSocket();
     
-    // Mount waiting room UI
-    mountWaitingRoom();
-    
-    // Subscribe to lobby state to know when game starts
-    let gameInitialized = false;
-    const unsubscribe = subscribeLobbyState((state) => {
-        if (state.matchStarted && !gameInitialized) {
-            gameInitialized = true;
-            unmountWaitingRoom();
-            startPhaserGame();
-        }
-    });
-    
-    console.log("Waiting for game state");
-    await waitForGameState();
+    if (isSoloGame) {
+        // Solo mode: skip waiting room, auto-start after game state received
+        console.log("Solo mode: skipping waiting room");
+        await waitForGameState();
+        
+        // Small delay to allow bots to be added, then auto-start
+        setTimeout(() => {
+            import('./connection.ts').then(({sendStartGame}) => {
+                sendStartGame();
+            });
+        }, 500);
+        
+        // Subscribe to know when game actually starts
+        let gameInitialized = false;
+        subscribeLobbyState((state) => {
+            if (state.matchStarted && !gameInitialized) {
+                gameInitialized = true;
+                startPhaserGame();
+            }
+        });
+    } else {
+        // Multiplayer mode: show waiting room
+        mountWaitingRoom();
+        
+        // Subscribe to lobby state to know when game starts
+        let gameInitialized = false;
+        subscribeLobbyState((state) => {
+            if (state.matchStarted && !gameInitialized) {
+                gameInitialized = true;
+                unmountWaitingRoom();
+                startPhaserGame();
+            }
+        });
+        
+        console.log("Waiting for game state");
+        await waitForGameState();
+    }
 }
 
 async function startPhaserGame() {

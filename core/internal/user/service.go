@@ -75,7 +75,15 @@ func (auth *Service) Logout(userId uint) (*User, error) {
 
 func (auth *Service) newUserAuthToken(userId uint) (*User, error) {
 	token := CreateAuthToken(32)
-	user, err := auth.updateUserAuthToken(userId, hashString(token))
+	hashedToken := hashString(token)
+	
+	log.Debug().
+		Uint("user_id", userId).
+		Str("token_prefix", token[:8]+"...").
+		Str("hashed_prefix", hashedToken[:16]+"...").
+		Msg("newUserAuthToken: storing hashed token")
+	
+	user, err := auth.updateUserAuthToken(userId, hashedToken)
 	if err != nil {
 		return nil, err
 	}
@@ -147,17 +155,30 @@ func (auth *Service) VerifyAuthHeader(headers http.Header) (*User, error) {
 
 func (auth *Service) verifyToken(token string) (*User, error) {
 	user := User{}
+	hashedToken := hashString(token)
+	
+	log.Debug().
+		Str("token_prefix", token[:8]+"...").
+		Str("hashed_prefix", hashedToken[:16]+"...").
+		Msg("verifyToken: looking up token in database")
 
 	result := auth.Db.
-		Where("token = ?", hashString(token)).
+		Where("token = ?", hashedToken).
 		Find(&user)
 
 	if result.Error != nil {
-		log.Error().Err(result.Error).Msg("Failed to update auth token")
+		log.Error().Err(result.Error).Msg("verifyToken: database error")
 		return &User{}, errors.New("sessie verlopen, log opnieuw in")
 	}
 
+	log.Debug().
+		Uint("user_id", user.ID).
+		Str("username", user.Username).
+		Int64("rows_found", result.RowsAffected).
+		Msg("verifyToken: query result")
+
 	if user.ID == 0 || user.Username == "" {
+		log.Warn().Msg("verifyToken: no user found for token")
 		return &User{}, errors.New("sessie verlopen, log opnieuw in")
 	}
 

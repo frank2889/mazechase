@@ -109,7 +109,7 @@ func (a *Handler) loginWithCookie(user, pass string) (*connect.Response[v1.UserR
 func (a *Handler) Test(_ context.Context, c *connect.Request[v1.AuthResponse]) (*connect.Response[v1.UserResponse], error) {
 	user, err := a.auth.VerifyAuthHeader(c.Header())
 	if err != nil {
-		return nil, err
+		return nil, connect.NewError(connect.CodeUnauthenticated, err)
 	}
 
 	return connect.NewResponse(user.ToRPC()), nil

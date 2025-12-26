@@ -6,33 +6,3 @@ import LobbyComponent from "../../components/Lobby";
 <Layout title="MazeChase - Lobby">
     <LobbyComponent client:load/>
 </Layout>
-
-<script>
-    import { getUserInfo } from '../../lib/auth';
-    
-    // Check if user is logged in with retry logic
-    async function checkAuth(retries = 3, delay = 500) {
-        for (let i = 0; i < retries; i++) {
-            try {
-                const username = await getUserInfo();
-                if (username) {
-                    console.log('Auth successful:', username);
-                    return; // Auth successful
-                }
-            } catch (e) {
-                console.log(`Auth check attempt ${i + 1} failed:`, e);
-            }
-            
-            // Wait before retrying
-            if (i < retries - 1) {
-                await new Promise(resolve => setTimeout(resolve, delay));
-            }
-        }
-        
-        // All retries failed, redirect to login
-        console.log('Auth failed after all retries, redirecting to login');
-        window.location.href = '/auth/login';
-    }
-    
-    checkAuth();
-</script>

@@ -129,10 +129,17 @@ const LobbyComponent: Component = () => {
     createEffect(async () => {
         try {
             const username: string = await getUserInfo();
+            if (!username) {
+                // Not logged in, redirect to login
+                window.location.href = '/auth/login';
+                return;
+            }
             setCurrentUser(username);
             startAutoRefresh();
         } catch (error) {
             console.error('Failed to get user info:', error);
+            // Auth failed, redirect to login
+            window.location.href = '/auth/login';
         }
     });
 

@@ -29,5 +29,39 @@ func InitDB() *gorm.DB {
 
 	log.Info().Msgf("successfully connected to database: %s", dbPath)
 
+	// Seed default users
+	seedDefaultUsers(db)
+
 	return db
+}
+
+// seedDefaultUsers creates the default family accounts if they don't exist
+func seedDefaultUsers(db *gorm.DB) {
+	defaultUsers := []struct {
+		Username string
+		Password string
+	}{
+		{"melanie", "melanie123"},
+		{"frank", "frank123"},
+		{"sophie", "sophie123"},
+		{"emma", "emma123"},
+	}
+
+	for _, u := range defaultUsers {
+		var existing user.User
+		result := db.Where("username = ?", u.Username).First(&existing)
+		if result.Error == gorm.ErrRecordNotFound {
+			newUser := user.User{
+				Username: u.Username,
+				Password: user.EncryptPasswordPublic([]byte(u.Password)),
+				Token:    "",
+				Guest:    false,
+			}
+			if err := db.Create(&newUser).Error; err != nil {
+				log.Warn().Err(err).Str("username", u.Username).Msg("Failed to seed user")
+			} else {
+				log.Info().Str("username", u.Username).Msg("Seeded default user")
+			}
+		}
+	}
 }

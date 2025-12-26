@@ -57,6 +57,11 @@ func encryptPassword(password []byte) string {
 	return string(hashedPassword)
 }
 
+// EncryptPasswordPublic is a public wrapper for encryptPassword (used by database seeding)
+func EncryptPasswordPublic(password []byte) string {
+	return encryptPassword(password)
+}
+
 func hashString(input string) string {
 	hash := sha256.New()
 	hash.Write([]byte(input))

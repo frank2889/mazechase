@@ -18,6 +18,33 @@ async function checkAuth() {
     }
 }
 
+// Detect if running on mobile/touch device
+function isTouchDevice(): boolean {
+    return ('ontouchstart' in window) || 
+           (navigator.maxTouchPoints > 0) || 
+           (window.matchMedia && window.matchMedia('(hover: none)').matches);
+}
+
+// Calculate optimal game dimensions for the screen
+function getGameDimensions() {
+    const baseWidth = 1550;
+    const baseHeight = 1050;
+    
+    const windowWidth = window.innerWidth;
+    const windowHeight = window.innerHeight;
+    
+    // Reserve space for touch controls on mobile
+    const touchControlHeight = isTouchDevice() ? 180 : 0;
+    const availableHeight = windowHeight - touchControlHeight;
+    
+    return {
+        width: baseWidth,
+        height: baseHeight,
+        availableWidth: windowWidth,
+        availableHeight: availableHeight
+    };
+}
+
 export async function initGame() {
     // Check user is logged in with real account
     await checkAuth();
@@ -29,12 +56,12 @@ export async function initGame() {
     const gameWithDep = new GameScene()
     setGame(gameWithDep)
 
-    const mapWidth = 1550 // 30 tiles each with 50 width + 50 for centring
-    const mapHeight = 1050 // 20 tiles each with 50 width + 50 for centring
-    const config = {
+    const dims = getGameDimensions();
+    
+    const config: Phaser.Types.Core.GameConfig = {
         type: Phaser.AUTO,
-        width: mapWidth,
-        height: mapHeight,
+        width: dims.width,
+        height: dims.height,
         backgroundColor: 0x000000,
         physics: {
             default: 'arcade',
@@ -46,11 +73,41 @@ export async function initGame() {
         scale: {
             mode: Phaser.Scale.FIT,
             autoCenter: Phaser.Scale.CENTER_BOTH,
-            parent: 'the-game'
+            parent: 'the-game',
+            width: dims.width,
+            height: dims.height,
+            min: {
+                width: 320,
+                height: 240
+            }
         },
+        input: {
+            keyboard: true,
+            touch: true
+        },
+        render: {
+            pixelArt: true,
+            antialias: false,
+            roundPixels: true
+        }
     };
 
-    new Phaser.Game(config);
+    const game = new Phaser.Game(config);
+    
+    // Handle window resize for responsive layout
+    window.addEventListener('resize', () => {
+        const newDims = getGameDimensions();
+        game.scale.resize(dims.width, dims.height);
+    });
+    
+    // Handle orientation change on mobile
+    window.addEventListener('orientationchange', () => {
+        setTimeout(() => {
+            game.scale.refresh();
+        }, 100);
+    });
+
+    return game;
 }
 
 initGame().then(() => {

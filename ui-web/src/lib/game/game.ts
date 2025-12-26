@@ -47,6 +47,10 @@ export class GameScene extends Phaser.Scene {
     isRedirecting = true
     currentScore = 0;
     gameMode: GameMode = 'classic';
+    
+    // Touch/mobile input
+    touchDirection: AnimDir = 'default';
+    wasdKeys!: { W: Phaser.Input.Keyboard.Key, A: Phaser.Input.Keyboard.Key, S: Phaser.Input.Keyboard.Key, D: Phaser.Input.Keyboard.Key };
 
     allSprites: { [key: string]: Ghost | Pacman } = {
         "pacman": {
@@ -103,6 +107,15 @@ export class GameScene extends Phaser.Scene {
         const modeConfig = getGameModeConfig();
 
         this.cursors = this.input.keyboard!.createCursorKeys();
+        
+        // Add WASD keys for alternative control
+        this.wasdKeys = {
+            W: this.input.keyboard!.addKey(Phaser.Input.Keyboard.KeyCodes.W),
+            A: this.input.keyboard!.addKey(Phaser.Input.Keyboard.KeyCodes.A),
+            S: this.input.keyboard!.addKey(Phaser.Input.Keyboard.KeyCodes.S),
+            D: this.input.keyboard!.addKey(Phaser.Input.Keyboard.KeyCodes.D)
+        };
+        
         this.createMap()
         this.initPacmanAnim()
         this.initGhostsAnim()
@@ -202,20 +215,26 @@ export class GameScene extends Phaser.Scene {
         let curAnim: AnimDir;
         let spriteID = this.controllingSprite!.playerInfo!.getData(playerSpriteIdKey) as string;
 
-        if (this.cursors.left.isDown) {
+        // Check arrow keys, WASD, and touch direction
+        const isLeft = this.cursors.left.isDown || this.wasdKeys.A.isDown;
+        const isRight = this.cursors.right.isDown || this.wasdKeys.D.isDown;
+        const isUp = this.cursors.up.isDown || this.wasdKeys.W.isDown;
+        const isDown = this.cursors.down.isDown || this.wasdKeys.S.isDown;
+
+        if (isLeft) {
             this.movePlayer(spriteID, this.controllingSprite!.movementSpeed, 0);
             curAnim = `left`
             this.setSpriteAnim(spriteID, curAnim)
-        } else if (this.cursors.right.isDown) {
+        } else if (isRight) {
             this.movePlayer(spriteID, -this.controllingSprite!.movementSpeed, 0);
 
             curAnim = `right`
             this.setSpriteAnim(spriteID, curAnim)
-        } else if (this.cursors.up.isDown) {
+        } else if (isUp) {
             this.movePlayer(spriteID, 0, this.controllingSprite!.movementSpeed);
             curAnim = `up`
             this.setSpriteAnim(spriteID, curAnim)
-        } else if (this.cursors.down.isDown) {
+        } else if (isDown) {
             this.movePlayer(spriteID, 0, -this.controllingSprite!.movementSpeed);
             curAnim = `down`
             this.setSpriteAnim(spriteID, curAnim)

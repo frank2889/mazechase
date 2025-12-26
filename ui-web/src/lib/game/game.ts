@@ -365,14 +365,18 @@ export class GameScene extends Phaser.Scene {
     }
 
     private loadPlayers() {
+        // First pass: create all sprites
         for (const [spriteId, spriteData] of Object.entries(this.allSprites)) {
             const defaultAnim = spriteData.animBase + spriteData.defaultAnim
             const startPos = spriteData.startPos
 
+            // Use correct texture key: "pacman" for pacman, "ghosts" for all ghosts
+            const textureKey = spriteId === "pacman" ? "pacman" : "ghosts";
+            
             let sprite = this.physics.add.sprite(
                 startPos[0],
                 startPos[1],
-                spriteId
+                textureKey
             );
 
             sprite.anims.play(defaultAnim);
@@ -396,18 +400,12 @@ export class GameScene extends Phaser.Scene {
 
             spriteData.userNameText = this.addUsernameText(sprite);
 
-            // collisions
+            // collisions with map
             this.physics.add.collider(sprite, this.mapLayer)
 
             if (spriteId == "pacman") {
                 this.physics.add.overlap(sprite, this.pelletLayer, this.pelletCallBack.bind(this))
                 this.physics.add.collider(sprite, this.powerLayer, this.powerUpCallBack.bind(this))
-            } else {
-                this.physics.add.collider(
-                    sprite,
-                    this.allSprites["pacman"].playerInfo!,
-                    this.pacmanGhostCollision.bind(this)
-                )
             }
 
             sprite.setData(playerSpriteIdKey, spriteId)
@@ -415,6 +413,18 @@ export class GameScene extends Phaser.Scene {
             spriteData.playerInfo = sprite
 
             this.allSprites[spriteId] = spriteData
+        }
+        
+        // Second pass: add ghost-pacman collisions (now pacman sprite exists)
+        const pacmanSprite = this.allSprites["pacman"].playerInfo!;
+        for (const [spriteId, spriteData] of Object.entries(this.allSprites)) {
+            if (spriteId !== "pacman" && spriteData.playerInfo) {
+                this.physics.add.collider(
+                    spriteData.playerInfo,
+                    pacmanSprite,
+                    this.pacmanGhostCollision.bind(this)
+                )
+            }
         }
     }
 

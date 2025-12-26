@@ -128,8 +128,8 @@ func (auth *Service) VerifyAuthHeader(headers http.Header) (*User, error) {
 	if err != nil {
 		log.Warn().
 			Str("reason", "missing_auth_cookie").
-			Str("path", req.URL.Path).
-			Interface("headers", headers).Msg("Auth failed: no Authorization cookie")
+			Str("cookie_name", AuthHeaderKey).
+			Msg("Auth failed: no auth cookie found")
 		return nil, fmt.Errorf("niet ingelogd")
 	}
 

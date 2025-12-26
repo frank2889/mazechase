@@ -8,7 +8,9 @@ import (
 	"connectrpc.com/connect"
 )
 
-const AuthHeaderKey = "Authorization"
+// AuthHeaderKey is used as both a header and cookie key for auth tokens
+// Use a non-reserved name to avoid browser or proxy stripping ("Authorization" can be filtered).
+const AuthHeaderKey = "mc_auth"
 const CtxUserKey = "user"
 
 type Interceptor struct {

@@ -17,6 +17,9 @@
   },
   "dependencies": {
     "@astrojs/solid-js": "^5.1.1",
+    "@babylonjs/core": "^8.43.0",
+    "@babylonjs/loaders": "^8.43.0",
+    "@babylonjs/materials": "^8.43.0",
     "@bufbuild/protobuf": "^2.5.2",
     "@connectrpc/connect": "^2.0.2",
     "@connectrpc/connect-web": "^2.0.2",

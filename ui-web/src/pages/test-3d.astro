@@ -1,0 +1,194 @@
+---
+// Test page for 3D rendering - remove after development
+---
+
+<html lang="nl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MazeChase 3D Test</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            background: #0a0a1a;
+            overflow: hidden;
+            font-family: system-ui, sans-serif;
+        }
+        #game-container {
+            width: 100vw;
+            height: 100vh;
+            position: relative;
+        }
+        #game-canvas {
+            width: 100%;
+            height: 100%;
+            display: block;
+        }
+        .overlay {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            color: white;
+            font-size: 14px;
+            background: rgba(0, 0, 0, 0.7);
+            padding: 15px 20px;
+            border-radius: 8px;
+            max-width: 300px;
+        }
+        .overlay h1 {
+            font-size: 18px;
+            margin-bottom: 10px;
+            color: #00ffc7;
+        }
+        .overlay p {
+            margin-bottom: 8px;
+            line-height: 1.4;
+        }
+        .overlay .controls {
+            margin-top: 15px;
+            padding-top: 10px;
+            border-top: 1px solid rgba(255,255,255,0.2);
+        }
+        .overlay kbd {
+            background: #333;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-size: 12px;
+        }
+        .status {
+            position: absolute;
+            bottom: 20px;
+            left: 20px;
+            color: #00ff00;
+            font-size: 12px;
+            font-family: monospace;
+        }
+        .back-link {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            color: #00ffc7;
+            text-decoration: none;
+            background: rgba(0, 0, 0, 0.7);
+            padding: 10px 20px;
+            border-radius: 8px;
+        }
+        .back-link:hover {
+            background: rgba(0, 100, 100, 0.7);
+        }
+    </style>
+</head>
+<body>
+    <div id="game-container">
+        <canvas id="game-canvas"></canvas>
+        
+        <div class="overlay">
+            <h1>MazeChase 3D Test</h1>
+            <p>Dit is een proof-of-concept voor de 3D migratie van MazeChase.</p>
+            <p>De maze wordt gegenereerd met Babylon.js.</p>
+            <div class="controls">
+                <p><kbd>Muis</kbd> + <kbd>Drag</kbd> - Camera roteren</p>
+                <p><kbd>Scroll</kbd> - Zoom in/uit</p>
+                <p><kbd>Arrow Keys</kbd> - Speler bewegen</p>
+            </div>
+        </div>
+        
+        <a href="/lobby" class="back-link">← Terug naar Lobby</a>
+        
+        <div class="status" id="status">Initializing...</div>
+    </div>
+
+    <script type="module">
+        import { Game3DScene } from '../lib/game3d/scene.ts';
+
+        const statusEl = document.getElementById('status');
+        
+        function updateStatus(msg) {
+            statusEl.textContent = msg;
+            console.log(msg);
+        }
+
+        async function init() {
+            try {
+                updateStatus('Creating 3D scene...');
+                
+                const canvas = document.getElementById('game-canvas');
+                const game = new Game3DScene(canvas);
+                
+                updateStatus('Building demo maze...');
+                game.initDemoMaze();
+                
+                // Add test players
+                updateStatus('Adding players...');
+                const runner = game.addPlayer('runner', 'runner', 5, 5);
+                const chaser0 = game.addPlayer('ch0', 'ch0', 15, 10);
+                const chaser1 = game.addPlayer('ch1', 'ch1', 14, 10);
+                const chaser2 = game.addPlayer('ch2', 'ch2', 16, 10);
+                
+                // Enable camera controls for testing
+                const camera = game.getEngine().mainCamera;
+                camera.attachControl(canvas, true);
+                
+                // Start rendering
+                game.start();
+                
+                updateStatus('3D Engine running | FPS: --');
+                
+                // Update FPS display
+                setInterval(() => {
+                    const fps = game.getEngine().babylonEngine.getFps().toFixed(0);
+                    updateStatus(`3D Engine running | FPS: ${fps}`);
+                }, 500);
+
+                // Keyboard controls for test
+                let runnerX = 5;
+                let runnerY = 5;
+                
+                document.addEventListener('keydown', (e) => {
+                    switch(e.key) {
+                        case 'ArrowUp':
+                        case 'w':
+                            runnerY = Math.max(1, runnerY - 1);
+                            break;
+                        case 'ArrowDown':
+                        case 's':
+                            runnerY = Math.min(13, runnerY + 1);
+                            break;
+                        case 'ArrowLeft':
+                        case 'a':
+                            runnerX = Math.max(1, runnerX - 1);
+                            break;
+                        case 'ArrowRight':
+                        case 'd':
+                            runnerX = Math.min(18, runnerX + 1);
+                            break;
+                        case 'p':
+                            // Toggle power mode
+                            game.setRunnerPoweredUp(true);
+                            setTimeout(() => game.setRunnerPoweredUp(false), 3000);
+                            break;
+                        case 'e':
+                            // Eat pellet at current position
+                            game.removePellet(runnerX, runnerY);
+                            break;
+                    }
+                    game.updatePlayerPosition('runner', runnerX, runnerY);
+                });
+
+                // Make game accessible globally for debugging
+                window.game3d = game;
+                
+            } catch (error) {
+                updateStatus('Error: ' + error.message);
+                console.error(error);
+            }
+        }
+
+        init();
+    </script>
+</body>
+</html>

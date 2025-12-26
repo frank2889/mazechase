@@ -37,14 +37,17 @@ RUN apk add --no-cache ca-certificates
 
 WORKDIR /app/
 
-# Create data directory for SQLite database
-RUN mkdir -p /app/appdata
+# Create data directory for SQLite database (must match volume mount)
+RUN mkdir -p /appdata/config
+
+# Set environment to use /appdata for database
+ENV IS_DOCKER=true
 
 COPY --from=web /web/dist ./dist
 
 COPY --from=go_builder /app/mazechase .
 
 # Default port
-EXPOSE 11300
+EXPOSE 8080
 
 ENTRYPOINT ["./mazechase"]

@@ -11,7 +11,9 @@ import {
     Color3,
     Vector3,
     Mesh,
-    TransformNode
+    TransformNode,
+    GlowLayer,
+    Animation
 } from '@babylonjs/core';
 
 // Tile size in 3D world units
@@ -38,6 +40,7 @@ export class Maze3D {
     private floorMesh: Mesh | null = null;
     private pelletMeshes: Map<string, Mesh> = new Map();
     private powerUpMeshes: Map<string, Mesh> = new Map();
+    private glowLayer: GlowLayer | null = null;
 
     // Materials
     private wallMaterial!: StandardMaterial;
@@ -49,6 +52,15 @@ export class Maze3D {
         this.scene = scene;
         this.mazeRoot = new TransformNode('mazeRoot', scene);
         this.createMaterials();
+        this.setupGlowLayer();
+    }
+
+    /**
+     * Setup glow layer for pellets and power-ups
+     */
+    private setupGlowLayer(): void {
+        this.glowLayer = new GlowLayer('glowLayer', this.scene);
+        this.glowLayer.intensity = 0.8;
     }
 
     private createMaterials(): void {
@@ -63,15 +75,17 @@ export class Maze3D {
         this.floorMaterial.diffuseColor = new Color3(0.02, 0.02, 0.05);
         this.floorMaterial.specularColor = new Color3(0, 0, 0);
 
-        // Pellet material - yellow/gold
+        // Pellet material - yellow/gold with strong glow
         this.pelletMaterial = new StandardMaterial('pelletMat', this.scene);
         this.pelletMaterial.diffuseColor = new Color3(1, 0.9, 0.2);
-        this.pelletMaterial.emissiveColor = new Color3(0.3, 0.25, 0.05);
+        this.pelletMaterial.emissiveColor = new Color3(0.8, 0.6, 0.1);
+        this.pelletMaterial.specularColor = new Color3(1, 1, 0.5);
 
-        // Power-up material - bright cyan/white
+        // Power-up material - bright cyan/white with intense glow
         this.powerUpMaterial = new StandardMaterial('powerUpMat', this.scene);
         this.powerUpMaterial.diffuseColor = new Color3(1, 1, 1);
-        this.powerUpMaterial.emissiveColor = new Color3(0.5, 0.8, 1);
+        this.powerUpMaterial.emissiveColor = new Color3(0.8, 1, 1);
+        this.powerUpMaterial.specularColor = new Color3(1, 1, 1);
     }
 
     /**
@@ -149,6 +163,11 @@ export class Maze3D {
         pellet.position.y = TILE_SIZE_3D * 0.15;
         pellet.parent = this.mazeRoot;
         
+        // Add to glow layer
+        if (this.glowLayer) {
+            this.glowLayer.addIncludedOnlyMesh(pellet);
+        }
+        
         this.pelletMeshes.set(`${tileX}_${tileY}`, pellet);
     }
 
@@ -162,7 +181,64 @@ export class Maze3D {
         powerUp.position.y = TILE_SIZE_3D * 0.2;
         powerUp.parent = this.mazeRoot;
         
+        // Add to glow layer
+        if (this.glowLayer) {
+            this.glowLayer.addIncludedOnlyMesh(powerUp);
+        }
+        
+        // Add pulsing animation
+        this.addPulseAnimation(powerUp);
+        
         this.powerUpMeshes.set(`${tileX}_${tileY}`, powerUp);
+    }
+
+    /**
+     * Add pulsing scale animation to a mesh
+     */
+    private addPulseAnimation(mesh: Mesh): void {
+        const frameRate = 30;
+        
+        // Scale animation
+        const scaleAnimation = new Animation(
+            'pulseScale',
+            'scaling',
+            frameRate,
+            Animation.ANIMATIONTYPE_VECTOR3,
+            Animation.ANIMATIONLOOPMODE_CYCLE
+        );
+        
+        const baseScale = 1;
+        const pulseScale = 1.3;
+        
+        const scaleKeys = [
+            { frame: 0, value: new Vector3(baseScale, baseScale, baseScale) },
+            { frame: 15, value: new Vector3(pulseScale, pulseScale, pulseScale) },
+            { frame: 30, value: new Vector3(baseScale, baseScale, baseScale) }
+        ];
+        
+        scaleAnimation.setKeys(scaleKeys);
+        mesh.animations.push(scaleAnimation);
+        
+        // Also animate Y position for floating effect
+        const floatAnimation = new Animation(
+            'pulseFloat',
+            'position.y',
+            frameRate,
+            Animation.ANIMATIONTYPE_FLOAT,
+            Animation.ANIMATIONLOOPMODE_CYCLE
+        );
+        
+        const baseY = mesh.position.y;
+        const floatKeys = [
+            { frame: 0, value: baseY },
+            { frame: 15, value: baseY + 0.1 },
+            { frame: 30, value: baseY }
+        ];
+        
+        floatAnimation.setKeys(floatKeys);
+        mesh.animations.push(floatAnimation);
+        
+        this.scene.beginAnimation(mesh, 0, 30, true);
     }
 
     /**

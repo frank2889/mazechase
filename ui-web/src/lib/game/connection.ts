@@ -1,6 +1,5 @@
 import {showError} from "./utils.ts";
 import type {AnimDir, GameMessage, LobbyPlayer} from "./models.ts";
-import {GameScene} from "./game.ts";
 import {getBaseUrl} from "../api.ts";
 
 let ws: WebSocket;
@@ -10,7 +9,24 @@ let gameStatePromise: Promise<string>
 
 let prevGameState: any = {}
 
-let gameScene: GameScene | null = null;
+// Game event handlers for 3D scene
+export interface GameEventHandlers {
+    onPlayerMove?: (spriteId: string, x: number, y: number, dir: string) => void;
+    onPelletEaten?: (tileX: number, tileY: number) => void;
+    onPowerUpEaten?: (tileX: number, tileY: number) => void;
+    onPowerUpEnd?: () => void;
+    onPlayerCaught?: (runnerId: string, chaserId: string) => void;
+    onGameOver?: (winner: string, scores: Record<string, number>) => void;
+    onScoreUpdate?: (scores: Record<string, number>) => void;
+    onPlayerJoin?: (spriteId: string, username: string) => void;
+    onPlayerLeave?: (spriteId: string) => void;
+}
+
+let gameEventHandlers: GameEventHandlers = {};
+
+export function subscribeGameEvents(handlers: GameEventHandlers) {
+    gameEventHandlers = { ...gameEventHandlers, ...handlers };
+}
 
 // Lobby state management
 export interface LobbyState {
@@ -55,10 +71,6 @@ function notifyLobbyStateListeners() {
 
 export function getLobbyState(): LobbyState {
     return {...lobbyState};
-}
-
-export function setGame(state: GameScene) {
-    gameScene = state;
 }
 
 export function getSpriteID() {
@@ -243,11 +255,6 @@ function handleGameStateMessage(msg: any) {
     }
 }
 
-function setPlayerJoinedUsername(spriteId: string, username: string) {
-    console.log(`New player joined ${spriteId}: ${username}`);
-    gameScene?.allSprites[spriteId]?.userNameText!.setText(username)
-}
-
 // actual join with player info
 function handleNewPlayerJoin(json: any) {
     if (!json.spriteType) {
@@ -255,28 +262,21 @@ function handleNewPlayerJoin(json: any) {
     }
 
     const spriteId = json.spriteType;
-    setPlayerJoinedUsername(spriteId, json.user);
+    const username = json.user;
+    console.log(`New player joined ${spriteId}: ${username}`);
+    
+    // Notify 3D scene
+    gameEventHandlers.onPlayerJoin?.(spriteId, username);
 }
 
 function handlePosMessage(json: any) {
     let spriteId = json.spriteType
     let x = json.x as number;
     let y = json.y as number;
-    let anim = json.dir as string;
+    let dir = json.dir as string;
 
-    // update player
-    gameScene?.allSprites[spriteId]?.playerInfo!.setPosition(x, y);
-    // update other player username text
-    gameScene?.setUserNameTextPos(spriteId)
-
-    try {
-        gameScene?.setSpriteAnim(spriteId, anim)
-    } catch (e) {
-        // if invalid anim default to neutral image
-        let defaultAnim = gameScene?.allSprites[spriteId]!.defaultAnim!
-        gameScene?.setSpriteAnim(spriteId, defaultAnim)
-        console.warn(e)
-    }
+    // Notify 3D scene of position update
+    gameEventHandlers.onPlayerMove?.(spriteId, x, y, dir);
 }
 
 
@@ -285,8 +285,9 @@ function handleDisconnect(json: any) {
     console.log(json)
 
     let spriteId = json.spriteType;
-
-    gameScene?.allSprites[spriteId]!.userNameText!.setText('')
+    
+    // Notify 3D scene
+    gameEventHandlers.onPlayerLeave?.(spriteId);
 }
 
 
@@ -295,8 +296,8 @@ function handlePellet(json: any) {
     const y = json.y as number
     console.log(`Pellet eaten at x:${x}, y:${y}`)
 
-    gameScene?.pelletLayer.removeTileAt(x, y)
-    // Server handles game over check when all pellets are collected
+    // Notify 3D scene
+    gameEventHandlers.onPelletEaten?.(x, y);
 }
 
 
@@ -305,46 +306,36 @@ function handlePowerPelletStart(json: any) {
     const y = json.y as number
     console.log(`Power eaten at x:${x}, y:${y}`)
 
-    gameScene?.powerLayer.removeTileAt(x, y)
-
-    // give runner power up
-    gameScene?.allSprites['runner']!.playerInfo!.setTint(0xff0000);
-    gameScene!.allSprites['runner']!.movementSpeed = -160
-    // gameScene!.allSprites['runner']!.movementSpeed = -300
+    // Notify 3D scene
+    gameEventHandlers.onPowerUpEaten?.(x, y);
 }
 
 
 function handlePowerPelletEnd(_json: any) {
     console.log(`power up ended`)
 
-    // give runner power up
-    gameScene?.allSprites['runner']!.playerInfo!.setTint(0xffffff);
-    gameScene!.allSprites['runner']!.movementSpeed = -200
-    // gameScene!.allSprites['runner']!.movementSpeed = -300
+    // Notify 3D scene
+    gameEventHandlers.onPowerUpEnd?.();
 }
 
 
 function handlePlayerKilled(json: any) {
     let spriteId = json.spriteId;
-    console.log(`spriteId ${spriteId} killed`)
-    gameScene?.allSprites[spriteId]!.playerInfo!.destroy()
-    gameScene?.allSprites[spriteId]!.userNameText!.setText("") // username empty
+    let chaserId = json.chaserId || 'unknown';
+    console.log(`spriteId ${spriteId} killed by ${chaserId}`)
     
-    // Check if current player was killed
-    const currentSpriteId = getSpriteID();
-    if (spriteId === currentSpriteId && gameScene) {
-        gameScene.spectatingText.visible = true;
-    }
+    // Notify 3D scene
+    gameEventHandlers.onPlayerCaught?.(spriteId, chaserId);
 }
 
 
 function handleGameOver(msg: any) {
     console.log(`game over: ${msg.reason}`)
-    if (gameScene) {
-        const winner = msg.winner || 'Onbekend';
-        const reason = msg.reason || 'Game beëindigd';
-        gameScene.showGameOver(winner, reason);
-    }
+    const winner = msg.winner || 'Onbekend';
+    const scores = msg.scores || {};
+    
+    // Notify 3D scene
+    gameEventHandlers.onGameOver?.(winner, scores);
 }
 
 
@@ -371,9 +362,15 @@ export function sendRunnerChaserMessage(chaserSpriteId: string) {
 }
 
 
-export function sendPosMessage(x: number, y: number, dir: AnimDir) {
-    // console.log('position')
-    sendWsMessage('pos', {x: x, y: y, dir: dir})
+export function sendPosMessage(dirOrX: string | number, y?: number, dir?: AnimDir) {
+    // Support both old (x, y, dir) and new (direction only) signatures
+    if (typeof dirOrX === 'string') {
+        // New 3D mode: direction only - server will calculate position
+        sendWsMessage('pos', { dir: dirOrX })
+    } else {
+        // Legacy mode with full position data
+        sendWsMessage('pos', {x: dirOrX, y: y, dir: dir})
+    }
 }
 
 

@@ -6,6 +6,7 @@ import { GameEngine } from './engine';
 import { Maze3D, TileType, type MazeConfig } from './maze';
 import { Player3D, type SpriteType3D } from './player';
 import { loadTiledMap, gameToWorld3D, SPAWN_POSITIONS } from './tilemap-loader';
+import { ParticleManager } from './particles';
 
 // Phaser tile size in pixels
 const PHASER_TILE_SIZE = 50;
@@ -22,9 +23,12 @@ export class Game3DScene {
     private engine: GameEngine;
     private maze: Maze3D;
     private players: Map<string, Player3D> = new Map();
+    private particles: ParticleManager;
     private lastTime: number = 0;
     private mazeWidth: number = 0;
     private mazeHeight: number = 0;
+    private followPlayerId: string | null = null;
+    private isRunning: boolean = false;
 
     constructor(canvas: HTMLCanvasElement) {
         // Check WebGL support
@@ -34,6 +38,7 @@ export class Game3DScene {
 
         this.engine = new GameEngine({ canvas, antialias: true });
         this.maze = new Maze3D(this.engine.babylonScene);
+        this.particles = new ParticleManager(this.engine.babylonScene);
     }
 
     /**
@@ -61,6 +66,13 @@ export class Game3DScene {
             const pos3D = gameToWorld3D(spawnPos.x, spawnPos.y, PHASER_TILE_SIZE);
             this.addPlayer(spriteType, spriteType, pos3D.x, pos3D.z);
         }
+    }
+
+    /**
+     * Set which player the camera should follow
+     */
+    setFollowPlayer(playerId: string): void {
+        this.followPlayerId = playerId;
     }
 
     /**
@@ -161,6 +173,7 @@ export class Game3DScene {
      */
     removePellet(tileX: number, tileY: number): void {
         this.maze.removePellet(tileX, tileY);
+        this.particles.createPelletEatEffect(tileX, tileY);
     }
 
     /**
@@ -168,15 +181,53 @@ export class Game3DScene {
      */
     removePowerUp(tileX: number, tileY: number): void {
         this.maze.removePowerUp(tileX, tileY);
+        this.particles.createPowerUpEatEffect(tileX, tileY);
     }
 
     /**
-     * Set power-up state for runner
+     * Set power-up state for runner and chasers
      */
     setRunnerPoweredUp(powered: boolean): void {
         const runner = this.players.get('runner');
         if (runner) {
             runner.setPoweredUp(powered);
+        }
+        
+        // Set chasers to scared mode
+        this.setChasersScared(powered);
+    }
+
+    /**
+     * Set scared state for all chasers
+     */
+    setChasersScared(scared: boolean): void {
+        ['ch0', 'ch1', 'ch2'].forEach(id => {
+            const chaser = this.players.get(id);
+            if (chaser) {
+                chaser.setScared(scared);
+            }
+        });
+    }
+
+    /**
+     * Hide/destroy a player (when caught)
+     */
+    hidePlayer(playerId: string): void {
+        const player = this.players.get(playerId);
+        if (player) {
+            const pos = player.getPosition();
+            this.particles.createPlayerCaughtEffect(pos.x, pos.y, pos.z);
+            player.setVisible(false);
+        }
+    }
+
+    /**
+     * Set a player's display name
+     */
+    setPlayerName(playerId: string, name: string): void {
+        const player = this.players.get(playerId);
+        if (player) {
+            player.setName(name);
         }
     }
 
@@ -184,6 +235,9 @@ export class Game3DScene {
      * Start the game loop
      */
     start(): void {
+        if (this.isRunning) return;
+        
+        this.isRunning = true;
         this.lastTime = performance.now();
         
         // Custom update loop that runs before render
@@ -196,6 +250,16 @@ export class Game3DScene {
             this.players.forEach(player => {
                 player.update(deltaTime);
             });
+
+            // Update camera follow
+            if (this.followPlayerId) {
+                const followPlayer = this.players.get(this.followPlayerId);
+                if (followPlayer) {
+                    const pos = followPlayer.getPosition();
+                    this.engine.followTarget(pos.x, pos.z);
+                }
+            }
+            this.engine.updateCameraFollow(deltaTime);
         });
 
         this.engine.start();

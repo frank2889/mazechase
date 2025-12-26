@@ -4,7 +4,6 @@ import {addLobby, deleteLobby, getRelativeTime, listLobbies} from "../lib/lobby.
 import {getUserInfo, logout} from "../lib/auth.ts";
 import Snackbar, {type SnackbarMessage} from "./Snackbar.tsx";
 import {GAME_MODES, type GameMode} from "../lib/game/modes.ts";
-import {RenderModeToggle} from "./RenderModeToggle.tsx";
 import {
     Gamepad2, Trophy, Link2, Plus, ClipboardList, Play, Check, 
     Copy, Trash2, Users, Zap, Ghost, Flag, Swords, LogOut, X
@@ -186,7 +185,6 @@ const LobbyComponent: Component = () => {
                     >
                         <Trophy class="w-5 h-5" /> Leaderboard
                     </button>
-                    <RenderModeToggle />
                 </div>
 
                 <div class="absolute right-20 flex flex-col items-center">

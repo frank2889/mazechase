@@ -9,7 +9,11 @@ import {
     Color3,
     Vector3,
     Mesh,
-    Animation
+    Animation,
+    DynamicTexture,
+    Plane,
+    SineEase,
+    EasingFunction
 } from '@babylonjs/core';
 import { TILE_SIZE_3D } from './maze';
 
@@ -46,7 +50,12 @@ export class Player3D {
     private spriteType: SpriteType3D;
     private targetPosition: Vector3;
     private isPoweredUp: boolean = false;
+    private isScared: boolean = false;
     private originalColor: Color3;
+    private originalEmissive: Color3;
+    private namePlane: Mesh | null = null;
+    private nameMaterial: StandardMaterial | null = null;
+    private playerName: string = '';
 
     // For smooth movement interpolation
     private moveSpeed: number = 8; // Units per second
@@ -56,7 +65,8 @@ export class Player3D {
         this.spriteType = spriteType;
 
         const colors = PLAYER_COLORS[spriteType];
-        this.originalColor = colors.primary;
+        this.originalColor = colors.primary.clone();
+        this.originalEmissive = colors.emissive.clone();
 
         // Create material
         this.material = new StandardMaterial(`player_${spriteType}_mat`, scene);
@@ -74,6 +84,8 @@ export class Player3D {
         } else {
             // Chasers are capsule-like (ghost shape)
             this.mesh = this.createGhostMesh(spriteType);
+            // Add floating animation to ghosts
+            this.addFloatingAnimation();
         }
 
         this.mesh.material = this.material;
@@ -82,6 +94,104 @@ export class Player3D {
         const startPos = this.tileToWorldPos(startTileX, startTileY);
         this.mesh.position = startPos;
         this.targetPosition = startPos.clone();
+    }
+
+    /**
+     * Add floating/bobbing animation to ghosts
+     */
+    private addFloatingAnimation(): void {
+        const frameRate = 30;
+        
+        // Floating Y animation
+        const floatAnimation = new Animation(
+            'ghostFloat',
+            'position.y',
+            frameRate,
+            Animation.ANIMATIONTYPE_FLOAT,
+            Animation.ANIMATIONLOOPMODE_CYCLE
+        );
+        
+        // Get base Y from current position
+        const baseY = TILE_SIZE_3D * 0.3;
+        const floatHeight = 0.08;
+        
+        const keys = [
+            { frame: 0, value: baseY },
+            { frame: 20, value: baseY + floatHeight },
+            { frame: 40, value: baseY }
+        ];
+        
+        floatAnimation.setKeys(keys);
+        
+        // Add easing for smooth motion
+        const easingFunction = new SineEase();
+        easingFunction.setEasingMode(EasingFunction.EASINGMODE_EASEINOUT);
+        floatAnimation.setEasingFunction(easingFunction);
+        
+        this.mesh.animations.push(floatAnimation);
+        this.scene.beginAnimation(this.mesh, 0, 40, true);
+    }
+
+    /**
+     * Set and display player name above the mesh
+     */
+    setName(name: string): void {
+        this.playerName = name;
+        
+        // Remove existing name plane
+        if (this.namePlane) {
+            this.namePlane.dispose();
+        }
+        if (this.nameMaterial) {
+            this.nameMaterial.dispose();
+        }
+        
+        if (!name) return;
+        
+        // Create dynamic texture for text
+        const textureSize = 256;
+        const texture = new DynamicTexture(`nameTexture_${this.spriteType}`, textureSize, this.scene, true);
+        texture.hasAlpha = true;
+        
+        // Draw text on texture
+        const ctx = texture.getContext();
+        ctx.clearRect(0, 0, textureSize, textureSize);
+        ctx.font = 'bold 48px Arial';
+        ctx.fillStyle = 'white';
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'middle';
+        ctx.fillText(name, textureSize / 2, textureSize / 2);
+        texture.update();
+        
+        // Create plane for name
+        const planeWidth = TILE_SIZE_3D * 1.5;
+        const planeHeight = TILE_SIZE_3D * 0.4;
+        this.namePlane = MeshBuilder.CreatePlane(`namePlane_${this.spriteType}`, {
+            width: planeWidth,
+            height: planeHeight
+        }, this.scene);
+        
+        // Position above player
+        this.namePlane.parent = this.mesh;
+        this.namePlane.position.y = TILE_SIZE_3D * 0.6;
+        
+        // Billboard mode - always faces camera
+        this.namePlane.billboardMode = Mesh.BILLBOARDMODE_ALL;
+        
+        // Create material with texture
+        this.nameMaterial = new StandardMaterial(`nameMat_${this.spriteType}`, this.scene);
+        this.nameMaterial.diffuseTexture = texture;
+        this.nameMaterial.emissiveTexture = texture;
+        this.nameMaterial.useAlphaFromDiffuseTexture = true;
+        this.nameMaterial.disableLighting = true;
+        this.namePlane.material = this.nameMaterial;
+    }
+
+    /**
+     * Get player name
+     */
+    getName(): string {
+        return this.playerName;
     }
 
     private createGhostMesh(name: string): Mesh {
@@ -163,7 +273,7 @@ export class Player3D {
     }
 
     /**
-     * Enable power-up visual
+     * Enable power-up visual (for runner)
      */
     setPoweredUp(powered: boolean): void {
         this.isPoweredUp = powered;
@@ -174,9 +284,27 @@ export class Player3D {
             this.material.diffuseColor = new Color3(1, 0.3, 0.3);
         } else {
             // Reset to original colors
-            const colors = PLAYER_COLORS[this.spriteType];
-            this.material.diffuseColor = colors.primary;
-            this.material.emissiveColor = colors.emissive;
+            this.material.diffuseColor = this.originalColor;
+            this.material.emissiveColor = this.originalEmissive;
+        }
+    }
+
+    /**
+     * Set scared state (for chasers when runner has power-up)
+     */
+    setScared(scared: boolean): void {
+        if (this.spriteType === 'runner') return; // Runner doesn't get scared
+        
+        this.isScared = scared;
+        
+        if (scared) {
+            // Turn blue and flicker when scared
+            this.material.diffuseColor = new Color3(0.2, 0.3, 1);
+            this.material.emissiveColor = new Color3(0.1, 0.15, 0.5);
+        } else {
+            // Reset to original colors
+            this.material.diffuseColor = this.originalColor;
+            this.material.emissiveColor = this.originalEmissive;
         }
     }
 
@@ -192,12 +320,21 @@ export class Player3D {
      */
     setVisible(visible: boolean): void {
         this.mesh.isVisible = visible;
+        if (this.namePlane) {
+            this.namePlane.isVisible = visible;
+        }
     }
 
     /**
      * Dispose of resources
      */
     dispose(): void {
+        if (this.namePlane) {
+            this.namePlane.dispose();
+        }
+        if (this.nameMaterial) {
+            this.nameMaterial.dispose();
+        }
         this.mesh.dispose();
         this.material.dispose();
     }

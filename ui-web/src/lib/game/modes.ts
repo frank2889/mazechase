@@ -7,7 +7,7 @@
  */
 
 import { Zap, Flag, Swords } from 'lucide-solid';
-import { JSX } from 'solid-js';
+import type { JSX } from 'solid-js';
 
 export type GameMode = 'classic' | 'race' | 'battle';
 

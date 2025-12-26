@@ -46,23 +46,27 @@ export async function initGame() {
     connectToWebSocket();
     
     if (isSoloGame) {
-        // Solo mode: skip waiting room, auto-start after game state received
-        console.log("Solo mode: skipping waiting room");
+        // Solo mode: skip waiting room, start game immediately after state received
+        console.log("Solo mode: starting game immediately");
         await waitForGameState();
         
-        // Small delay to allow bots to be added, then auto-start
+        // Start 3D game immediately (don't wait for matchStarted)
+        await start3DGame();
+        
+        // Send start game command after a short delay to trigger bots and game loop
         setTimeout(() => {
             import('./connection.ts').then(({sendStartGame}) => {
+                console.log("Solo mode: sending startGame command");
                 sendStartGame();
             });
-        }, 500);
+        }, 1000);
         
-        // Subscribe to know when game actually starts
-        let gameInitialized = false;
+        // Still subscribe to handle countdown display if server sends it
         subscribeLobbyState((state) => {
-            if (state.matchStarted && !gameInitialized) {
-                gameInitialized = true;
-                start3DGame();
+            if (state.countdown !== null) {
+                showCountdown(state.countdown);
+            } else {
+                hideCountdown();
             }
         });
     } else {

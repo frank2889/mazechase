@@ -1,42 +1,69 @@
-# 🎮 MazeChase
+# MazeChase 3D
 
-Een real-time multiplayer maze chase game voor het hele gezin! Gebouwd met moderne technologieën voor een soepele, responsieve ervaring op elk apparaat.
+Een real-time multiplayer 3D maze chase game voor het hele gezin! Gebouwd met moderne technologieën voor een soepele, responsieve ervaring op elk apparaat.
 
 **Live Demo:** [mazechase-har7u.ondigitalocean.app](https://mazechase-har7u.ondigitalocean.app)
 
 ---
 
-## 📖 Inhoudsopgave
+## Inhoudsopgave
 
-- [Over het Spel](#-over-het-spel)
-- [Game Modes](#-game-modes)
-- [Tech Stack](#-tech-stack)
-- [Design System](#-design-system)
-- [Architectuur](#-architectuur)
-- [Installatie](#-installatie)
-- [Development](#-development)
-- [Deployment](#-deployment)
-- [API Referentie](#-api-referentie)
+- [Over het Spel](#over-het-spel)
+- [Game Features](#game-features)
+- [Tech Stack](#tech-stack)
+- [Visuele Features](#visuele-features)
+- [Architectuur](#architectuur)
+- [Installatie](#installatie)
+- [Development](#development)
+- [API Referentie](#api-referentie)
 
 ---
 
-## 🎯 Over het Spel
+## Over het Spel
 
-MazeChase is een competitieve multiplayer game waar 4 spelers door een doolhof racen om pellets te verzamelen en elkaar te elimineren. Perfect voor familie game nights!
+MazeChase 3D is een competitieve multiplayer game waar 4 spelers door een 3D doolhof racen om pellets te verzamelen en elkaar te elimineren. Perfect voor familie game nights!
 
-### ✨ Features
+### Gameplay
 
-- **4-Speler Multiplayer** - Speel met vrienden of familie
-- **Bot Auto-fill** - Na 10 seconden worden lege plekken opgevuld met bots
-- **Single Player Mode** - Oefen solo tegen 3 bots
-- **Responsive Design** - Werkt op desktop, tablet en mobiel
-- **Touch Controls** - Virtuele joystick voor mobiele apparaten
-- **Nederlandse UI** - Volledig vertaald naar het Nederlands
+- **Runner** - Verzamel alle pellets en ontsnap aan de Chasers
+- **Chasers** - Vang de Runner voordat alle pellets verzameld zijn
+- **Power-ups** - Pak een power-up om tijdelijk de Chasers te kunnen vangen!
 
-### 👥 Voorgedefinieerde Accounts
+### Win Condities
+
+| Winnaar | Conditie |
+| ------- | -------- |
+| Runner | Alle pellets verzameld |
+| Runner | Alle 3 Chasers gevangen tijdens power-up |
+| Chasers | Runner gevangen |
+
+---
+
+## Game Features
+
+### Core Gameplay
+
+- **4-Speler Multiplayer** - Real-time WebSocket synchronisatie
+- **Bot Auto-fill** - Na 10 seconden worden lege plekken automatisch opgevuld met AI bots
+- **Single Player Mode** - Oefen solo tegen 3 intelligente bots
+- **Server-side Movement** - Collision detection en beweging op de server voor fair play
+
+### Bot AI
+
+- **Chase Mode** - Bots achtervolgen de Runner met pathfinding
+- **Flee Mode** - Tijdens power-up vluchten bots van de Runner
+- **30% Randomness** - Bots maken soms onvoorspelbare bewegingen
+
+### Controls
+
+- **Keyboard** - WASD of pijltjestoetsen
+- **Touch** - Virtuele D-pad voor mobiel
+- **Continuous Movement** - Houd ingedrukt voor doorlopende beweging
+
+### Voorgedefinieerde Accounts
 
 | Gebruiker | Wachtwoord |
-|-----------|------------|
+| --------- | ---------- |
 | melanie   | melanie123 |
 | frank     | frank123   |
 | sophie    | sophie123  |
@@ -44,24 +71,12 @@ MazeChase is een competitieve multiplayer game waar 4 spelers door een doolhof r
 
 ---
 
-## 🎲 Game Modes
-
-### 🏆 Classic Mode
-Runner vs Chasers! De Runner verzamelt pellets terwijl Chasers jagen.
-
-### 🏁 Race Mode  
-Verzamel 50 pellets als eerste om te winnen. Snelheid is key!
-
-### ⚔️ Battle Royale
-Elimineer andere spelers. Laatste speler wint!
-
----
-
-## 🛠️ Tech Stack
+## Tech Stack
 
 ### Backend (Go 1.25)
+
 | Technologie | Versie | Doel |
-|-------------|--------|------|
+| ----------- | ------ | ---- |
 | Go | 1.25 | Server runtime |
 | Melody | 1.4.0 | WebSocket handling |
 | GORM | 1.31.1 | ORM voor SQLite |
@@ -70,132 +85,92 @@ Elimineer andere spelers. Laatste speler wint!
 | bcrypt | - | Password hashing |
 
 ### Frontend (Node 24)
+
 | Technologie | Versie | Doel |
-|-------------|--------|------|
+| ----------- | ------ | ---- |
 | Astro | 5.15.9 | Static site generator |
-| Phaser | 3.90.0 | Game engine |
+| Babylon.js | 8.43.0 | 3D Game Engine |
 | SolidJS | 1.9.9 | Reactive UI components |
 | TailwindCSS | 4.1.8 | Utility-first styling |
 | TypeScript | 5.8.3 | Type safety |
 | Lucide Icons | - | UI iconografie |
 
 ### Tooling
+
 | Tool | Doel |
-|------|------|
+| ---- | ---- |
 | Docker | Containerization |
 | buf | Protobuf code generation |
 | Vitest | Frontend testing |
-| GitHub Actions | CI/CD |
 
 ---
 
-## 🎨 Design System
+## Visuele Features
 
-### Kleurenpalet
+### 3D Rendering (Babylon.js)
 
-```css
-/* Primaire Kleuren */
---purple-500: #8b5cf6;    /* Primary buttons, accents */
---purple-600: #7c3aed;    /* Hover states */
---purple-700: #6d28d9;    /* Active states */
+- **Isometrische Camera** - Vaste hoek met zoom controls
+- **Smooth Camera Follow** - Lerp-based camera tracking
+- **Glow Effects** - Pellets en power-ups gloeien
+- **Particle Systems** - Effecten bij pellet/power-up pickup
+- **60 FPS** - Geoptimaliseerde render loop
 
-/* Secundaire Kleuren */  
---cyan-400: #22d3ee;      /* Secondary accents, links */
---cyan-500: #06b6d4;      /* Hover */
+### Wereld Themas
 
-/* Achtergronden */
---slate-900: #0f172a;     /* Main background */
---slate-800: #1e293b;     /* Cards, inputs */
---slate-700: #334155;     /* Borders, dividers */
+Het spel kiest random een visueel thema bij start:
 
-/* Tekst */
---white: #ffffff;         /* Primary text */
---slate-300: #cbd5e1;     /* Secondary text */
---slate-400: #94a3b8;     /* Muted text */
+| Thema | Kleuren | Sfeer |
+| ----- | ------- | ----- |
+| Neon Night | Paars/Cyan | Cyberpunk neon |
+| Cyber Arcade | Blauw/Groen | Klassiek arcade |
+| Sunset Maze | Oranje/Rood | Warme zonsondergang |
+| Ghost Forest | Groen/Mist | Spookachtig bos |
 
-/* Status Kleuren */
---green-500: #22c55e;     /* Success, online */
---red-500: #ef4444;       /* Error, danger */
---yellow-500: #eab308;    /* Warning */
-```
+### Decoratieve Elementen
 
-### Iconografie
+- **Animated Trees** - Zachtjes wiegende bomen rondom het doolhof
+- **Crystals** - Pulserende kristallen op hoekpunten
+- **Floating Rocks** - Zwevende rotsen met up/down animatie
+- **Ambient Particles** - Atmosferische zwevende deeltjes
 
-We gebruiken [Lucide Icons](https://lucide.dev/) via het `lucide-solid` package voor SolidJS integratie.
+### HUD Elementen
 
-**Installatie:**
-```bash
-npm install lucide-solid
-```
+| Element | Locatie | Beschrijving |
+| ------- | ------- | ------------ |
+| Score Display | Links-boven | Scores van alle spelers |
+| Game Timer | Rechts-boven | Resterende tijd (3 min) |
+| Power-up Timer | Rechts-boven | Countdown tijdens power-up |
+| Minimap | Links-midden | Top-down weergave met spelerposities |
+| FPS Counter | Rechts-onder | Performance indicator |
 
-**Gebruik in componenten:**
-```tsx
-import { User, Gamepad2, Trophy, LogOut } from 'lucide-solid';
+### Animaties
 
-// In JSX
-<User class="w-5 h-5 text-purple-400" />
-<Gamepad2 class="w-6 h-6" />
-```
-
-**Gebruikte icons:**
-| Icon | Component | Gebruik |
-|------|-----------|---------|
-| `User`, `Users` | Account | Gebruiker, spelers |
-| `Gamepad2`, `Play` | Game | Controls, start |
-| `Bot` | Game | Bot indicator |
-| `Trophy`, `Target`, `Flag` | Modes | Classic, Race, Battle |
-| `Zap` | Quick start | Solo play button |
-| `LogOut` | Auth | Uitloggen |
-| `Plus`, `Trash2` | Lobby | Aanmaken, verwijderen |
-| `Link2`, `Copy` | Share | Lobby code delen |
-
-### Typography
-- **Font Family:** System fonts (native stack)
-- **Headings:** Bold, tracking-tight
-- **Body:** Regular weight, relaxed line-height
-
-### Component Styling
-```css
-/* Buttons */
-.btn-primary {
-  @apply bg-purple-500 hover:bg-purple-600 text-white 
-         font-semibold py-3 px-6 rounded-lg 
-         transition-colors duration-200;
-}
-
-.btn-secondary {
-  @apply bg-cyan-500 hover:bg-cyan-600 text-white
-         font-semibold py-3 px-6 rounded-lg;
-}
-
-/* Cards */
-.card {
-  @apply bg-slate-800/50 backdrop-blur-sm 
-         border border-slate-700 rounded-xl p-6;
-}
-
-/* Inputs */
-.input {
-  @apply w-full px-4 py-3 bg-slate-800 border border-slate-600
-         rounded-lg text-white placeholder-slate-400
-         focus:border-purple-500 focus:ring-1 focus:ring-purple-500;
-}
-```
+- **Player Movement** - Smooth interpolation naar target positie
+- **Ghost Floating** - Chasers bewegen zachtjes op en neer
+- **Scared Mode** - Chasers worden blauw tijdens power-up
+- **Score Popups** - Zwevende +10/+50 bij punten
+- **Countdown** - Grote pulserende nummers voor game start
+- **Game Over** - Fade-in overlay met winnaar en scores
 
 ---
 
-## 🏗️ Architectuur
+## Architectuur
 
 ```
 mazechase/
 ├── core/                    # Go Backend
 │   ├── cmd/
-│   │   ├── server/         # Entry point
+│   │   ├── server/         # Entry point + embedded frontend
 │   │   └── api.go          # HTTP/WebSocket setup
 │   ├── internal/
 │   │   ├── config/         # Environment config
 │   │   ├── database/       # GORM + SQLite
-│   │   ├── game/           # Game logic, WebSocket
+│   │   ├── game/           # Game logic
+│   │   │   ├── bot.go          # Bot AI (chase/flee)
+│   │   │   ├── game_config.go  # Game constants
+│   │   │   ├── maze_data.go    # Maze layout & collision
+│   │   │   ├── messages.go     # WebSocket message handlers
+│   │   │   └── world.go        # Game state & player management
 │   │   ├── lobby/          # Lobby management
 │   │   └── user/           # Auth, sessions
 │   └── generated/          # Protobuf generated code
@@ -204,46 +179,73 @@ mazechase/
 │   ├── src/
 │   │   ├── components/     # SolidJS components
 │   │   ├── lib/
-│   │   │   ├── game/       # Phaser game code
-│   │   │   ├── generated/  # Protobuf TS types
+│   │   │   ├── game/       # Game connection & UI
+│   │   │   │   ├── main.ts         # Game initialization
+│   │   │   │   ├── connection.ts   # WebSocket handling
+│   │   │   │   └── audio.ts        # Sound effects
+│   │   │   ├── game3d/     # Babylon.js 3D engine
+│   │   │   │   ├── engine.ts       # Babylon engine wrapper
+│   │   │   │   ├── scene.ts        # Main game scene
+│   │   │   │   ├── maze.ts         # 3D maze rendering
+│   │   │   │   ├── player.ts       # Player meshes
+│   │   │   │   ├── particles.ts    # Particle effects
+│   │   │   │   ├── scenery.ts      # Decorative elements
+│   │   │   │   └── minimap.ts      # HUD minimap
 │   │   │   ├── api.ts      # ConnectRPC client
 │   │   │   └── auth.ts     # Auth helpers
 │   │   ├── layouts/        # Page layouts
 │   │   └── pages/          # Astro pages
-│   └── public/             # Static assets
+│   └── public/
+│       └── gassets/        # Game assets (map.json)
 │
-├── spec/                    # API Specifications
-│   ├── protos/             # Protobuf definitions
-│   ├── buf.yaml            # Buf config
-│   └── buf.gen.yaml        # Code generation config
-│
-├── tests/                   # Test scripts
+├── docs/                    # Documentation
 ├── Dockerfile              # Multi-stage build
-├── docker-compose.yml      # Local development
-└── Makefile                # Build commands
+└── docker-compose.yml      # Local development
 ```
 
 ### Data Flow
 
 ```
-┌─────────────┐     WebSocket      ┌─────────────┐
-│   Browser   │◄──────────────────►│  Go Server  │
-│  (Phaser)   │                    │  (Melody)   │
-└─────────────┘                    └─────────────┘
-      │                                   │
-      │ ConnectRPC                        │ GORM
-      ▼                                   ▼
-┌─────────────┐                    ┌─────────────┐
-│  Auth/Lobby │                    │   SQLite    │
-│    APIs     │                    │  Database   │
-└─────────────┘                    └─────────────┘
+Browser (Babylon.js)  <-- WebSocket -->  Go Server (Melody)
+        |                                      |
+        | direction: up/down/left/right        |
+        |------------------------------------->|
+        |                                      |
+        |    Server calculates:                |
+        |    - New position                    |
+        |    - Wall collision                  |
+        |    - Pellet pickup                   |
+        |    - Player collision                |
+        |                                      |
+        |<-------------------------------------|
+        |  pos update: x, y, pellet, score     |
+```
+
+### WebSocket Protocol
+
+Client naar Server:
+
+```json
+{ "type": "pos", "dir": "up" }
+{ "type": "ready" }
+{ "type": "start" }
+```
+
+Server naar Client:
+
+```json
+{ "type": "state", "spriteId": "runner", "scores": {}, "spawnPositions": {} }
+{ "type": "pos", "spriteId": "runner", "x": 700, "y": 1150, "pellet": {"x": 14, "y": 23}, "score": 10 }
+{ "type": "pow", "x": 1, "y": 3, "duration": 8 }
+{ "type": "gameover", "winner": "Runner", "reason": "Alle pellets verzameld!", "scores": {} }
 ```
 
 ---
 
-## �� Installatie
+## Installatie
 
 ### Vereisten
+
 - Go 1.25+
 - Node.js 24+
 - npm 10+
@@ -273,7 +275,7 @@ services:
 
 ---
 
-## 💻 Development
+## Development
 
 ### Setup
 
@@ -282,166 +284,120 @@ services:
 git clone https://github.com/frank2889/mazechase.git
 cd mazechase
 
-# Install dependencies
+# Install frontend dependencies
 cd ui-web && npm install
-cd ../core && go mod download
 
-# Generate protobuf code
-cd ../spec && buf generate
+# Install backend dependencies
+cd ../core && go mod download
 ```
 
-### Run Development Servers
+### Build and Run
+
+```bash
+# Build frontend
+cd ui-web && npm run build
+
+# Copy to backend dist folder
+cp -r dist ../core/dist
+
+# Build and run server
+cd ../core
+go build -o bin/server ./cmd/server
+./bin/server
+```
+
+Server draait op http://localhost:8080
+
+### Development Mode
 
 ```bash
 # Terminal 1: Backend
 cd core && go run cmd/server/main.go
 
-# Terminal 2: Frontend (hot reload)
+# Terminal 2: Frontend dev server
 cd ui-web && npm run dev
 ```
 
-### Makefile Commands
+---
+
+## Game Controls
+
+### Desktop
+
+| Toets | Actie |
+| ----- | ----- |
+| W / Pijl omhoog | Omhoog |
+| S / Pijl omlaag | Omlaag |
+| A / Pijl links | Links |
+| D / Pijl rechts | Rechts |
+| Scroll | Zoom in/out |
+
+### Mobile
+
+- D-Pad: Virtuele knoppen onderaan scherm
+- Touch and Hold: Continue beweging
+
+---
+
+## Game Configuration
+
+Configuratie in `core/internal/game/game_config.go`:
+
+```go
+const (
+    TileSize      = 50      // Pixels per tile
+    PlayerSpeed   = 200     // Pixels per second
+    TickRateSec   = 0.05    // 20 ticks per second
+    PowerUpTime   = 8       // Seconds
+    PelletScore   = 10      // Points per pellet
+    PowerUpScore  = 50      // Points per power-up
+    TotalPellets  = 201     // Win condition
+)
+```
+
+---
+
+## Troubleshooting
+
+### Server start niet
 
 ```bash
-make build          # Build both backend and frontend
-make dev            # Start development servers
-make test           # Run all tests
-make lint           # Lint code
-make clean          # Clean build artifacts
-make proto          # Regenerate protobuf code
+# Check of poort 8080 vrij is
+lsof -i :8080
+
+# Kill bestaand process
+pkill -f "bin/server"
 ```
 
-### Environment Variables
+### WebSocket verbinding faalt
 
-| Variable | Default | Beschrijving |
-|----------|---------|--------------|
-| `PORT` | 8080 | Server port |
-| `LOBBY_LIMIT` | 100 | Max aantal lobbies |
-| `MP_DISABLE_AUTH` | false | Disable auth (dev only) |
-| `DB_PATH` | ./appdata/config/multipacman.db | Database locatie |
+- Check CORS settings in production
+- Verify dat cookie mc_auth wordt meegestuurd
+- Check browser console voor errors
 
----
-
-## ☁️ Deployment
-
-### DigitalOcean App Platform
-
-De app deployed automatisch via GitHub push. Configuratie in `.do/app.yaml`:
-
-```yaml
-spec-version: 2
-name: mazechase
-region: ams
-
-services:
-  - name: mazechase
-    github:
-      repo: frank2889/mazechase
-      branch: main
-      deploy_on_push: true
-    dockerfile_path: Dockerfile
-    http_port: 8080
-    instance_size_slug: basic-xxs
-    envs:
-      - key: PORT
-        value: "8080"
-```
-
-### Manual Deployment
+### Build errors
 
 ```bash
-# Build
-cd core && go build -o bin/server cmd/server/main.go
-cd ../ui-web && npm run build
+# Frontend rebuild
+cd ui-web && rm -rf node_modules && npm install && npm run build
 
-# Copy frontend to backend
-cp -r ui-web/dist core/dist
-
-# Run
-./core/bin/server
+# Backend rebuild
+cd core && go clean && go build -o bin/server ./cmd/server
 ```
 
 ---
 
-## 📡 API Referentie
+## Licentie
 
-### Auth Service (ConnectRPC)
-
-```protobuf
-service AuthService {
-  rpc Login(AuthRequest) returns (UserResponse);
-  rpc Register(RegisterUserRequest) returns (RegisterUserResponse);
-  rpc Logout(Empty) returns (Empty);
-  rpc Test(AuthResponse) returns (UserResponse);  // Verify session
-}
-```
-
-### Lobby Service (ConnectRPC)
-
-```protobuf
-service LobbyService {
-  rpc CreateLobby(CreateLobbyRequest) returns (Lobby);
-  rpc GetLobbies(Empty) returns (LobbyList);
-  rpc JoinLobby(JoinLobbyRequest) returns (Lobby);
-  rpc LeaveLobby(LeaveLobbyRequest) returns (Empty);
-}
-```
-
-### WebSocket Messages (Game)
-
-| Type | Richting | Beschrijving |
-|------|----------|--------------|
-| `join` | Client → Server | Join game room |
-| `move` | Client → Server | Player movement |
-| `state` | Server → Client | Full game state |
-| `update` | Server → Client | Delta update |
-| `gameover` | Server → Client | Game ended |
+MIT License - zie LICENSE bestand.
 
 ---
 
-## 📊 Performance
+## Credits
 
-| Optimalisatie | Effect |
-|---------------|--------|
-| Message Batching | 60% minder network packets |
-| Delta Compression | 70% bandwidth besparing |
-| Object Pooling | Geen GC stutter |
-| Client Prediction | Zero perceived latency |
-| Asset Caching | 1 jaar cache voor static assets |
+Gemaakt met liefde door het MazeChase Team
 
----
-
-## 🧪 Testing
-
-```bash
-# Backend tests
-cd core && go test -v -race ./...
-
-# Frontend tests  
-cd ui-web && npm test
-
-# Test coverage
-cd ui-web && npm run test:coverage
-```
-
----
-
-## 📝 Licentie
-
-MIT License - zie [LICENSE](LICENSE)
-
----
-
-## 🙏 Credits
-
-- **Phaser.js** - Game framework
-- **SolidJS** - Reactive UI
-- **Melody** - WebSocket library
-- **Lucide** - Icon set
-
----
-
-<div align="center">
-  <p>Gemaakt met ❤️ voor familie game nights</p>
-  <p><strong>© 2025 MazeChase</strong></p>
-</div>
+- Game Engine: Babylon.js
+- Backend: Go + Melody
+- Frontend: Astro + SolidJS
+- Icons: Lucide

@@ -267,9 +267,9 @@ func (bm *BotManager) RemoveOneBot() {
 
 	// Broadcast bot leave
 	leaveMsg := map[string]interface{}{
-		"type":     "dis",
-		"username": bot.PlayerEntity.Username,
-		"spriteId": string(bot.PlayerEntity.SpriteType),
+		"type":       "dis",
+		"user":       bot.PlayerEntity.Username,
+		"spriteType": string(bot.PlayerEntity.SpriteType),
 	}
 	if msgBytes, err := json.Marshal(leaveMsg); err == nil {
 		bm.broadcast(msgBytes)

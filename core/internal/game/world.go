@@ -84,7 +84,8 @@ func (w *World) GetGameStateReport(secretToken, username, spriteId string, newPl
 	connectedMap := map[string]interface{}{}
 
 	for _, otherPlayerSession := range w.ConnectedPlayers.GetValues() {
-		if otherPlayerSession == newPlayer {
+		// Skip nil sessions (bots don't have real sessions)
+		if otherPlayerSession == nil || otherPlayerSession == newPlayer {
 			continue
 		}
 

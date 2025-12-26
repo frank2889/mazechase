@@ -400,13 +400,13 @@ export class GameScene extends Phaser.Scene {
             this.physics.add.collider(sprite, this.mapLayer)
 
             if (spriteId == "pacman") {
-                this.physics.add.overlap(sprite, this.pelletLayer, this.pelletCallBack)
-                this.physics.add.collider(sprite, this.powerLayer, this.powerUpCallBack)
+                this.physics.add.overlap(sprite, this.pelletLayer, this.pelletCallBack.bind(this))
+                this.physics.add.collider(sprite, this.powerLayer, this.powerUpCallBack.bind(this))
             } else {
                 this.physics.add.collider(
                     sprite,
                     this.allSprites["pacman"].playerInfo!,
-                    this.pacmanGhostCollision
+                    this.pacmanGhostCollision.bind(this)
                 )
             }
 
@@ -456,7 +456,7 @@ export class GameScene extends Phaser.Scene {
 
     showGameOver(winner: string, reason: string) {
         this.gameOver = true;
-        this.gameOverText.setText(`🏆 ${winner} wint!`);
+        this.gameOverText.setText(`${winner} wint!`);
         this.gameOverText.visible = true;
         
         // Show end game screen after short delay
@@ -472,7 +472,7 @@ export class GameScene extends Phaser.Scene {
         overlay.innerHTML = `
             <div style="position: fixed; inset: 0; background: rgba(0,0,0,0.9); display: flex; align-items: center; justify-content: center; z-index: 1000;">
                 <div style="background: #1a1a2e; border-radius: 16px; padding: 32px; max-width: 400px; text-align: center; border: 2px solid #ffd700;">
-                    <div style="font-size: 48px; margin-bottom: 16px;">🏆</div>
+                    <div style="font-size: 48px; margin-bottom: 16px; color: #ffd700;">WINNER</div>
                     <h1 style="color: #ffd700; font-size: 28px; margin-bottom: 8px;">Game Over!</h1>
                     <p style="color: #888; margin-bottom: 16px;">${reason}</p>
                     <div style="background: linear-gradient(to right, #ffd700, #ffaa00); padding: 16px; border-radius: 8px; margin-bottom: 24px;">
@@ -484,10 +484,10 @@ export class GameScene extends Phaser.Scene {
                     </div>
                     <div style="display: flex; gap: 12px;">
                         <button onclick="window.location.reload()" style="flex: 1; background: #22c55e; color: white; padding: 12px; border: none; border-radius: 8px; font-weight: bold; cursor: pointer;">
-                            🔄 Opnieuw
+                            Opnieuw
                         </button>
                         <button onclick="window.location.href='/lobby'" style="flex: 1; background: #3b82f6; color: white; padding: 12px; border: none; border-radius: 8px; font-weight: bold; cursor: pointer;">
-                            🏠 Lobby
+                            Lobby
                         </button>
                     </div>
                 </div>

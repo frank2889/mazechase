@@ -89,7 +89,7 @@ func (manager *Manager) getWorld(lobby *lobby.Lobby) (*World, error) {
 
 	if activeWorld.IsLobbyFull() {
 		log.Warn().Any("lobby_state", activeWorld).Msgf("lobby is full, more players are not allowed")
-		return nil, fmt.Errorf("lobby is full")
+		return nil, fmt.Errorf("lobby is vol")
 	}
 
 	return activeWorld, nil
@@ -99,18 +99,18 @@ func (manager *Manager) getUserAndLobbyInfo(newPlayerSession *melody.Session) (*
 	userInfo, err := user.UserDataFromContext(newPlayerSession.Request.Context())
 	if err != nil {
 		log.Error().Err(err).Msg("User context error")
-		return nil, nil, fmt.Errorf("no userInfo info found")
+		return nil, nil, fmt.Errorf("niet ingelogd")
 	}
 
 	queryParams := newPlayerSession.Request.URL.Query()
 	param := queryParams.Get("lobby")
 	if param == "" {
-		return nil, nil, fmt.Errorf("lobby query parameter not found")
+		return nil, nil, fmt.Errorf("lobby niet gevonden")
 	}
 
 	lobbyId, err := strconv.Atoi(param)
 	if err != nil {
-		return nil, nil, fmt.Errorf("failed to convert %s to int: %v", param, err)
+		return nil, nil, fmt.Errorf("ongeldige lobby ID")
 	}
 
 	lobbyInfo, err := manager.lobbyService.GetLobbyFromID(lobbyId)

@@ -29,7 +29,7 @@ func (lobbyService *Service) GetLobbyFromID(id int) (*Lobby, error) {
 	result := lobbyService.Db.Find(&lobby, id)
 	if result.Error != nil {
 		log.Error().Err(result.Error).Int("lobby-id", id).Msg("no lobby found with id")
-		return nil, fmt.Errorf("unable to find lobby for %d", id)
+		return nil, fmt.Errorf("lobby niet gevonden")
 	}
 
 	return lobby, nil
@@ -50,7 +50,7 @@ func (lobbyService *Service) CreateLobby(lobbyName, username string, userId uint
 	result := lobbyService.Db.Create(lobby)
 	if result.Error != nil {
 		log.Error().Err(result.Error).Msg("unable to create lobby")
-		return fmt.Errorf("unable to create lobby")
+		return fmt.Errorf("lobby aanmaken mislukt")
 	}
 
 	return nil
@@ -60,7 +60,7 @@ func (lobbyService *Service) DeleteLobby(lobbyId uint64, userId uint) error {
 	res := lobbyService.Db.Where("user_id", userId).Delete(&Lobby{}, lobbyId)
 	if res.Error != nil {
 		log.Error().Err(res.Error).Msg("unable to delete lobby")
-		return fmt.Errorf("unable to delete lobby")
+		return fmt.Errorf("lobby verwijderen mislukt")
 	}
 
 	return nil
@@ -72,7 +72,7 @@ func (lobbyService *Service) RetrieveLobbies() ([]Lobby, error) {
 	res := lobbyService.Db.Find(&lobbies)
 	if res.Error != nil {
 		log.Error().Err(res.Error).Msg("unable to query lobbies")
-		return []Lobby{}, fmt.Errorf("unable to find lobbies")
+		return []Lobby{}, fmt.Errorf("lobbies ophalen mislukt")
 	}
 
 	return lobbies, nil
@@ -104,13 +104,13 @@ func (lobbyService *Service) countUserLobbies(uid uint) error {
 
 	if result.Error != nil {
 		log.Error().Err(result.Error).Msg("unable to count user lobbies")
-		return fmt.Errorf("unable to count user lobbies")
+		return fmt.Errorf("fout bij controleren lobby limiet")
 	}
 
 	if count+1 <= int64(config.Opts.LobbyLimit) {
 		return nil
 	} else {
-		return fmt.Errorf("user has reached max lobby limit of %d", config.Opts.LobbyLimit)
+		return fmt.Errorf("je hebt het maximum van %d lobbies bereikt", config.Opts.LobbyLimit)
 	}
 }
 

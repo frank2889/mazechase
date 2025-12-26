@@ -87,8 +87,8 @@ func (a *Handler) GuestLogin(_ context.Context, _ *connect.Request[v1.Empty]) (*
 
 func (a *Handler) Login(_ context.Context, c *connect.Request[v1.AuthRequest]) (*connect.Response[v1.UserResponse], error) {
 	username, password := c.Msg.Username, c.Msg.Password
-	if username != c.Msg.Username || password != c.Msg.Password {
-		return nil, fmt.Errorf("empty username or password")
+	if username == "" || password == "" {
+		return nil, fmt.Errorf("vul gebruikersnaam en wachtwoord in")
 	}
 
 	return a.loginWithCookie(username, password)

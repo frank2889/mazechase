@@ -43,7 +43,7 @@ const LobbyComponent: Component = () => {
 
         const {err} = await addLobby(lobbyName);
         if (err) {
-            showSnackbar(`Error adding lobby name: ${err}`, 'error');
+            showSnackbar(`Fout bij aanmaken lobby: ${err}`, 'error');
         }
 
         setNewLobbyName("");

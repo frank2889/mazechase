@@ -63,7 +63,7 @@ func (auth *Service) Login(username, inputPassword string) (*User, error) {
 	finalUser, err := auth.newUserAuthToken(user.ID)
 	if err != nil {
 		log.Error().Err(err).Msg("Failed to update user token")
-		return &User{}, fmt.Errorf("failed update user token")
+		return &User{}, fmt.Errorf("login mislukt, probeer opnieuw")
 	}
 
 	return finalUser, nil
@@ -126,7 +126,7 @@ func (auth *Service) VerifyAuthHeader(headers http.Header) (*User, error) {
 	req := http.Request{Header: headers}
 	authCookie, err := req.Cookie(AuthHeaderKey)
 	if err != nil {
-		return nil, fmt.Errorf("cookie: %s not found", AuthHeaderKey)
+		return nil, fmt.Errorf("niet ingelogd")
 	}
 
 	return auth.verifyToken(authCookie.Value)
@@ -141,11 +141,11 @@ func (auth *Service) verifyToken(token string) (*User, error) {
 
 	if result.Error != nil {
 		log.Error().Err(result.Error).Msg("Failed to update auth token")
-		return &User{}, errors.New("unable to update token")
+		return &User{}, errors.New("sessie verlopen, log opnieuw in")
 	}
 
 	if user.ID == 0 || user.Username == "" {
-		return &User{}, errors.New("invalid token")
+		return &User{}, errors.New("sessie verlopen, log opnieuw in")
 	}
 
 	// return un-hashed token

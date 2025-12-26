@@ -73,7 +73,7 @@ func (i *Interceptor) verifyUser(ctx context.Context, headers http.Header) (cont
 func UserDataFromContext(ctx context.Context) (*User, error) {
 	userVal := ctx.Value(CtxUserKey)
 	if userVal == nil {
-		return nil, fmt.Errorf("could not find user in context")
+		return nil, fmt.Errorf("gebruiker niet ingelogd")
 	}
 
 	return userVal.(*User), nil

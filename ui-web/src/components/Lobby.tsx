@@ -300,12 +300,12 @@ const LobbyComponent: Component = () => {
                 <div class="max-w-md mx-auto mb-6">
                     <div class="p-4 rounded-lg shadow-lg bg-cyan-900/30 backdrop-blur-md border border-cyan-500/30">
                         <div class="text-gray-300 text-lg font-semibold mb-2 flex items-center gap-2">
-                            <Link2 class="w-5 h-5 text-cyan-400" /> Join met Code
+                            <Link2 class="w-5 h-5 text-cyan-400" /> Join met Code of Naam
                         </div>
                         <div class="flex gap-2">
                             <input
                                 type="text"
-                                placeholder="Voer lobby code in..."
+                                placeholder="Lobby ID of naam..."
                                 value={joinCode()}
                                 onInput={(e) => setJoinCode(e.currentTarget.value)}
                                 onKeyPress={(e) => e.key === 'Enter' && handleJoinByCode()}
@@ -319,6 +319,7 @@ const LobbyComponent: Component = () => {
                                 Join
                             </button>
                         </div>
+                        <p class="text-gray-500 text-xs mt-2">Tip: Je kunt joinen met het nummer (bijv. 123) of de lobby naam</p>
                     </div>
                 </div>
 
@@ -433,20 +434,23 @@ const LobbyCard: Component<LobbyCardProps> = (props) => {
 
     const getShareLink = () => {
         const baseUrl = window.location.origin;
-        return `${baseUrl}/game?lobby=${props.lobby.ID}&mode=${props.selectedMode}`;
+        // Use lobby name for cleaner URLs (backend supports both ID and name)
+        const lobbyIdentifier = encodeURIComponent(props.lobby.lobbyName);
+        return `${baseUrl}/game?lobby=${lobbyIdentifier}&mode=${props.selectedMode}`;
     };
 
     const copyShareLink = async () => {
         const mode = GAME_MODES[props.selectedMode];
+        const shareText = `Join mijn MazeChase game!\nLobby: ${props.lobby.lobbyName}\nLink: ${getShareLink()}`;
         try {
-            await navigator.clipboard.writeText(getShareLink());
+            await navigator.clipboard.writeText(shareText);
             setCopied(true);
             props.showSnackbar?.(`Link gekopieerd! (${mode.nameNL})`, 'success');
             setTimeout(() => setCopied(false), 2000);
         } catch (err) {
             // Fallback for Safari
             const textArea = document.createElement('textarea');
-            textArea.value = getShareLink();
+            textArea.value = shareText;
             document.body.appendChild(textArea);
             textArea.select();
             document.execCommand('copy');
@@ -463,13 +467,14 @@ const LobbyCard: Component<LobbyCardProps> = (props) => {
             class="lobby-card w-60 h-56 p-4 rounded-lg shadow-lg bg-slate-800/50 backdrop-blur-md border border-slate-700/50"
         >
             {/* Lobby Name */}
-            <h3 class="text-white text-lg font-semibold mb-2">
+            <h3 class="text-white text-lg font-semibold mb-1 truncate" title={props.lobby.lobbyName}>
                 {props.lobby.lobbyName}
             </h3>
 
-            {/* Lobby Code for sharing */}
-            <div class="bg-slate-900 rounded px-2 py-1 mb-2 text-center">
-                <span class="text-purple-400 font-mono text-sm">Code: {props.lobby.ID ? `#${props.lobby.ID}` : 'Laden...'}</span>
+            {/* Lobby Code/ID for sharing */}
+            <div class="bg-slate-900 rounded px-2 py-1 mb-2 flex justify-between items-center">
+                <span class="text-purple-400 font-mono text-sm">#{props.lobby.ID}</span>
+                <span class="text-gray-500 text-xs">of gebruik naam</span>
             </div>
 
             {/* Lobby Details */}

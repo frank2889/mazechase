@@ -2,6 +2,7 @@ package lobby
 
 import (
 	"fmt"
+	"strconv"
 	"sync"
 
 	v1 "github.com/frank2889/mazechase/generated/lobby/v1"
@@ -33,6 +34,30 @@ func (lobbyService *Service) GetLobbyFromID(id int) (*Lobby, error) {
 	}
 
 	return lobby, nil
+}
+
+// GetLobbyByName finds a lobby by its name (case-insensitive)
+func (lobbyService *Service) GetLobbyByName(name string) (*Lobby, error) {
+	var lobby Lobby
+	result := lobbyService.Db.Where("LOWER(lobby_name) = LOWER(?)", name).First(&lobby)
+	if result.Error != nil {
+		log.Debug().Str("name", name).Msg("no lobby found with name")
+		return nil, fmt.Errorf("lobby niet gevonden")
+	}
+	return &lobby, nil
+}
+
+// GetLobbyByIDOrName tries to find a lobby by ID first, then by name
+func (lobbyService *Service) GetLobbyByIDOrName(identifier string) (*Lobby, error) {
+	// First try as ID
+	if id, err := strconv.Atoi(identifier); err == nil {
+		if lobby, err := lobbyService.GetLobbyFromID(id); err == nil {
+			return lobby, nil
+		}
+	}
+	
+	// Then try as name
+	return lobbyService.GetLobbyByName(identifier)
 }
 
 func (lobbyService *Service) CreateLobby(lobbyName, username string, userId uint) (uint, error) {

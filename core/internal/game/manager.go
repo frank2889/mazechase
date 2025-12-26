@@ -8,7 +8,6 @@ import (
 	"github.com/frank2889/mazechase/pkg"
 	"github.com/olahol/melody"
 	"github.com/rs/zerolog/log"
-	"strconv"
 )
 
 type Manager struct {
@@ -136,12 +135,8 @@ func (manager *Manager) getUserAndLobbyInfo(newPlayerSession *melody.Session) (*
 		return nil, nil, fmt.Errorf("lobby niet gevonden")
 	}
 
-	lobbyId, err := strconv.Atoi(param)
-	if err != nil {
-		return nil, nil, fmt.Errorf("ongeldige lobby ID")
-	}
-
-	lobbyInfo, err := manager.lobbyService.GetLobbyFromID(lobbyId)
+	// Try to find lobby by ID or name
+	lobbyInfo, err := manager.lobbyService.GetLobbyByIDOrName(param)
 	if err != nil {
 		return nil, nil, err
 	}

@@ -4,8 +4,8 @@ import (
 	"fmt"
 	"sync"
 
-	v1 "github.com/RA341/multipacman/generated/lobby/v1"
-	"github.com/RA341/multipacman/internal/config"
+	v1 "github.com/frank2889/mazechase/generated/lobby/v1"
+	"github.com/frank2889/mazechase/internal/config"
 	"github.com/rs/zerolog/log"
 	"gorm.io/gorm"
 )

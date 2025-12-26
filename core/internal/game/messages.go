@@ -3,7 +3,7 @@ package game
 import (
 	"encoding/json"
 	"fmt"
-	"github.com/RA341/multipacman/pkg"
+	"github.com/frank2889/mazechase/pkg"
 	"github.com/rs/zerolog/log"
 	"time"
 )

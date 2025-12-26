@@ -1,9 +1,9 @@
 package main
 
 import (
-	"github.com/RA341/multipacman/cmd"
-	"github.com/RA341/multipacman/internal/config"
-	"github.com/RA341/multipacman/pkg"
+	"github.com/frank2889/mazechase/cmd"
+	"github.com/frank2889/mazechase/internal/config"
+	"github.com/frank2889/mazechase/pkg"
 )
 
 func main() {

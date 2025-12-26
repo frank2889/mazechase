@@ -8,7 +8,7 @@ import (
 	"net/http"
 
 	"connectrpc.com/connect"
-	v1 "github.com/RA341/multipacman/generated/auth/v1"
+	v1 "github.com/frank2889/mazechase/generated/auth/v1"
 	"github.com/rs/zerolog/log"
 	"golang.org/x/crypto/bcrypt"
 )

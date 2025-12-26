@@ -3,7 +3,7 @@ package lobby
 import (
 	"time"
 
-	v1 "github.com/RA341/multipacman/generated/lobby/v1"
+	v1 "github.com/frank2889/mazechase/generated/lobby/v1"
 	"gorm.io/gorm"
 )
 

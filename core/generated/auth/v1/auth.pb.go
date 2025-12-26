@@ -382,7 +382,7 @@ const file_auth_v1_auth_proto_rawDesc = "" +
 	"\n" +
 	"GuestLogin\x12\x0e.auth.v1.Empty\x1a\x15.auth.v1.UserResponse\"\x00\x12*\n" +
 	"\x06Logout\x12\x0e.auth.v1.Empty\x1a\x0e.auth.v1.Empty\"\x00B\x85\x01\n" +
-	"\vcom.auth.v1B\tAuthProtoP\x01Z.github.com/RA341/multipacman/generated/auth/v1\xa2\x02\x03AXX\xaa\x02\aAuth.V1\xca\x02\aAuth\\V1\xe2\x02\x13Auth\\V1\\GPBMetadata\xea\x02\bAuth::V1b\x06proto3"
+	"\vcom.auth.v1B\tAuthProtoP\x01Z.github.com/frank2889/mazechase/generated/auth/v1\xa2\x02\x03AXX\xaa\x02\aAuth.V1\xca\x02\aAuth\\V1\xe2\x02\x13Auth\\V1\\GPBMetadata\xea\x02\bAuth::V1b\x06proto3"
 
 var (
 	file_auth_v1_auth_proto_rawDescOnce sync.Once

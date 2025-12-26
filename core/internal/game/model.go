@@ -2,7 +2,7 @@ package game
 
 import (
 	"encoding/json"
-	"github.com/RA341/multipacman/internal/user"
+	"github.com/frank2889/mazechase/internal/user"
 	"strconv"
 )
 

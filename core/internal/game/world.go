@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/RA341/multipacman/pkg"
+	"github.com/frank2889/mazechase/pkg"
 	"github.com/olahol/melody"
 	"github.com/rs/zerolog/log"
 	"sync"

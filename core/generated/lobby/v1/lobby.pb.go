@@ -374,7 +374,7 @@ const file_lobby_v1_lobby_proto_rawDesc = "" +
 	"\bAddLobby\x12\x1b.lobby.v1.AddLobbiesRequest\x1a\x1c.lobby.v1.AddLobbiesResponse\"\x00\x12J\n" +
 	"\vDeleteLobby\x12\x1b.lobby.v1.DelLobbiesRequest\x1a\x1c.lobby.v1.DelLobbiesResponse\"\x00B\x8c\x01\n" +
 	"\fcom.lobby.v1B\n" +
-	"LobbyProtoP\x01Z/github.com/RA341/multipacman/generated/lobby/v1\xa2\x02\x03LXX\xaa\x02\bLobby.V1\xca\x02\bLobby\\V1\xe2\x02\x14Lobby\\V1\\GPBMetadata\xea\x02\tLobby::V1b\x06proto3"
+	"LobbyProtoP\x01Z/github.com/frank2889/mazechase/generated/lobby/v1\xa2\x02\x03LXX\xaa\x02\bLobby.V1\xca\x02\bLobby\\V1\xe2\x02\x14Lobby\\V1\\GPBMetadata\xea\x02\tLobby::V1b\x06proto3"
 
 var (
 	file_lobby_v1_lobby_proto_rawDescOnce sync.Once

@@ -5,7 +5,7 @@ import (
 	"sync"
 	"time"
 
-	"github.com/RA341/multipacman/pkg"
+	"github.com/frank2889/mazechase/pkg"
 	"github.com/rs/zerolog/log"
 )
 

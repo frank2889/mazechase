@@ -1,9 +1,9 @@
 package database
 
 import (
-	"github.com/RA341/multipacman/internal/config"
-	"github.com/RA341/multipacman/internal/lobby"
-	"github.com/RA341/multipacman/internal/user"
+	"github.com/frank2889/mazechase/internal/config"
+	"github.com/frank2889/mazechase/internal/lobby"
+	"github.com/frank2889/mazechase/internal/user"
 	"github.com/rs/zerolog/log"
 	"gorm.io/driver/sqlite"
 	"gorm.io/gorm"

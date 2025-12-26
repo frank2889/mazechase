@@ -3,9 +3,9 @@ package game
 import (
 	"encoding/json"
 	"fmt"
-	"github.com/RA341/multipacman/internal/lobby"
-	"github.com/RA341/multipacman/internal/user"
-	"github.com/RA341/multipacman/pkg"
+	"github.com/frank2889/mazechase/internal/lobby"
+	"github.com/frank2889/mazechase/internal/user"
+	"github.com/frank2889/mazechase/pkg"
 	"github.com/olahol/melody"
 	"github.com/rs/zerolog/log"
 	"strconv"

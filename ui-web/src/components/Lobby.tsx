@@ -250,7 +250,22 @@ const LobbyComponent: Component = () => {
                 {/* Single Player Quick Start */}
                 <div class="max-w-md mx-auto mb-6">
                     <button
-                        onClick={() => window.location.assign(`/game?lobby=solo-${Date.now()}&mode=${selectedMode()}&single=true`)}
+                        onClick={async () => {
+                            // Create a lobby for solo play
+                            const {val, err} = await addLobby(`Solo-${currentUser()}`);
+                            if (err) {
+                                showSnackbar(`Fout: ${err}`, 'error');
+                                return;
+                            }
+                            // Get the newly created lobby
+                            const {val: lobbiesResult} = await listLobbies();
+                            const myLobby = lobbiesResult?.lobbies?.find(l => l.lobbyName === `Solo-${currentUser()}`);
+                            if (myLobby) {
+                                window.location.assign(`/game?lobby=${myLobby.id}&mode=${selectedMode()}&single=true`);
+                            } else {
+                                showSnackbar('Kon lobby niet vinden', 'error');
+                            }
+                        }}
                         class="w-full p-4 bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-500 hover:to-pink-500 rounded-xl shadow-lg transition-all duration-200 flex items-center justify-center gap-3 text-white font-bold text-xl"
                     >
                         <Zap class="w-6 h-6" />

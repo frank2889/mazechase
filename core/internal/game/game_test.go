@@ -222,14 +222,14 @@ func TestWorld_EatPowerUp(t *testing.T) {
 	}
 }
 
-func TestWorld_GhostEatenAction(t *testing.T) {
+func TestWorld_ChaserEatenAction(t *testing.T) {
 	world := NewWorldState()
 
-	world.GhostEatenAction(Ghost1)
-	world.GhostEatenAction(Ghost2)
+	world.ChaserEatenAction(Chaser1)
+	world.ChaserEatenAction(Chaser2)
 
-	if len(world.GhostsIdsEaten) != 2 {
-		t.Errorf("Expected 2 ghosts eaten, got %d", len(world.GhostsIdsEaten))
+	if len(world.ChasersIdsEaten) != 2 {
+		t.Errorf("Expected 2 chasers eaten, got %d", len(world.ChasersIdsEaten))
 	}
 }
 
@@ -253,7 +253,7 @@ func TestWorld_IsLobbyFull(t *testing.T) {
 // Player Entity Tests
 func TestPlayerEntity_ToJSON(t *testing.T) {
 	player := NewPlayerEntity(1, "TestPlayer")
-	player.SpriteType = Pacman
+	player.SpriteType = Runner
 	player.X = 100
 	player.Y = 200
 
@@ -269,7 +269,7 @@ func TestPlayerEntity_ToJSON(t *testing.T) {
 
 func TestPlayerEntity_ToMap(t *testing.T) {
 	player := NewPlayerEntity(1, "TestPlayer")
-	player.SpriteType = Ghost1
+	player.SpriteType = Chaser1
 	player.X = 100
 	player.Y = 200
 	player.Dir = "left"
@@ -279,7 +279,7 @@ func TestPlayerEntity_ToMap(t *testing.T) {
 	if m["user"] != "TestPlayer" {
 		t.Error("Expected username in map")
 	}
-	if m["spriteType"] != Ghost1 {
+	if m["spriteType"] != Chaser1 {
 		t.Error("Expected sprite type in map")
 	}
 	if m["x"] != float64(100) {
@@ -391,7 +391,7 @@ func BenchmarkWorld_EatPellet(b *testing.B) {
 
 func BenchmarkPlayerEntity_ToJSON(b *testing.B) {
 	player := NewPlayerEntity(1, "BenchPlayer")
-	player.SpriteType = Pacman
+	player.SpriteType = Runner
 	player.X = 100
 	player.Y = 200
 

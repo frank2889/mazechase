@@ -108,6 +108,7 @@ func (w *World) GetGameStateReport(secretToken, username, spriteId string, newPl
 		"powerUpsEaten": w.PowerUpsCoordsEaten.GetList(),
 		"secretToken":   secretToken,
 		"spriteId":      spriteId,
+		"spriteType":    spriteId,
 		"username":      username,
 	}
 	return json.Marshal(data)

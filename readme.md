@@ -120,11 +120,34 @@ Elimineer andere spelers. Laatste speler wint!
 ```
 
 ### Iconografie
-Lucide Icons - consistent, modern icon set
-- `User`, `Users` - Account gerelateerd
-- `Gamepad2`, `Play`, `Bot` - Game controls
-- `Trophy`, `Target` - Game modes
-- `LogOut`, `Settings` - Navigatie
+
+We gebruiken [Lucide Icons](https://lucide.dev/) via het `lucide-solid` package voor SolidJS integratie.
+
+**Installatie:**
+```bash
+npm install lucide-solid
+```
+
+**Gebruik in componenten:**
+```tsx
+import { User, Gamepad2, Trophy, LogOut } from 'lucide-solid';
+
+// In JSX
+<User class="w-5 h-5 text-purple-400" />
+<Gamepad2 class="w-6 h-6" />
+```
+
+**Gebruikte icons:**
+| Icon | Component | Gebruik |
+|------|-----------|---------|
+| `User`, `Users` | Account | Gebruiker, spelers |
+| `Gamepad2`, `Play` | Game | Controls, start |
+| `Bot` | Game | Bot indicator |
+| `Trophy`, `Target`, `Flag` | Modes | Classic, Race, Battle |
+| `Zap` | Quick start | Solo play button |
+| `LogOut` | Auth | Uitloggen |
+| `Plus`, `Trash2` | Lobby | Aanmaken, verwijderen |
+| `Link2`, `Copy` | Share | Lobby code delen |
 
 ### Typography
 - **Font Family:** System fonts (native stack)

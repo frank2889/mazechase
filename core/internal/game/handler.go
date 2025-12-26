@@ -116,6 +116,10 @@ func (h *WsHandler) HandleConnect(newPlayerSession *melody.Session) {
 	// add new player count
 	broadCastSessions := world.ConnectedPlayers.GetValues()
 	h.lobbyService.UpdateLobbyPlayerCount(lobbyInfo.ID, len(broadCastSessions))
+
+	// Schedule automatic bot fill after 10 seconds if this is the first player
+	// This gives time for other real players to join
+	world.ScheduleBotFill(10)
 }
 
 func (h *WsHandler) HandleDisconnect(s *melody.Session) {

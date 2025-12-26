@@ -3,6 +3,8 @@ package game
 import (
 	"encoding/json"
 	"fmt"
+	"time"
+
 	"github.com/RA341/multipacman/pkg"
 	"github.com/olahol/melody"
 	"github.com/rs/zerolog/log"
@@ -19,6 +21,8 @@ type World struct {
 	PelletsCoordEaten   CoordList
 	PowerUpsCoordsEaten CoordList
 	worldLock           sync.Mutex
+	BotManager          *BotManager
+	botFillScheduled    bool
 }
 
 func NewWorldState() *World {
@@ -32,6 +36,8 @@ func NewWorldState() *World {
 		GhostsIdsEaten:      []SpriteType{},
 		worldLock:           sync.Mutex{},
 		gameOverChan:        make(chan string, 1),
+		BotManager:          nil, // Will be set when broadcast function is available
+		botFillScheduled:    false,
 	}
 }
 
@@ -130,6 +136,36 @@ func (w *World) GameOver(reason string) {
 
 func (w *World) waitForGameOver() string {
 	return <-w.gameOverChan
+}
+
+// ScheduleBotFill schedules automatic bot filling after a delay
+// This allows time for real players to join before bots are added
+func (w *World) ScheduleBotFill(delaySeconds int) {
+	w.worldLock.Lock()
+	if w.botFillScheduled {
+		w.worldLock.Unlock()
+		return
+	}
+	w.botFillScheduled = true
+	w.worldLock.Unlock()
+
+	go func() {
+		time.Sleep(time.Duration(delaySeconds) * time.Second)
+
+		w.worldLock.Lock()
+		defer w.worldLock.Unlock()
+
+		// Check if there are still empty slots and bot manager exists
+		if w.BotManager == nil {
+			return
+		}
+
+		availableSlots := len(w.CharactersList)
+		if availableSlots > 0 {
+			log.Info().Int("slots", availableSlots).Msg("Auto-filling empty slots with bots")
+			w.BotManager.FillWithBots()
+		}
+	}()
 }
 
 type Consumable interface {

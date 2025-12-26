@@ -38,6 +38,7 @@ type PlayerEntity struct {
 	Y           float64    `json:"y"`
 	Dir         string     `json:"dir"`
 	secretToken string
+	IsBot       bool `json:"-"` // Not sent to client
 }
 
 // ToJSON converts the PlayerEntity to a JSON string

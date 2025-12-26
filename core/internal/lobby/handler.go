@@ -2,6 +2,7 @@ package lobby
 
 import (
 	"context"
+	"fmt"
 
 	"connectrpc.com/connect"
 	v1 "github.com/RA341/multipacman/generated/lobby/v1"
@@ -42,13 +43,17 @@ func (l Handler) AddLobby(ctx context.Context, req *connect.Request[v1.AddLobbie
 }
 
 func (l Handler) DeleteLobby(ctx context.Context, req *connect.Request[v1.DelLobbiesRequest]) (*connect.Response[v1.DelLobbiesResponse], error) {
-	lobbyName := req.Msg.GetLobby()
+	lobbyInfo := req.Msg.GetLobby()
+	if lobbyInfo == nil {
+		return nil, fmt.Errorf("lobby niet opgegeven")
+	}
+	
 	userInfo, err := user.UserDataFromContext(ctx)
 	if err != nil {
 		return nil, err
 	}
 
-	err = l.lobbyService.DeleteLobby(lobbyName.ID, userInfo.ID)
+	err = l.lobbyService.DeleteLobby(lobbyInfo.ID, userInfo.ID)
 	if err != nil {
 		return nil, err
 	}

@@ -28,7 +28,17 @@ func (manager *Manager) getLobbyIdFromSession(s *melody.Session) uint {
 
 func (manager *Manager) broadcastAll(world *World, message []byte) error {
 	broadCastSessions := world.ConnectedPlayers.GetValues()
-	err := manager.mel.BroadcastMultiple(message, broadCastSessions)
+	// Filter out nil sessions (bots don't have real sessions)
+	validSessions := make([]*melody.Session, 0, len(broadCastSessions))
+	for _, s := range broadCastSessions {
+		if s != nil {
+			validSessions = append(validSessions, s)
+		}
+	}
+	if len(validSessions) == 0 {
+		return nil
+	}
+	err := manager.mel.BroadcastMultiple(message, validSessions)
 	if err != nil {
 		return err
 	}
@@ -69,8 +79,21 @@ func (manager *Manager) getWorld(lobby *lobby.Lobby) (*World, error) {
 
 		newWorld := NewWorldState()
 		manager.activeLobbies.Store(lobby.ID, newWorld)
+		
+		// Create broadcast function for bots
+		broadcastFunc := func(msg []byte) error {
+			return manager.broadcastAll(newWorld, msg)
+		}
+		newWorld.BotManager = NewBotManager(newWorld, broadcastFunc)
+		
 		go func() {
 			reason := newWorld.waitForGameOver()
+			
+			// Stop all bots when game ends
+			if newWorld.BotManager != nil {
+				newWorld.BotManager.StopAllBots()
+			}
+			
 			// endgame does not need any info
 			msg := EndGameMessage(reason).handler(MessageData{})
 			marshal, err := json.Marshal(msg)
@@ -85,6 +108,11 @@ func (manager *Manager) getWorld(lobby *lobby.Lobby) (*World, error) {
 		}()
 
 		return newWorld, nil
+	}
+
+	// If a real player is joining and there are bots, remove one bot
+	if activeWorld.BotManager != nil && activeWorld.BotManager.GetBotCount() > 0 {
+		activeWorld.BotManager.RemoveOneBot()
 	}
 
 	if activeWorld.IsLobbyFull() {

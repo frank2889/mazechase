@@ -27,7 +27,7 @@ type BotManager struct {
 	broadcast func([]byte) error
 }
 
-var botNames = []string{"🤖 Bot-Alpha", "🤖 Bot-Beta", "🤖 Bot-Gamma", "🤖 Bot-Delta"}
+var botNames = []string{"Bot Alpha", "Bot Beta", "Bot Gamma", "Bot Delta"}
 var directions = []string{"up", "down", "left", "right"}
 
 // NewBotManager creates a new bot manager for a world

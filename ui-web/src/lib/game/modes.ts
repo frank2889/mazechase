@@ -6,6 +6,9 @@
  * C) BATTLE - Last player standing wins (power-ups eliminate others)
  */
 
+import { Ghost, Flag, Swords } from 'lucide-solid';
+import { JSX } from 'solid-js';
+
 export type GameMode = 'classic' | 'race' | 'battle';
 
 export interface GameModeConfig {
@@ -15,6 +18,7 @@ export interface GameModeConfig {
     description: string;
     descriptionNL: string;
     icon: string;
+    iconComponent: JSX.Element;
     minPlayers: number;
     maxPlayers: number;
     hasTeams: boolean;
@@ -27,8 +31,9 @@ export const GAME_MODES: Record<GameMode, GameModeConfig> = {
         name: 'Classic',
         nameNL: 'Klassiek',
         description: 'Original Pac-Man: 1 Pacman vs 3 Ghosts',
-        descriptionNL: '1 Pacman jaagt op pellets, 3 Ghosts jagen op Pacman',
-        icon: '👻',
+        descriptionNL: '1 Runner jaagt op pellets, 3 Chasers jagen op Runner',
+        icon: 'ghost',
+        iconComponent: Ghost({ class: "w-8 h-8 text-pink-400" }),
         minPlayers: 2,
         maxPlayers: 4,
         hasTeams: true,
@@ -40,7 +45,8 @@ export const GAME_MODES: Record<GameMode, GameModeConfig> = {
         nameNL: 'Race',
         description: '4 players race to collect the most pellets',
         descriptionNL: 'Verzamel zoveel mogelijk pellets. Hoogste score wint!',
-        icon: '🏁',
+        icon: 'flag',
+        iconComponent: Flag({ class: "w-8 h-8 text-cyan-400" }),
         minPlayers: 2,
         maxPlayers: 4,
         hasTeams: false,
@@ -52,7 +58,8 @@ export const GAME_MODES: Record<GameMode, GameModeConfig> = {
         nameNL: 'Gevecht',
         description: 'Last player standing wins',
         descriptionNL: 'Pak power-ups en elimineer anderen. Laatste wint!',
-        icon: '⚔️',
+        icon: 'swords',
+        iconComponent: Swords({ class: "w-8 h-8 text-orange-400" }),
         minPlayers: 2,
         maxPlayers: 4,
         hasTeams: false,

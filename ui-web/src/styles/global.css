@@ -1,1 +1,33 @@
 @import "tailwindcss";
+
+/* MazeChase Custom Theme Colors */
+@theme {
+    /* Primary brand colors - Purple/Magenta */
+    --color-brand-primary: #8B5CF6;
+    --color-brand-light: #A78BFA;
+    --color-brand-dark: #7C3AED;
+    
+    /* Accent colors */
+    --color-accent-cyan: #22D3EE;
+    --color-accent-magenta: #EC4899;
+    --color-accent-lime: #84CC16;
+    --color-accent-orange: #F97316;
+    
+    /* Game player colors */
+    --color-runner: #22D3EE;      /* Cyan - the runner */
+    --color-chaser-1: #EC4899;    /* Magenta */
+    --color-chaser-2: #8B5CF6;    /* Purple */
+    --color-chaser-3: #F97316;    /* Orange */
+    
+    /* UI Surface colors */
+    --color-surface-dark: #0F0F1A;
+    --color-surface-base: #1A1A2E;
+    --color-surface-card: #252542;
+    --color-surface-border: #3D3D5C;
+}
+
+/* Base body styling */
+body {
+    background: linear-gradient(180deg, #0F0F1A 0%, #1A1A2E 50%, #0F0F1A 100%);
+    min-height: 100vh;
+}

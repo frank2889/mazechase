@@ -293,12 +293,12 @@ export function ChatBox(props: ChatProps) {
  * Quick chat presets for common messages
  */
 export const quickChatMessages = [
-    { label: '👋', message: 'Hello!' },
-    { label: '👍', message: 'Good game!' },
-    { label: '😄', message: 'Nice move!' },
-    { label: '🏃', message: 'Run!' },
-    { label: '👻', message: 'Watch out for ghosts!' },
-    { label: '⭐', message: 'Power up!' },
+    { label: 'Hoi', message: 'Hallo!' },
+    { label: 'GG', message: 'Goed gespeeld!' },
+    { label: 'Nice', message: 'Goeie zet!' },
+    { label: 'Ren!', message: 'Rennen!' },
+    { label: 'Pas op', message: 'Pas op voor de jagers!' },
+    { label: 'Power', message: 'Power up!' },
 ];
 
 export function QuickChatButtons(props: { onSendMessage: (message: string) => void }) {

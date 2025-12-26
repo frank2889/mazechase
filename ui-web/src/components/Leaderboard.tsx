@@ -1,5 +1,6 @@
 // Leaderboard component for multiplayer Pacman
-import { createSignal, For, Show, onMount } from 'solid-js';
+import { createSignal, For, Show, onMount, JSX } from 'solid-js';
+import { Trophy, Medal, Star, Ghost, Gamepad2, X } from 'lucide-solid';
 
 export interface LeaderboardEntry {
     userId: number;
@@ -42,12 +43,12 @@ export function Leaderboard(props: LeaderboardProps) {
         return `${Math.round((entry.wins / total) * 100)}%`;
     };
 
-    const getRankEmoji = (index: number) => {
+    const getRankDisplay = (index: number): JSX.Element => {
         switch (index) {
-            case 0: return '🥇';
-            case 1: return '🥈';
-            case 2: return '🥉';
-            default: return `#${index + 1}`;
+            case 0: return <Medal class="w-5 h-5 text-yellow-400" />;
+            case 1: return <Medal class="w-5 h-5 text-gray-300" />;
+            case 2: return <Medal class="w-5 h-5 text-amber-600" />;
+            default: return <span>#{index + 1}</span>;
         }
     };
 
@@ -56,9 +57,9 @@ export function Leaderboard(props: LeaderboardProps) {
             <div class="leaderboard-container">
                 {/* Header */}
                 <div class="leaderboard-header">
-                    <h2 class="leaderboard-title">🏆 Leaderboard</h2>
+                    <h2 class="leaderboard-title flex items-center gap-2"><Trophy class="w-6 h-6 text-purple-400" /> Leaderboard</h2>
                     <Show when={props.onClose}>
-                        <button class="close-btn" onClick={props.onClose}>✕</button>
+                        <button class="close-btn" onClick={props.onClose}><X class="w-5 h-5" /></button>
                     </Show>
                 </div>
 
@@ -68,19 +69,19 @@ export function Leaderboard(props: LeaderboardProps) {
                         class={`tab-btn ${activeTab() === 'wins' ? 'active' : ''}`}
                         onClick={() => setActiveTab('wins')}
                     >
-                        🏅 Wins
+                        <Medal class="w-4 h-4 inline mr-1" /> Wins
                     </button>
                     <button
                         class={`tab-btn ${activeTab() === 'score' ? 'active' : ''}`}
                         onClick={() => setActiveTab('score')}
                     >
-                        ⭐ High Score
+                        <Star class="w-4 h-4 inline mr-1" /> High Score
                     </button>
                     <button
                         class={`tab-btn ${activeTab() === 'ghosts' ? 'active' : ''}`}
                         onClick={() => setActiveTab('ghosts')}
                     >
-                        👻 Ghosts Eaten
+                        <Ghost class="w-4 h-4 inline mr-1" /> Chasers
                     </button>
                 </div>
 
@@ -98,11 +99,11 @@ export function Leaderboard(props: LeaderboardProps) {
                         {/* Table header */}
                         <div class="table-header">
                             <span class="col-rank">Rank</span>
-                            <span class="col-player">Player</span>
+                            <span class="col-player">Speler</span>
                             <span class="col-stat">
                                 {activeTab() === 'wins' && 'Wins'}
                                 {activeTab() === 'score' && 'Score'}
-                                {activeTab() === 'ghosts' && 'Ghosts'}
+                                {activeTab() === 'ghosts' && 'Chasers'}
                             </span>
                             <span class="col-winrate">Win Rate</span>
                         </div>
@@ -114,7 +115,7 @@ export function Leaderboard(props: LeaderboardProps) {
                                     <div
                                         class={`table-row ${entry.userId === props.currentUserId ? 'current-user' : ''} ${index() < 3 ? 'top-three' : ''}`}
                                     >
-                                        <span class="col-rank">{getRankEmoji(index())}</span>
+                                        <span class="col-rank">{getRankDisplay(index())}</span>
                                         <span class="col-player">
                                             <span class="player-avatar">
                                                 {entry.username.charAt(0).toUpperCase()}
@@ -135,8 +136,8 @@ export function Leaderboard(props: LeaderboardProps) {
                         {/* Empty state */}
                         <Show when={sortedEntries().length === 0}>
                             <div class="empty-state">
-                                <span class="empty-icon">🎮</span>
-                                <p>No players yet. Be the first!</p>
+                                <Gamepad2 class="w-12 h-12 text-purple-400 mx-auto mb-2" />
+                                <p>Nog geen spelers. Wees de eerste!</p>
                             </div>
                         </Show>
                     </div>

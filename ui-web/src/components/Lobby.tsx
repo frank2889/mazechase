@@ -4,6 +4,10 @@ import {addLobby, deleteLobby, getRelativeTime, listLobbies} from "../lib/lobby.
 import {getUserInfo, logout} from "../lib/auth.ts";
 import Snackbar, {type SnackbarMessage} from "./Snackbar.tsx";
 import {GAME_MODES, type GameMode} from "../lib/game/modes.ts";
+import {
+    Gamepad2, Trophy, Link2, Plus, ClipboardList, Play, Check, 
+    Copy, Trash2, Users, Zap, Ghost, Flag, Swords, LogOut, X
+} from 'lucide-solid';
 
 const LobbyComponent: Component = () => {
     const [currentUser, setCurrentUser] = createSignal<string | null>(null);
@@ -153,34 +157,35 @@ const LobbyComponent: Component = () => {
     });
 
     return (
-        <div class="min-h-screen">
+        <div class="min-h-screen bg-gradient-to-b from-slate-900 via-purple-950 to-slate-900">
             <Snackbar message={snackbarMessage()} onClose={closeSnackbar}/>
 
             {/* Header */}
             <div class="relative flex justify-center items-center pt-10 pb-6 px-6">
-                <h1 class="text-transparent bg-clip-text bg-gradient-to-r from-yellow-400 to-orange-500 text-5xl font-bold tracking-wider drop-shadow-lg">
-                    🎮 MazeChase
+                <h1 class="text-transparent bg-clip-text bg-gradient-to-r from-purple-400 via-pink-500 to-cyan-400 text-5xl font-bold tracking-wider drop-shadow-lg flex items-center gap-3">
+                    <Gamepad2 class="w-12 h-12 text-purple-400" />
+                    MazeChase
                 </h1>
 
                 <div class="absolute left-20 flex gap-3">
                     <button
                         onClick={() => setShowLeaderboard(true)}
-                        class="bg-yellow-500 hover:bg-yellow-400 text-black font-semibold py-2 px-4 rounded-lg shadow-lg transition-colors duration-200"
+                        class="bg-purple-600 hover:bg-purple-500 text-white font-semibold py-2 px-4 rounded-lg shadow-lg transition-colors duration-200 flex items-center gap-2"
                     >
-                        🏆 Leaderboard
+                        <Trophy class="w-5 h-5" /> Leaderboard
                     </button>
                 </div>
 
                 <div class="absolute right-20 flex flex-col items-center">
                     <div class="text-gray-300 font-medium text-lg mb-3">
                         {welcomeMessage}
-                        {currentUser() && (<span class="text-blue-400 font-bold">{currentUser()}</span>)}
+                        {currentUser() && (<span class="text-cyan-400 font-bold">{currentUser()}</span>)}
                     </div>
                     <button
                         onClick={handleLogout}
-                        class="bg-red-500 hover:bg-red-600 text-white font-semibold py-2 px-4 rounded-lg shadow-lg transition-colors duration-200 ease-in-out"
+                        class="bg-red-600 hover:bg-red-500 text-white font-semibold py-2 px-4 rounded-lg shadow-lg transition-colors duration-200 ease-in-out flex items-center gap-2"
                     >
-                        Uitloggen
+                        <LogOut class="w-4 h-4" /> Uitloggen
                     </button>
                 </div>
             </div>
@@ -188,13 +193,15 @@ const LobbyComponent: Component = () => {
             {/* Leaderboard Modal */}
             <Show when={showLeaderboard()}>
                 <div class="fixed inset-0 bg-black/80 flex items-center justify-center z-50" onClick={() => setShowLeaderboard(false)}>
-                    <div class="bg-gray-900 rounded-2xl p-6 max-w-md w-full mx-4 border-2 border-yellow-500/50" onClick={(e) => e.stopPropagation()}>
+                    <div class="bg-slate-900 rounded-2xl p-6 max-w-md w-full mx-4 border-2 border-purple-500/50" onClick={(e) => e.stopPropagation()}>
                         <div class="flex justify-between items-center mb-6">
-                            <h2 class="text-2xl font-bold text-yellow-400">🏆 Leaderboard</h2>
-                            <button onClick={() => setShowLeaderboard(false)} class="text-gray-400 hover:text-white text-2xl">×</button>
+                            <h2 class="text-2xl font-bold text-purple-400 flex items-center gap-2"><Trophy class="w-6 h-6" /> Leaderboard</h2>
+                            <button onClick={() => setShowLeaderboard(false)} class="text-gray-400 hover:text-white">
+                                <X class="w-6 h-6" />
+                            </button>
                         </div>
                         <div class="text-center py-8 text-gray-400">
-                            <div class="text-4xl mb-4">🎮</div>
+                            <Gamepad2 class="w-12 h-12 mx-auto mb-4 text-purple-400" />
                             <p>Leaderboard wordt bijgehouden na je eerste game!</p>
                             <p class="text-sm mt-2 text-gray-500">Speel een potje om je score te registreren.</p>
                         </div>
@@ -233,9 +240,22 @@ const LobbyComponent: Component = () => {
                     </Show>
                 </div>
 
+                {/* Single Player Quick Start */}
+                <div class="max-w-md mx-auto mb-6">
+                    <button
+                        onClick={() => window.location.assign(`/game?lobby=solo-${Date.now()}&mode=${selectedMode()}&single=true`)}
+                        class="w-full p-4 bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-500 hover:to-pink-500 rounded-xl shadow-lg transition-all duration-200 flex items-center justify-center gap-3 text-white font-bold text-xl"
+                    >
+                        <Zap class="w-6 h-6" />
+                        Solo Spelen (met Bots)
+                    </button>
+                </div>
+
                 {/* Game Mode Selection */}
                 <div class="max-w-2xl mx-auto mb-6">
-                    <h3 class="text-gray-300 text-xl font-semibold mb-3 text-center">🎮 Kies Speelmodus</h3>
+                    <h3 class="text-gray-300 text-xl font-semibold mb-3 text-center flex items-center justify-center gap-2">
+                        <Gamepad2 class="w-5 h-5 text-purple-400" /> Kies Speelmodus
+                    </h3>
                     <div class="grid grid-cols-3 gap-3">
                         <For each={Object.values(GAME_MODES)}>
                             {(mode) => (
@@ -243,11 +263,11 @@ const LobbyComponent: Component = () => {
                                     onClick={() => setSelectedMode(mode.id)}
                                     class={`p-4 rounded-lg border-2 transition-all ${
                                         selectedMode() === mode.id
-                                            ? 'border-yellow-400 bg-yellow-400/20 scale-105'
-                                            : 'border-gray-600 bg-gray-800/50 hover:border-gray-500'
+                                            ? 'border-purple-400 bg-purple-400/20 scale-105'
+                                            : 'border-slate-600 bg-slate-800/50 hover:border-slate-500'
                                     }`}
                                 >
-                                    <div class="text-3xl mb-1">{mode.icon}</div>
+                                    <div class="flex justify-center mb-2">{mode.iconComponent}</div>
                                     <div class="text-white font-bold">{mode.nameNL}</div>
                                     <div class="text-gray-400 text-xs mt-1">{mode.descriptionNL}</div>
                                 </button>
@@ -258,8 +278,10 @@ const LobbyComponent: Component = () => {
 
                 {/* Join by Code */}
                 <div class="max-w-md mx-auto mb-6">
-                    <div class="p-4 rounded-lg shadow-lg bg-blue-900/30 backdrop-blur-md border border-blue-500/30">
-                        <div class="text-gray-300 text-lg font-semibold mb-2">🔗 Join met Code</div>
+                    <div class="p-4 rounded-lg shadow-lg bg-cyan-900/30 backdrop-blur-md border border-cyan-500/30">
+                        <div class="text-gray-300 text-lg font-semibold mb-2 flex items-center gap-2">
+                            <Link2 class="w-5 h-5 text-cyan-400" /> Join met Code
+                        </div>
                         <div class="flex gap-2">
                             <input
                                 type="text"
@@ -267,12 +289,12 @@ const LobbyComponent: Component = () => {
                                 value={joinCode()}
                                 onInput={(e) => setJoinCode(e.currentTarget.value)}
                                 onKeyPress={(e) => e.key === 'Enter' && handleJoinByCode()}
-                                class="flex-1 px-4 py-2 bg-gray-700 text-white border border-gray-600 rounded-lg focus:outline-none focus:border-blue-500"
+                                class="flex-1 px-4 py-2 bg-slate-800 text-white border border-slate-600 rounded-lg focus:outline-none focus:border-cyan-500"
                             />
                             <button
                                 onClick={handleJoinByCode}
                                 disabled={!joinCode().trim()}
-                                class="px-4 py-2 bg-blue-500 hover:bg-blue-600 disabled:bg-gray-600 disabled:cursor-not-allowed text-white font-semibold rounded-lg"
+                                class="px-4 py-2 bg-cyan-600 hover:bg-cyan-500 disabled:bg-slate-600 disabled:cursor-not-allowed text-white font-semibold rounded-lg"
                             >
                                 Join
                             </button>
@@ -282,9 +304,11 @@ const LobbyComponent: Component = () => {
 
                 {/* Create Lobby Section */}
                 <div class="max-w-md mx-auto mb-8">
-                    <div class="p-6 rounded-lg shadow-lg bg-white/10 backdrop-blur-md border border-white/20">
+                    <div class="p-6 rounded-lg shadow-lg bg-slate-800/50 backdrop-blur-md border border-slate-700/50">
                         <div class="flex gap-3 items-center">
-                            <div class="text-gray-300 text-xl font-semibold">➕ Maak Lobby</div>
+                            <div class="text-gray-300 text-xl font-semibold flex items-center gap-2">
+                                <Plus class="w-5 h-5 text-green-400" /> Maak Lobby
+                            </div>
                             <input
                                 type="text"
                                 placeholder="lobby naam"
@@ -292,12 +316,12 @@ const LobbyComponent: Component = () => {
                                 onInput={(e) => setNewLobbyName(e.currentTarget.value)}
                                 onKeyPress={handleKeyPress}
                                 disabled={isCreatingLobby()}
-                                class="flex-1 px-4 py-2 bg-gray-700 text-white border border-gray-600 rounded-lg focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 disabled:opacity-50 disabled:cursor-not-allowed"
+                                class="flex-1 px-4 py-2 bg-slate-700 text-white border border-slate-600 rounded-lg focus:outline-none focus:border-purple-500 focus:ring-1 focus:ring-purple-500 disabled:opacity-50 disabled:cursor-not-allowed"
                             />
                             <button
                                 onClick={handleCreateLobby}
                                 disabled={!newLobbyName().trim() || isCreatingLobby()}
-                                class="px-6 py-2 bg-green-500 hover:bg-green-600 disabled:bg-gray-600 disabled:cursor-not-allowed text-white font-semibold rounded-lg transition-colors duration-200 ease-in-out"
+                                class="px-6 py-2 bg-green-600 hover:bg-green-500 disabled:bg-slate-600 disabled:cursor-not-allowed text-white font-semibold rounded-lg transition-colors duration-200 ease-in-out"
                             >
                                 <Show when={isCreatingLobby()} fallback="Maak">
                                     <svg class="animate-spin h-4 w-4" xmlns="http://www.w3.org/2000/svg"
@@ -325,7 +349,9 @@ const LobbyComponent: Component = () => {
                         </div>
                     }
                 >
-                    <h3 class="text-gray-300 text-xl font-semibold mb-3 text-center">📋 Actieve Lobbies</h3>
+                    <h3 class="text-gray-300 text-xl font-semibold mb-3 text-center flex items-center justify-center gap-2">
+                        <ClipboardList class="w-5 h-5 text-purple-400" /> Actieve Lobbies
+                    </h3>
                     <div class="px-10 grid gap-4 grid-cols-1
                                 sm:grid-cols-2
                                 md:grid-cols-3
@@ -395,7 +421,7 @@ const LobbyCard: Component<LobbyCardProps> = (props) => {
         try {
             await navigator.clipboard.writeText(getShareLink());
             setCopied(true);
-            props.showSnackbar?.(`Link gekopieerd! (${mode.icon} ${mode.nameNL})`, 'success');
+            props.showSnackbar?.(`Link gekopieerd! (${mode.nameNL})`, 'success');
             setTimeout(() => setCopied(false), 2000);
         } catch (err) {
             // Fallback for Safari
@@ -406,7 +432,7 @@ const LobbyCard: Component<LobbyCardProps> = (props) => {
             document.execCommand('copy');
             document.body.removeChild(textArea);
             setCopied(true);
-            props.showSnackbar?.(`Link gekopieerd! (${mode.icon} ${mode.nameNL})`, 'success');
+            props.showSnackbar?.(`Link gekopieerd! (${mode.nameNL})`, 'success');
             setTimeout(() => setCopied(false), 2000);
         }
     };
@@ -414,7 +440,7 @@ const LobbyCard: Component<LobbyCardProps> = (props) => {
     return (
         <div
             ref={cardRef}
-            class="lobby-card w-60 h-56 p-4 rounded-lg shadow-lg bg-white/10 backdrop-blur-md border border-white/20"
+            class="lobby-card w-60 h-56 p-4 rounded-lg shadow-lg bg-slate-800/50 backdrop-blur-md border border-slate-700/50"
         >
             {/* Lobby Name */}
             <h3 class="text-white text-lg font-semibold mb-2">
@@ -422,13 +448,14 @@ const LobbyCard: Component<LobbyCardProps> = (props) => {
             </h3>
 
             {/* Lobby Code for sharing */}
-            <div class="bg-gray-800 rounded px-2 py-1 mb-2 text-center">
-                <span class="text-yellow-400 font-mono text-sm">Code: #{props.lobby.ID}</span>
+            <div class="bg-slate-900 rounded px-2 py-1 mb-2 text-center">
+                <span class="text-purple-400 font-mono text-sm">Code: {props.lobby.ID ? `#${props.lobby.ID}` : 'Laden...'}</span>
             </div>
 
             {/* Lobby Details */}
             <div class="lobby-details text-white/90 text-sm mb-3 space-y-1 flex-1">
-                <div class="flex items-center">
+                <div class="flex items-center gap-2">
+                    <Users class="w-4 h-4 text-cyan-400" />
                     <span class="text-white/70 font-medium">Spelers:</span>
                     <span class="ml-2">{props.lobby.playerCount.toString()}/4</span>
                 </div>
@@ -439,25 +466,25 @@ const LobbyCard: Component<LobbyCardProps> = (props) => {
                 <div class="flex justify-between items-center">
                     <button
                         onClick={props.onJoin}
-                        class="join-btn bg-green-500/80 hover:bg-green-500 text-white px-4 py-2 rounded transition-colors backdrop-blur-sm font-bold"
+                        class="join-btn bg-green-600/80 hover:bg-green-500 text-white px-4 py-2 rounded transition-colors backdrop-blur-sm font-bold flex items-center gap-2"
                     >
-                        ▶ Spelen
+                        <Play class="w-4 h-4" /> Spelen
                     </button>
 
                     <button
                         onClick={copyShareLink}
-                        class={`px-3 py-2 rounded transition-colors backdrop-blur-sm ${copied() ? 'bg-green-600 text-white' : 'bg-blue-500/80 hover:bg-blue-500 text-white'}`}
+                        class={`px-3 py-2 rounded transition-colors backdrop-blur-sm flex items-center gap-1 ${copied() ? 'bg-green-600 text-white' : 'bg-cyan-600/80 hover:bg-cyan-500 text-white'}`}
                     >
-                        {copied() ? '✓ Gekopieerd!' : '🔗 Deel'}
+                        {copied() ? <><Check class="w-4 h-4" /> OK</> : <><Copy class="w-4 h-4" /> Deel</>}
                     </button>
                 </div>
 
                 <Show when={props.lobby.ownerName === props.currentUser}>
                     <button
                         onClick={handleDeleteClick}
-                        class="delete-btn bg-red-500/60 hover:bg-red-500 text-white px-4 py-1 rounded transition-colors backdrop-blur-sm text-sm"
+                        class="delete-btn bg-red-600/60 hover:bg-red-500 text-white px-4 py-1 rounded transition-colors backdrop-blur-sm text-sm flex items-center justify-center gap-1"
                     >
-                        Verwijder
+                        <Trash2 class="w-3 h-3" /> Verwijder
                     </button>
                 </Show>
             </div>

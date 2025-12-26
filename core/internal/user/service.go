@@ -112,8 +112,15 @@ func (auth *Service) VerifyAuthHeader(headers http.Header) (*User, error) {
 		}, nil
 	}
 
+	// Debug: log all received headers
+	log.Debug().
+		Str("cookie_header", headers.Get("Cookie")).
+		Str("auth_header", headers.Get(AuthHeaderKey)).
+		Msg("VerifyAuthHeader: checking headers")
+
 	clientToken := headers.Get(AuthHeaderKey)
 	if clientToken != "" {
+		log.Debug().Msg("Found token in auth header")
 		return auth.verifyToken(clientToken)
 	}
 
@@ -129,10 +136,12 @@ func (auth *Service) VerifyAuthHeader(headers http.Header) (*User, error) {
 		log.Warn().
 			Str("reason", "missing_auth_cookie").
 			Str("cookie_name", AuthHeaderKey).
+			Str("cookie_header_raw", headers.Get("Cookie")).
 			Msg("Auth failed: no auth cookie found")
 		return nil, fmt.Errorf("niet ingelogd")
 	}
 
+	log.Debug().Str("cookie_value", authCookie.Value[:8]+"...").Msg("Found auth cookie")
 	return auth.verifyToken(authCookie.Value)
 }
 

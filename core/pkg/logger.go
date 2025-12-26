@@ -175,12 +175,12 @@ func (gl *GameLogger) PowerUpEaten(x, y float64) {
 		Msg("Power-up eaten")
 }
 
-// GhostEaten logs when a ghost is eaten
-func (gl *GameLogger) GhostEaten(ghostID string) {
+// ChaserEaten logs when a chaser is caught
+func (gl *GameLogger) ChaserEaten(chaserID string) {
 	gl.baseEvent(zerolog.InfoLevel).
-		Str("event", "ghost_eaten").
-		Str("ghostId", ghostID).
-		Msg("Ghost eaten")
+		Str("event", "chaser_eaten").
+		Str("chaserId", chaserID).
+		Msg("Chaser caught")
 }
 
 // MessageReceived logs incoming WebSocket messages

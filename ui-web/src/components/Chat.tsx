@@ -1,4 +1,4 @@
-// Chat system component for multiplayer Pacman
+// Chat system component for MazeChase
 import { createSignal, For, onMount, onCleanup, Show } from 'solid-js';
 
 export interface ChatMessageData {

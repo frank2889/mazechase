@@ -1,4 +1,4 @@
-// Sound effects and music manager for Pacman game
+// Sound effects and music manager for MazeChase game
 
 /**
  * Sound effects configuration
@@ -39,10 +39,10 @@ export class SoundManager {
     preload(): void {
         const audioPath = '/audio';
 
-        // Pacman sounds
+        // MazeChase sounds
         this.scene.load.audio('chomp', `${audioPath}/chomp.mp3`);
         this.scene.load.audio('death', `${audioPath}/death.mp3`);
-        this.scene.load.audio('eatGhost', `${audioPath}/eat_ghost.mp3`);
+        this.scene.load.audio('eatChaser', `${audioPath}/eat_ghost.mp3`);
         this.scene.load.audio('eatFruit', `${audioPath}/eat_fruit.mp3`);
         this.scene.load.audio('powerUp', `${audioPath}/power_pellet.mp3`);
         this.scene.load.audio('siren', `${audioPath}/siren.mp3`);
@@ -64,7 +64,7 @@ export class SoundManager {
 
         // Create sound instances
         const soundKeys = [
-            'chomp', 'death', 'eatGhost', 'eatFruit', 'powerUp',
+            'chomp', 'death', 'eatChaser', 'eatFruit', 'powerUp',
             'siren', 'frightened', 'gameStart', 'gameOver', 'win', 'intermission'
         ];
 
@@ -238,7 +238,7 @@ export class SoundManager {
      */
     private saveConfig(): void {
         try {
-            localStorage.setItem('pacman-sound-config', JSON.stringify(this.config));
+            localStorage.setItem('mazechase-sound-config', JSON.stringify(this.config));
         } catch (e) {
             console.warn('Failed to save sound config');
         }
@@ -249,7 +249,7 @@ export class SoundManager {
      */
     private loadConfig(): void {
         try {
-            const saved = localStorage.getItem('pacman-sound-config');
+            const saved = localStorage.getItem('mazechase-sound-config');
             if (saved) {
                 const parsed = JSON.parse(saved);
                 this.config = { ...this.config, ...parsed };
@@ -273,7 +273,7 @@ export class SoundManager {
 export type SoundEffect =
     | 'chomp'
     | 'death'
-    | 'eatGhost'
+    | 'eatChaser'
     | 'eatFruit'
     | 'powerUp'
     | 'siren'
@@ -288,20 +288,20 @@ declare const Phaser: any;
 
 /**
  * Create placeholder audio files for development
- * In production, replace with actual Pacman-style sounds
+ * In production, replace with actual MazeChase-style sounds
  */
 export function createPlaceholderAudioInfo(): string {
     return `
 To add sound effects, create the following audio files in /public/audio/:
 
-1. chomp.mp3 - Pacman eating pellets (short, repeatable)
-2. death.mp3 - Pacman death sound
-3. eat_ghost.mp3 - Eating a frightened ghost
+1. chomp.mp3 - Runner eating pellets (short, repeatable)
+2. death.mp3 - Runner caught sound
+3. eat_ghost.mp3 - Catching a frightened chaser
 4. eat_fruit.mp3 - Eating bonus fruit
 5. power_pellet.mp3 - Collecting power pellet
-6. siren.mp3 - Ghost chase siren (loopable)
-7. frightened.mp3 - Ghosts frightened state sound
-8. game_start.mp3 - Classic Pacman start jingle
+6. siren.mp3 - Chaser pursuit siren (loopable)
+7. frightened.mp3 - Chasers frightened state sound
+8. game_start.mp3 - MazeChase start jingle
 9. game_over.mp3 - Game over sound
 10. win.mp3 - Level complete / win sound
 11. intermission.mp3 - Cutscene music

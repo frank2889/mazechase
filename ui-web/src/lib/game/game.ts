@@ -1,9 +1,9 @@
-import type {AnimDir, Ghost, GhostAnimBase, Pacman} from "./models.ts";
+import type {AnimDir, Chaser, ChaserAnimBase, Runner} from "./models.ts";
 import {
     getGameState,
     getSpriteID,
     getUsername,
-    sendPacmanGhostMessage,
+    sendRunnerChaserMessage,
     sendPelletMessage,
     sendPosMessage,
     sendPowerUpMessage
@@ -36,7 +36,7 @@ export class GameScene extends Phaser.Scene {
     pelletLayer!: Phaser.Tilemaps.TilemapLayer
     powerLayer!: Phaser.Tilemaps.TilemapLayer
 
-    controllingSprite: Pacman | Ghost | undefined
+    controllingSprite: Runner | Chaser | undefined
 
     gameOverText!: Text;
     spectatingText!: Text
@@ -52,40 +52,40 @@ export class GameScene extends Phaser.Scene {
     touchDirection: AnimDir = 'default';
     wasdKeys!: { W: Phaser.Input.Keyboard.Key, A: Phaser.Input.Keyboard.Key, S: Phaser.Input.Keyboard.Key, D: Phaser.Input.Keyboard.Key };
 
-    allSprites: { [key: string]: Ghost | Pacman } = {
-        "pacman": {
+    allSprites: { [key: string]: Chaser | Runner } = {
+        "runner": {
             playerInfo: null,
             curAnimDir: 'up',
             defaultAnim: 'default',
-            animBase: 'pacman',
+            animBase: 'runner',
             startPos: [110, 220],
             userNameText: null,
             movementSpeed: -200
         },
-        'gh0': {
+        'ch0': {
             playerInfo: null,
             curAnimDir: 'right',
             defaultAnim: 'left',
-            animBase: 'ghostred',
+            animBase: 'chaserred',
             startPos: [670.1666666666666, 424.49999999999994],
             userNameText: null,
             movementSpeed: -160
         },
-        'gh1': {
+        'ch1': {
             playerInfo: null,
             curAnimDir: 'right',
             defaultAnim: 'left',
-            animBase: 'ghostblue',
+            animBase: 'chaserblue',
             startPos: [723.4999999999992, 424.49999999999994],
             userNameText: null,
             movementSpeed: -160
         },
-        'gh2': {
+        'ch2': {
             playerInfo: null,
             userNameText: null,
             curAnimDir: 'right',
             defaultAnim: 'left',
-            animBase: 'ghostpink',
+            animBase: 'chaserpink',
             startPos: [776.8333333333, 424.49999999999994],
             movementSpeed: -160
         },
@@ -117,8 +117,8 @@ export class GameScene extends Phaser.Scene {
         };
         
         this.createMap()
-        this.initPacmanAnim()
-        this.initGhostsAnim()
+        this.initRunnerAnim()
+        this.initChasersAnim()
         this.loadPlayers()
 
         // Focus the game canvas for keyboard input
@@ -191,9 +191,9 @@ export class GameScene extends Phaser.Scene {
             this.powerLayer.removeTileAt(powerUpId.X, powerUpId.Y)
         }
 
-        for (const ghId of gameState.ghostsEaten) {
-            console.log(`Eaten ghosts ${ghId}`)
-            this.allSprites[ghId]!.playerInfo!.destroy()
+        for (const chId of gameState.chasersEaten) {
+            console.log(`Eaten chasers ${chId}`)
+            this.allSprites[chId]!.playerInfo!.destroy()
         }
     }
 
@@ -284,11 +284,11 @@ export class GameScene extends Phaser.Scene {
 
     private loadAssets() {
         const assetsPath = "/gassets"
-        this.load.spritesheet("pacman", `${assetsPath}/pacmanSpriteSheet.png`, {
+        this.load.spritesheet("runner", `${assetsPath}/pacmanSpriteSheet.png`, {
             frameWidth: 50,
             frameHeight: 50,
         });
-        this.load.spritesheet("ghosts", `${assetsPath}/ghosts.png`, {
+        this.load.spritesheet("chasers", `${assetsPath}/ghosts.png`, {
             frameWidth: 50,
             frameHeight: 50,
         });
@@ -319,16 +319,16 @@ export class GameScene extends Phaser.Scene {
         this.powerLayer.setCollisionByExclusion([-1])
     }
 
-    private initGhostsAnim() {
+    private initChasersAnim() {
         // remember to maintain this order right, up, down, left (order in sprite sheet)
         const animDirections: AnimDir[] = ["right", "up", "down", "left"];
-        const ghostColors: GhostAnimBase[] = ["ghostred", "ghostblue", "ghostpink"];
+        const chaserColors: ChaserAnimBase[] = ["chaserred", "chaserblue", "chaserpink"];
 
         let i = 0;
-        for (let color of ghostColors) {
+        for (let color of chaserColors) {
             for (let dir of animDirections) {
                 this.anims.create({
-                    frames: this.anims.generateFrameNumbers('ghosts', {start: i, end: i}),
+                    frames: this.anims.generateFrameNumbers('chasers', {start: i, end: i}),
                     key: color + dir,
                 })
                 i++
@@ -336,7 +336,7 @@ export class GameScene extends Phaser.Scene {
         }
     }
 
-    private initPacmanAnim() {
+    private initRunnerAnim() {
         let namesArray: AnimDir[] = [
             'right',
             'up',
@@ -346,8 +346,8 @@ export class GameScene extends Phaser.Scene {
         let ind = 0
         for (let i = 0; i < 12; i += 3) {
             this.anims.create({
-                frames: this.anims.generateFrameNumbers('pacman', {start: i + 1, end: i + 3}),
-                key: 'pacman' + namesArray[ind],
+                frames: this.anims.generateFrameNumbers('runner', {start: i + 1, end: i + 3}),
+                key: 'runner' + namesArray[ind],
                 frameRate: 10,
                 repeat: -1
             });
@@ -355,10 +355,10 @@ export class GameScene extends Phaser.Scene {
         }
 
         let defaultAnim: AnimDir = "default"
-        // neutral pacman
+        // neutral runner
         this.anims.create({
-            frames: this.anims.generateFrameNumbers('pacman', {start: 0, end: 0}),
-            key: 'pacman' + defaultAnim,
+            frames: this.anims.generateFrameNumbers('runner', {start: 0, end: 0}),
+            key: 'runner' + defaultAnim,
             frameRate: 1,
             repeat: -1
         });
@@ -370,8 +370,8 @@ export class GameScene extends Phaser.Scene {
             const defaultAnim = spriteData.animBase + spriteData.defaultAnim
             const startPos = spriteData.startPos
 
-            // Use correct texture key: "pacman" for pacman, "ghosts" for all ghosts
-            const textureKey = spriteId === "pacman" ? "pacman" : "ghosts";
+            // Use correct texture key: "runner" for runner, "chasers" for all chasers
+            const textureKey = spriteId === "runner" ? "runner" : "chasers";
             
             let sprite = this.physics.add.sprite(
                 startPos[0],
@@ -387,13 +387,13 @@ export class GameScene extends Phaser.Scene {
 
             // hit box
             let desiredRadius = 20; // 50/2 - 5
-            if (spriteId === "pacman") {
+            if (spriteId === "runner") {
                 sprite.body.setCircle(desiredRadius);
                 const offsetX = (sprite.width / 2) - desiredRadius;
                 const offsetY = (sprite.height / 2) - desiredRadius;
                 sprite.body.setCircle(desiredRadius, offsetX, offsetY);
             } else {
-                // ghosts have a sightly offset and smaller hitbox because of sprite size
+                // chasers have a sightly offset and smaller hitbox because of sprite size
                 const offset = 8;
                 sprite.body.setCircle(desiredRadius - 2, offset, offset);
             }
@@ -403,7 +403,7 @@ export class GameScene extends Phaser.Scene {
             // collisions with map
             this.physics.add.collider(sprite, this.mapLayer)
 
-            if (spriteId == "pacman") {
+            if (spriteId == "runner") {
                 this.physics.add.overlap(sprite, this.pelletLayer, this.pelletCallBack.bind(this))
                 this.physics.add.collider(sprite, this.powerLayer, this.powerUpCallBack.bind(this))
             }
@@ -415,21 +415,21 @@ export class GameScene extends Phaser.Scene {
             this.allSprites[spriteId] = spriteData
         }
         
-        // Second pass: add ghost-pacman collisions (now pacman sprite exists)
-        const pacmanSprite = this.allSprites["pacman"].playerInfo!;
+        // Second pass: add chaser-runner collisions (now runner sprite exists)
+        const runnerSprite = this.allSprites["runner"].playerInfo!;
         for (const [spriteId, spriteData] of Object.entries(this.allSprites)) {
-            if (spriteId !== "pacman" && spriteData.playerInfo) {
+            if (spriteId !== "runner" && spriteData.playerInfo) {
                 this.physics.add.collider(
                     spriteData.playerInfo,
-                    pacmanSprite,
-                    this.pacmanGhostCollision.bind(this)
+                    runnerSprite,
+                    this.runnerChaserCollision.bind(this)
                 )
             }
         }
     }
 
     pelletCallBack(
-        _pacman: CollisionBodyType,
+        _runner: CollisionBodyType,
         pellet: CollisionBodyType
     ) {
         let pel = pellet as Tile
@@ -438,7 +438,7 @@ export class GameScene extends Phaser.Scene {
     }
 
     powerUpCallBack(
-        _pacman: CollisionBodyType,
+        _runner: CollisionBodyType,
         power: CollisionBodyType
     ) {
         let pow = power as Tile
@@ -448,15 +448,15 @@ export class GameScene extends Phaser.Scene {
         this.addScore(SCORE_VALUES.powerPellet);
     }
 
-    pacmanGhostCollision(
-        ghost: CollisionBodyType,
-        _pacman: CollisionBodyType,
+    runnerChaserCollision(
+        chaser: CollisionBodyType,
+        _runner: CollisionBodyType,
     ): void {
-        const gho = ghost as GameObjectWithBody
-        const ghostId = gho.getData(playerSpriteIdKey) as string
-        console.log('pacmanGhostCollision', ghostId)
+        const cha = chaser as GameObjectWithBody
+        const chaserId = cha.getData(playerSpriteIdKey) as string
+        console.log('runnerChaserCollision', chaserId)
 
-        sendPacmanGhostMessage(ghostId)
+        sendRunnerChaserMessage(chaserId)
     }
 
     addScore(points: number) {

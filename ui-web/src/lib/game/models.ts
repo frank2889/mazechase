@@ -2,8 +2,8 @@ import Phaser from 'phaser';
 import Text = Phaser.GameObjects.Text; // Make sure to import Phaser
 
 export type AnimDir = "up" | "down" | "left" | "right" | "default";
-export type GhostAnimBase = "ghostred" | "ghostblue" | "ghostpink";
-export type PacmanAnimBase = "pacman";
+export type ChaserAnimBase = "chaserred" | "chaserblue" | "chaserpink";
+export type RunnerAnimBase = "runner";
 
 export type GameMessage = "pos" | "pel" | "pow" | "kill"
 
@@ -16,16 +16,16 @@ export type PlayerInfo = {
     movementSpeed: number,
 }
 
-export function getAnimStr(info: Ghost | Pacman) {
+export function getAnimStr(info: Chaser | Runner) {
     return info.animBase + info.curAnimDir
 }
 
-export type Ghost = PlayerInfo & {
-    animBase: GhostAnimBase,
+export type Chaser = PlayerInfo & {
+    animBase: ChaserAnimBase,
 }
 
-export type Pacman = PlayerInfo & {
-    animBase: PacmanAnimBase,
+export type Runner = PlayerInfo & {
+    animBase: RunnerAnimBase,
 }
 
 

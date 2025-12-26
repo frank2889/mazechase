@@ -168,7 +168,7 @@ function handlePellet(json: any) {
     console.log(gameScene?.pelletLayer.tilesDrawn)
 
     if (gameScene?.pelletLayer.tilesDrawn === 0) {
-        gameScene.showGameOver('Pacman', 'Alle pellets verzameld!');
+        gameScene.showGameOver('Runner', 'Alle pellets verzameld!');
     }
 }
 
@@ -180,20 +180,20 @@ function handlePowerPelletStart(json: any) {
 
     gameScene?.powerLayer.removeTileAt(x, y)
 
-    // give pacman power up
-    gameScene?.allSprites['pacman']!.playerInfo!.setTint(0xff0000);
-    gameScene!.allSprites['pacman']!.movementSpeed = -160
-    // gameScene!.allSprites['pacman']!.movementSpeed = -300
+    // give runner power up
+    gameScene?.allSprites['runner']!.playerInfo!.setTint(0xff0000);
+    gameScene!.allSprites['runner']!.movementSpeed = -160
+    // gameScene!.allSprites['runner']!.movementSpeed = -300
 }
 
 
 function handlePowerPelletEnd(_json: any) {
     console.log(`power up ended`)
 
-    // give pacman power up
-    gameScene?.allSprites['pacman']!.playerInfo!.setTint(0xffffff);
-    gameScene!.allSprites['pacman']!.movementSpeed = -200
-    // gameScene!.allSprites['pacman']!.movementSpeed = -300
+    // give runner power up
+    gameScene?.allSprites['runner']!.playerInfo!.setTint(0xffffff);
+    gameScene!.allSprites['runner']!.movementSpeed = -200
+    // gameScene!.allSprites['runner']!.movementSpeed = -300
 }
 
 
@@ -237,10 +237,10 @@ export function sendPowerUpMessage(x: number, y: number) {
 }
 
 
-export function sendPacmanGhostMessage(ghostSpriteId: string) {
-    console.log('ghost and pacman collided')
-    // tell all clients pacman is dead
-    sendWsMessage('kill', {id: ghostSpriteId})
+export function sendRunnerChaserMessage(chaserSpriteId: string) {
+    console.log('chaser and runner collided')
+    // tell all clients runner is caught
+    sendWsMessage('kill', {id: chaserSpriteId})
 }
 
 

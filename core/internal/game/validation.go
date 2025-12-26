@@ -66,7 +66,7 @@ func (v *InputValidator) ValidateDirection(dir string) error {
 // ValidateSpriteType checks if sprite type is valid
 func (v *InputValidator) ValidateSpriteType(spriteType string) error {
 	validSprites := map[string]bool{
-		"pacman": true, "gh0": true, "gh1": true, "gh2": true,
+		"runner": true, "ch0": true, "ch1": true, "ch2": true,
 	}
 	if !validSprites[spriteType] {
 		return &ValidationError{Field: "spriteType", Message: "invalid sprite type"}

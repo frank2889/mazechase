@@ -1,12 +1,12 @@
 /**
  * MazeChase Game Modes
  * 
- * A) CLASSIC - Original Pac-Man style (1 Pacman vs 3 Ghosts)
+ * A) CLASSIC - 1 Runner vs 3 Chasers
  * B) RACE - 4 players race to collect the most pellets
  * C) BATTLE - Last player standing wins (power-ups eliminate others)
  */
 
-import { Ghost, Flag, Swords } from 'lucide-solid';
+import { Zap, Flag, Swords } from 'lucide-solid';
 import { JSX } from 'solid-js';
 
 export type GameMode = 'classic' | 'race' | 'battle';
@@ -30,10 +30,10 @@ export const GAME_MODES: Record<GameMode, GameModeConfig> = {
         id: 'classic',
         name: 'Classic',
         nameNL: 'Klassiek',
-        description: 'Original Pac-Man: 1 Pacman vs 3 Ghosts',
+        description: '1 Runner vs 3 Chasers',
         descriptionNL: '1 Runner jaagt op pellets, 3 Chasers jagen op Runner',
-        icon: 'ghost',
-        iconComponent: Ghost({ class: "w-8 h-8 text-pink-400" }),
+        icon: 'zap',
+        iconComponent: Zap({ class: "w-8 h-8 text-cyan-400" }),
         minPlayers: 2,
         maxPlayers: 4,
         hasTeams: true,
@@ -84,7 +84,7 @@ export const SCORE_VALUES = {
     pellet: 10,
     powerPellet: 50,
     eliminatePlayer: 200,
-    ghostEaten: 200,
+    chaserCaught: 200,
     survivalBonus: 500,
     winnerBonus: 1000,
     raceTimeBonus: 100, // Per second remaining

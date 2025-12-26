@@ -47,7 +47,7 @@ MazeChase is een competitieve multiplayer game waar 4 spelers door een doolhof r
 ## 🎲 Game Modes
 
 ### 🏆 Classic Mode
-Klassiek Pacman-achtig spel. Verzamel alle pellets om te winnen!
+Runner vs Chasers! De Runner verzamelt pellets terwijl Chasers jagen.
 
 ### 🏁 Race Mode  
 Verzamel 50 pellets als eerste om te winnen. Snelheid is key!

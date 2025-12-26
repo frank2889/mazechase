@@ -229,10 +229,10 @@ func TestGameStateSynchronization(t *testing.T) {
 		t.Error("Expected world to be powered up")
 	}
 
-	// Simulate ghost kill
-	world.GhostEatenAction(Ghost1)
-	if len(world.GhostsIdsEaten) != 1 {
-		t.Error("Expected 1 ghost eaten")
+	// Simulate chaser caught
+	world.ChaserEatenAction(Chaser1)
+	if len(world.ChasersIdsEaten) != 1 {
+		t.Error("Expected 1 chaser caught")
 	}
 
 	// Simulate player leaving
@@ -281,18 +281,18 @@ func TestLeaderboardSystemIntegration(t *testing.T) {
 
 	// Record some game results
 	leaderboard.RecordGameResult(1, "Player1", true, GameStats{
-		GhostsEaten:  3,
+		ChasersEaten:  3,
 		PelletsEaten: 100,
 		PowerUpsUsed: 2,
 	})
 
 	leaderboard.RecordGameResult(2, "Player2", false, GameStats{
-		GhostsEaten:  1,
+		ChasersEaten:  1,
 		PelletsEaten: 50,
 	})
 
 	leaderboard.RecordGameResult(1, "Player1", true, GameStats{
-		GhostsEaten:  2,
+		ChasersEaten:  2,
 		PelletsEaten: 80,
 	})
 
@@ -317,8 +317,8 @@ func TestLeaderboardSystemIntegration(t *testing.T) {
 		t.Error("Expected to find Player1 stats")
 	}
 
-	if stats.GhostsEaten != 5 {
-		t.Errorf("Expected 5 total ghosts eaten, got %d", stats.GhostsEaten)
+	if stats.ChasersEaten != 5 {
+		t.Errorf("Expected 5 total chasers caught, got %d", stats.ChasersEaten)
 	}
 }
 
@@ -435,7 +435,7 @@ func BenchmarkLeaderboardUpdate(b *testing.B) {
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
 		leaderboard.RecordGameResult(uint(i%100), "Player", true, GameStats{
-			GhostsEaten:  3,
+			ChasersEaten:  3,
 			PelletsEaten: 100,
 		})
 	}

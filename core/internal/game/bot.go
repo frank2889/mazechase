@@ -112,13 +112,13 @@ func (bm *BotManager) createBotUnlocked(index int) *Bot {
 // getStartX returns the starting X position for a sprite
 func getStartX(sprite SpriteType) float64 {
 	switch sprite {
-	case Pacman:
+	case Runner:
 		return 110
-	case Ghost1:
+	case Chaser1:
 		return 723.5
-	case Ghost2:
+	case Chaser2:
 		return 670.17
-	case Ghost3:
+	case Chaser3:
 		return 776.83
 	default:
 		return 400
@@ -128,9 +128,9 @@ func getStartX(sprite SpriteType) float64 {
 // getStartY returns the starting Y position for a sprite
 func getStartY(sprite SpriteType) float64 {
 	switch sprite {
-	case Pacman:
+	case Runner:
 		return 220
-	case Ghost1, Ghost2, Ghost3:
+	case Chaser1, Chaser2, Chaser3:
 		return 424.5
 	default:
 		return 400

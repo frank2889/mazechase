@@ -181,7 +181,7 @@ func (pf *AStarPathfinder) distance(a, b *PathNode) float64 {
 	return 1.0
 }
 
-// getNeighbors returns walkable neighboring nodes (4-directional for Pacman)
+// getNeighbors returns walkable neighboring nodes (4-directional for MazeChase)
 func (pf *AStarPathfinder) getNeighbors(node *PathNode) []*PathNode {
 	neighbors := make([]*PathNode, 0, 4)
 	directions := [][2]int{
@@ -215,8 +215,8 @@ func (pf *AStarPathfinder) reconstructPath(node *PathNode) []Point {
 	return path
 }
 
-// GhostAI implements improved ghost AI behavior
-type GhostAI struct {
+// ChaserAI implements improved chaser AI behavior
+type ChaserAI struct {
 	pathfinder *AStarPathfinder
 	difficulty DifficultyLevel
 }
@@ -230,91 +230,91 @@ const (
 	DifficultyHard
 )
 
-// GhostBehavior represents different ghost behaviors
-type GhostBehavior int
+// ChaserBehavior represents different chaser behaviors
+type ChaserBehavior int
 
 const (
-	BehaviorChase GhostBehavior = iota
+	BehaviorChase ChaserBehavior = iota
 	BehaviorScatter
 	BehaviorFrightened
 )
 
-// NewGhostAI creates a new ghost AI with pathfinding
-func NewGhostAI(grid *PathGrid, difficulty DifficultyLevel) *GhostAI {
-	return &GhostAI{
+// NewChaserAI creates a new chaser AI with pathfinding
+func NewChaserAI(grid *PathGrid, difficulty DifficultyLevel) *ChaserAI {
+	return &ChaserAI{
 		pathfinder: NewAStarPathfinder(grid),
 		difficulty: difficulty,
 	}
 }
 
-// GetNextMove calculates the next move for a ghost
-func (ai *GhostAI) GetNextMove(ghostX, ghostY, pacmanX, pacmanY int, behavior GhostBehavior) (nextX, nextY int) {
+// GetNextMove calculates the next move for a chaser
+func (ai *ChaserAI) GetNextMove(chaserX, chaserY, runnerX, runnerY int, behavior ChaserBehavior) (nextX, nextY int) {
 	switch behavior {
 	case BehaviorChase:
-		return ai.chaseMove(ghostX, ghostY, pacmanX, pacmanY)
+		return ai.chaseMove(chaserX, chaserY, runnerX, runnerY)
 	case BehaviorScatter:
-		return ai.scatterMove(ghostX, ghostY)
+		return ai.scatterMove(chaserX, chaserY)
 	case BehaviorFrightened:
-		return ai.frightenedMove(ghostX, ghostY, pacmanX, pacmanY)
+		return ai.frightenedMove(chaserX, chaserY, runnerX, runnerY)
 	default:
-		return ghostX, ghostY
+		return chaserX, chaserY
 	}
 }
 
-// chaseMove calculates chase behavior (move towards Pacman)
-func (ai *GhostAI) chaseMove(ghostX, ghostY, pacmanX, pacmanY int) (int, int) {
+// chaseMove calculates chase behavior (move towards Runner)
+func (ai *ChaserAI) chaseMove(chaserX, chaserY, runnerX, runnerY int) (int, int) {
 	// Use pathfinding based on difficulty
 	switch ai.difficulty {
 	case DifficultyHard:
 		// Full A* pathfinding
-		path := ai.pathfinder.FindPath(ghostX, ghostY, pacmanX, pacmanY)
+		path := ai.pathfinder.FindPath(chaserX, chaserY, runnerX, runnerY)
 		if len(path) > 1 {
 			return int(path[1].X), int(path[1].Y)
 		}
 	case DifficultyMedium:
 		// Greedy approach with some randomness
 		if randomChance(0.7) {
-			return ai.greedyMove(ghostX, ghostY, pacmanX, pacmanY)
+			return ai.greedyMove(chaserX, chaserY, runnerX, runnerY)
 		}
-		return ai.randomMove(ghostX, ghostY)
+		return ai.randomMove(chaserX, chaserY)
 	case DifficultyEasy:
-		// Random movement with slight bias towards Pacman
+		// Random movement with slight bias towards Runner
 		if randomChance(0.3) {
-			return ai.greedyMove(ghostX, ghostY, pacmanX, pacmanY)
+			return ai.greedyMove(chaserX, chaserY, runnerX, runnerY)
 		}
-		return ai.randomMove(ghostX, ghostY)
+		return ai.randomMove(chaserX, chaserY)
 	}
 
-	return ghostX, ghostY
+	return chaserX, chaserY
 }
 
 // scatterMove calculates scatter behavior (move to corners)
-func (ai *GhostAI) scatterMove(ghostX, ghostY int) (int, int) {
+func (ai *ChaserAI) scatterMove(chaserX, chaserY int) (int, int) {
 	// Move towards designated corner
-	return ai.randomMove(ghostX, ghostY)
+	return ai.randomMove(chaserX, chaserY)
 }
 
-// frightenedMove calculates frightened behavior (run away from Pacman)
-func (ai *GhostAI) frightenedMove(ghostX, ghostY, pacmanX, pacmanY int) (int, int) {
-	// Move away from Pacman
-	dx := ghostX - pacmanX
-	dy := ghostY - pacmanY
+// frightenedMove calculates frightened behavior (run away from Runner)
+func (ai *ChaserAI) frightenedMove(chaserX, chaserY, runnerX, runnerY int) (int, int) {
+	// Move away from Runner
+	dx := chaserX - runnerX
+	dy := chaserY - runnerY
 
 	if abs(dx) > abs(dy) {
 		if dx > 0 {
-			return ghostX + 1, ghostY
+			return chaserX + 1, chaserY
 		}
-		return ghostX - 1, ghostY
+		return chaserX - 1, chaserY
 	}
 
 	if dy > 0 {
-		return ghostX, ghostY + 1
+		return chaserX, chaserY + 1
 	}
-	return ghostX, ghostY - 1
+	return chaserX, chaserY - 1
 }
 
 // greedyMove makes a greedy move towards target
-func (ai *GhostAI) greedyMove(fromX, fromY, toX, toY int) (int, int) {
+func (ai *ChaserAI) greedyMove(fromX, fromY, toX, toY int) (int, int) {
 	dx := toX - fromX
 	dy := toY - fromY
 
@@ -332,7 +332,7 @@ func (ai *GhostAI) greedyMove(fromX, fromY, toX, toY int) (int, int) {
 }
 
 // randomMove makes a random valid move
-func (ai *GhostAI) randomMove(x, y int) (int, int) {
+func (ai *ChaserAI) randomMove(x, y int) (int, int) {
 	directions := [][2]int{{0, -1}, {0, 1}, {-1, 0}, {1, 0}}
 	dir := directions[randomInt(4)]
 	return x + dir[0], y + dir[1]

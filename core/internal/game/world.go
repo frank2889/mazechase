@@ -16,7 +16,7 @@ type World struct {
 	MatchStarted        bool
 	IsPoweredUp         bool
 	CharactersList      []SpriteType
-	GhostsIdsEaten      []SpriteType
+	ChasersIdsEaten     []SpriteType
 	ConnectedPlayers    *pkg.Map[string, *melody.Session]
 	PelletsCoordEaten   CoordList
 	PowerUpsCoordsEaten CoordList
@@ -29,11 +29,11 @@ func NewWorldState() *World {
 	return &World{
 		MatchStarted:        false,
 		IsPoweredUp:         false,
-		CharactersList:      []SpriteType{Ghost1, Ghost2, Ghost3, Pacman},
+		CharactersList:      []SpriteType{Chaser1, Chaser2, Chaser3, Runner},
 		ConnectedPlayers:    &pkg.Map[string, *melody.Session]{},
 		PelletsCoordEaten:   NewCordList(),
 		PowerUpsCoordsEaten: NewCordList(),
-		GhostsIdsEaten:      []SpriteType{},
+		ChasersIdsEaten:     []SpriteType{},
 		worldLock:           sync.Mutex{},
 		gameOverChan:        make(chan string, 1),
 		BotManager:          nil, // Will be set when broadcast function is available
@@ -103,7 +103,7 @@ func (w *World) GetGameStateReport(secretToken, username, spriteId string, newPl
 
 	data := map[string]interface{}{
 		"type":          "state",
-		"ghostsEaten":   w.GhostsIdsEaten,
+		"chasersEaten":  w.ChasersIdsEaten,
 		"activePlayers": connectedMap,
 		"pelletsEaten":  w.PelletsCoordEaten.GetList(),
 		"powerUpsEaten": w.PowerUpsCoordsEaten.GetList(),
@@ -125,8 +125,8 @@ func (w *World) IsLobbyFull() bool {
 }
 
 func (w *World) checkGameOver() (reason string) {
-	if len(w.GhostsIdsEaten) == 3 {
-		return "all ghosts eaten"
+	if len(w.ChasersIdsEaten) == 3 {
+		return "all chasers eliminated"
 	}
 
 	return ""
@@ -187,9 +187,9 @@ func (w *World) EatPowerUp(powerUpX, powerUpY float64) {
 	w.IsPoweredUp = true
 }
 
-func (w *World) GhostEatenAction(ghostID SpriteType) {
+func (w *World) ChaserEatenAction(chaserID SpriteType) {
 	w.worldLock.Lock()
 	defer w.worldLock.Unlock()
 
-	w.GhostsIdsEaten = append(w.GhostsIdsEaten, ghostID)
+	w.ChasersIdsEaten = append(w.ChasersIdsEaten, chaserID)
 }

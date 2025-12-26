@@ -1,4 +1,4 @@
-// Leaderboard component for multiplayer Pacman
+// Leaderboard component for MazeChase
 import { createSignal, For, Show, onMount, JSX } from 'solid-js';
 import { Trophy, Medal, Star, Ghost, Gamepad2, X } from 'lucide-solid';
 
@@ -7,7 +7,7 @@ export interface LeaderboardEntry {
     username: string;
     wins: number;
     losses: number;
-    ghostsEaten: number;
+    chasersEaten: number;
     pelletsEaten: number;
     gamesPlayed: number;
     highScore: number;
@@ -21,7 +21,7 @@ interface LeaderboardProps {
 }
 
 export function Leaderboard(props: LeaderboardProps) {
-    const [activeTab, setActiveTab] = createSignal<'wins' | 'score' | 'ghosts'>('wins');
+    const [activeTab, setActiveTab] = createSignal<'wins' | 'score' | 'chasers'>('wins');
 
     const sortedEntries = () => {
         const entries = [...props.entries];
@@ -30,8 +30,8 @@ export function Leaderboard(props: LeaderboardProps) {
                 return entries.sort((a, b) => b.wins - a.wins);
             case 'score':
                 return entries.sort((a, b) => b.highScore - a.highScore);
-            case 'ghosts':
-                return entries.sort((a, b) => b.ghostsEaten - a.ghostsEaten);
+            case 'chasers':
+                return entries.sort((a, b) => b.chasersEaten - a.chasersEaten);
             default:
                 return entries;
         }
@@ -78,8 +78,8 @@ export function Leaderboard(props: LeaderboardProps) {
                         <Star class="w-4 h-4 inline mr-1" /> High Score
                     </button>
                     <button
-                        class={`tab-btn ${activeTab() === 'ghosts' ? 'active' : ''}`}
-                        onClick={() => setActiveTab('ghosts')}
+                        class={`tab-btn ${activeTab() === 'chasers' ? 'active' : ''}`}
+                        onClick={() => setActiveTab('chasers')}
                     >
                         <Ghost class="w-4 h-4 inline mr-1" /> Chasers
                     </button>
@@ -103,7 +103,7 @@ export function Leaderboard(props: LeaderboardProps) {
                             <span class="col-stat">
                                 {activeTab() === 'wins' && 'Wins'}
                                 {activeTab() === 'score' && 'Score'}
-                                {activeTab() === 'ghosts' && 'Chasers'}
+                                {activeTab() === 'chasers' && 'Chasers'}
                             </span>
                             <span class="col-winrate">Win Rate</span>
                         </div>
@@ -125,7 +125,7 @@ export function Leaderboard(props: LeaderboardProps) {
                                         <span class="col-stat highlight">
                                             {activeTab() === 'wins' && entry.wins}
                                             {activeTab() === 'score' && entry.highScore.toLocaleString()}
-                                            {activeTab() === 'ghosts' && entry.ghostsEaten}
+                                            {activeTab() === 'chasers' && entry.chasersEaten}
                                         </span>
                                         <span class="col-winrate">{getWinRate(entry)}</span>
                                     </div>
@@ -400,8 +400,8 @@ export function PlayerStatsCard(props: { stats: LeaderboardEntry }) {
                     <span class="stat-label">High Score</span>
                 </div>
                 <div class="stat-item">
-                    <span class="stat-value">{props.stats.ghostsEaten}</span>
-                    <span class="stat-label">Ghosts Eaten</span>
+                    <span class="stat-value">{props.stats.chasersEaten}</span>
+                    <span class="stat-label">Chasers Gevangen</span>
                 </div>
                 <div class="stat-item">
                     <span class="stat-value">{props.stats.pelletsEaten}</span>

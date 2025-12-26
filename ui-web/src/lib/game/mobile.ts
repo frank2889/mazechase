@@ -1,4 +1,4 @@
-// Mobile touch controls for Pacman game
+// Mobile touch controls for MazeChase game
 import Phaser from 'phaser';
 
 /**

@@ -156,24 +156,24 @@ func KillPlayer() MessageHandler {
 	return MessageHandler{
 		messageName: name,
 		handler: func(data MessageData) map[string]interface{} {
-			ghostId, exists := data.msgInfo["id"]
+			chaserId, exists := data.msgInfo["id"]
 			if !exists {
-				log.Warn().Any("msg", data.msgInfo).Msg("no pellet ghostId found")
+				log.Warn().Any("msg", data.msgInfo).Msg("no chaser id found")
 				return nil
 			}
 
 			if data.world.IsPoweredUp {
-				data.world.GhostEatenAction(SpriteType(ghostId.(string)))
+				data.world.ChaserEatenAction(SpriteType(chaserId.(string)))
 				return map[string]interface{}{
-					"type":     name, // ghost eaten
-					"spriteId": ghostId,
+					"type":     name, // chaser eliminated
+					"spriteId": chaserId,
 				}
 			}
 
-			data.world.GameOver("pacman was killed")
+			data.world.GameOver("runner was caught")
 			return map[string]interface{}{
 				"type":     name,
-				"spriteId": Pacman, // pacman dead
+				"spriteId": Runner, // runner caught
 			}
 		},
 	}

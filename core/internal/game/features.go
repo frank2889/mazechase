@@ -126,15 +126,15 @@ func ChatMessageHandler(chatManager *ChatManager, manager *Manager) MessageHandl
 
 // Leaderboard system
 type LeaderboardEntry struct {
-	UserID      uint   `json:"userId" gorm:"primaryKey"`
-	Username    string `json:"username"`
-	Wins        int    `json:"wins"`
-	Losses      int    `json:"losses"`
-	GhostsEaten int    `json:"ghostsEaten"`
-	PeletsEaten int    `json:"pelletsEaten"`
-	GamesPlayed int    `json:"gamesPlayed"`
-	HighScore   int    `json:"highScore"`
-	UpdatedAt   time.Time
+	UserID       uint   `json:"userId" gorm:"primaryKey"`
+	Username     string `json:"username"`
+	Wins         int    `json:"wins"`
+	Losses       int    `json:"losses"`
+	ChasersEaten int    `json:"chasersEaten"`
+	PeletsEaten  int    `json:"pelletsEaten"`
+	GamesPlayed  int    `json:"gamesPlayed"`
+	HighScore    int    `json:"highScore"`
+	UpdatedAt    time.Time
 }
 
 // LeaderboardManager manages the leaderboard
@@ -165,7 +165,7 @@ func (lm *LeaderboardManager) RecordGameResult(userID uint, username string, won
 	}
 
 	entry.GamesPlayed++
-	entry.GhostsEaten += stats.GhostsEaten
+	entry.ChasersEaten += stats.ChasersEaten
 	entry.PeletsEaten += stats.PelletsEaten
 
 	if won {
@@ -223,7 +223,7 @@ func (lm *LeaderboardManager) GetPlayerStats(userID uint) (*LeaderboardEntry, bo
 
 // GameStats holds stats from a single game
 type GameStats struct {
-	GhostsEaten  int
+	ChasersEaten  int
 	PelletsEaten int
 	PowerUpsUsed int
 	SurvivalTime time.Duration
@@ -231,7 +231,7 @@ type GameStats struct {
 
 // calculateScore calculates a score from game stats
 func calculateScore(stats GameStats) int {
-	return stats.PelletsEaten*10 + stats.GhostsEaten*200 + stats.PowerUpsUsed*50
+	return stats.PelletsEaten*10 + stats.ChasersEaten*200 + stats.PowerUpsUsed*50
 }
 
 // WorldWithStats extends World with statistics tracking
@@ -247,7 +247,7 @@ type WorldWithStats struct {
 // PlayerGameStats tracks per-player stats for current game
 type PlayerGameStats struct {
 	PelletsEaten int
-	GhostsEaten  int
+	ChasersEaten  int
 	PowerUpsUsed int
 }
 
@@ -281,7 +281,7 @@ func (w *WorldWithStats) TrackGhostEaten(playerID string) {
 	if _, exists := w.stats[playerID]; !exists {
 		w.stats[playerID] = &PlayerGameStats{}
 	}
-	w.stats[playerID].GhostsEaten++
+	w.stats[playerID].ChasersEaten++
 }
 
 // GetPlayerStats returns stats for a player

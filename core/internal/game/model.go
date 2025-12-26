@@ -8,12 +8,12 @@ import (
 
 type SpriteType string
 
-// Character types - keeping original names for compatibility
+// Character types - MazeChase naming
 const (
-	Ghost1 SpriteType = "gh0"
-	Ghost2 SpriteType = "gh1"
-	Ghost3 SpriteType = "gh2"
-	Pacman SpriteType = "pacman"
+	Chaser1 SpriteType = "ch0"
+	Chaser2 SpriteType = "ch1"
+	Chaser3 SpriteType = "ch2"
+	Runner  SpriteType = "runner"
 )
 
 func NewPlayerEntity(userId uint, username string) *PlayerEntity {

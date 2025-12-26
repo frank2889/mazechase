@@ -34,12 +34,12 @@ func (l Handler) AddLobby(ctx context.Context, req *connect.Request[v1.AddLobbie
 
 	// Allow all users (including guests) to create lobbies
 	lobbyName := req.Msg.GetLobbyName()
-	err = l.lobbyService.CreateLobby(lobbyName, userInfo.Username, userInfo.ID)
+	lobbyId, err := l.lobbyService.CreateLobby(lobbyName, userInfo.Username, userInfo.ID)
 	if err != nil {
 		return nil, err
 	}
 
-	return connect.NewResponse(&v1.AddLobbiesResponse{}), nil
+	return connect.NewResponse(&v1.AddLobbiesResponse{LobbyId: uint64(lobbyId)}), nil
 }
 
 func (l Handler) DeleteLobby(ctx context.Context, req *connect.Request[v1.DelLobbiesRequest]) (*connect.Response[v1.DelLobbiesResponse], error) {

@@ -35,10 +35,10 @@ func (lobbyService *Service) GetLobbyFromID(id int) (*Lobby, error) {
 	return lobby, nil
 }
 
-func (lobbyService *Service) CreateLobby(lobbyName, username string, userId uint) error {
+func (lobbyService *Service) CreateLobby(lobbyName, username string, userId uint) (uint, error) {
 	err := lobbyService.countUserLobbies(userId)
 	if err != nil {
-		return err
+		return 0, err
 	}
 
 	lobby := &Lobby{
@@ -50,10 +50,10 @@ func (lobbyService *Service) CreateLobby(lobbyName, username string, userId uint
 	result := lobbyService.Db.Create(lobby)
 	if result.Error != nil {
 		log.Error().Err(result.Error).Msg("unable to create lobby")
-		return fmt.Errorf("lobby aanmaken mislukt")
+		return 0, fmt.Errorf("lobby aanmaken mislukt")
 	}
 
-	return nil
+	return lobby.ID, nil
 }
 
 func (lobbyService *Service) DeleteLobby(lobbyId uint64, userId uint) error {

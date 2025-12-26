@@ -147,6 +147,7 @@ func (x *AddLobbiesRequest) GetLobbyName() string {
 
 type AddLobbiesResponse struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
+	LobbyId       uint64                 `protobuf:"varint,1,opt,name=lobby_id,json=lobbyId,proto3" json:"lobby_id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -179,6 +180,13 @@ func (x *AddLobbiesResponse) ProtoReflect() protoreflect.Message {
 // Deprecated: Use AddLobbiesResponse.ProtoReflect.Descriptor instead.
 func (*AddLobbiesResponse) Descriptor() ([]byte, []int) {
 	return file_lobby_v1_lobby_proto_rawDescGZIP(), []int{3}
+}
+
+func (x *AddLobbiesResponse) GetLobbyId() uint64 {
+	if x != nil {
+		return x.LobbyId
+	}
+	return 0
 }
 
 type DelLobbiesRequest struct {
@@ -355,8 +363,9 @@ const file_lobby_v1_lobby_proto_rawDesc = "" +
 	"\alobbies\x18\x01 \x03(\v2\x0f.lobby.v1.LobbyR\alobbies\"2\n" +
 	"\x11AddLobbiesRequest\x12\x1d\n" +
 	"\n" +
-	"lobby_name\x18\x01 \x01(\tR\tlobbyName\"\x14\n" +
-	"\x12AddLobbiesResponse\":\n" +
+	"lobby_name\x18\x01 \x01(\tR\tlobbyName\"/\n" +
+	"\x12AddLobbiesResponse\x12\x19\n" +
+	"\blobby_id\x18\x01 \x01(\x04R\alobbyId\":\n" +
 	"\x11DelLobbiesRequest\x12%\n" +
 	"\x05lobby\x18\x01 \x01(\v2\x0f.lobby.v1.LobbyR\x05lobby\"\x14\n" +
 	"\x12DelLobbiesResponse\"\xaf\x01\n" +

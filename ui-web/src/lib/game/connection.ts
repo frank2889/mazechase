@@ -293,11 +293,7 @@ function handlePellet(json: any) {
     console.log(`Pellet eaten at x:${x}, y:${y}`)
 
     gameScene?.pelletLayer.removeTileAt(x, y)
-    console.log(gameScene?.pelletLayer.tilesDrawn)
-
-    if (gameScene?.pelletLayer.tilesDrawn === 0) {
-        gameScene.showGameOver('Runner', 'Alle pellets verzameld!');
-    }
+    // Server handles game over check when all pellets are collected
 }
 
 

@@ -29,9 +29,9 @@ func (handler MessageHandler) WithMiddleware(middleware func(MessageHandlerFunc)
 func CheckGameOverMiddleware(existingFunc MessageHandlerFunc) MessageHandlerFunc {
 	return func(data MessageData) map[string]interface{} {
 		encodedMsg := existingFunc(data)
-		reason := data.world.checkGameOver() // verify the state after message has been handled
+		reason, winner := data.world.checkGameOver() // verify the state after message has been handled
 		if reason != "" {
-			data.world.GameOver(reason)
+			data.world.GameOver(reason, winner)
 		}
 
 		return encodedMsg
@@ -85,7 +85,7 @@ func MovMessage() MessageHandler {
 	}
 }
 
-func EndGameMessage(reason string) MessageHandler {
+func EndGameMessage(reason string, winner string) MessageHandler {
 	name := "gameover"
 	return MessageHandler{
 		messageName: name,
@@ -93,6 +93,7 @@ func EndGameMessage(reason string) MessageHandler {
 			return map[string]interface{}{
 				"type":   name,
 				"reason": reason,
+				"winner": winner,
 			}
 		},
 	}
@@ -170,7 +171,7 @@ func KillPlayer() MessageHandler {
 				}
 			}
 
-			data.world.GameOver("runner was caught")
+			data.world.GameOver("Runner is gevangen!", "Chasers")
 			return map[string]interface{}{
 				"type":     name,
 				"spriteId": Runner, // runner caught

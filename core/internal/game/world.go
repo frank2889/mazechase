@@ -11,8 +11,14 @@ import (
 	"sync"
 )
 
+// GameOverInfo contains game over details
+type GameOverInfo struct {
+	Reason string
+	Winner string
+}
+
 type World struct {
-	gameOverChan        chan string
+	gameOverChan        chan GameOverInfo
 	MatchStarted        bool
 	IsPoweredUp         bool
 	CharactersList      []SpriteType
@@ -39,7 +45,7 @@ func NewWorldState() *World {
 		PowerUpsCoordsEaten: NewCordList(),
 		ChasersIdsEaten:     []SpriteType{},
 		worldLock:           sync.Mutex{},
-		gameOverChan:        make(chan string, 1),
+		gameOverChan:        make(chan GameOverInfo, 1),
 		BotManager:          nil, // Will be set when broadcast function is available
 		botFillScheduled:    false,
 		HostPlayerId:        "",
@@ -82,7 +88,7 @@ func (w *World) Leave(player *PlayerEntity) {
 	w.ConnectedPlayers.Delete(id)
 
 	if len(w.CharactersList) == 4 {
-		w.GameOver("all players left, lobby is now empty")
+		w.GameOver("Alle spelers hebben de lobby verlaten", "Niemand")
 	}
 }
 
@@ -156,19 +162,27 @@ func (w *World) IsLobbyFull() bool {
 	return len(w.CharactersList) == 0
 }
 
-func (w *World) checkGameOver() (reason string) {
+// TotalPellets is the total number of pellets on the map
+const TotalPellets = 201
+
+func (w *World) checkGameOver() (reason string, winner string) {
 	if len(w.ChasersIdsEaten) == 3 {
-		return "all chasers eliminated"
+		return "Alle chasers uitgeschakeld", "Runner"
 	}
 
-	return ""
+	// Check if all pellets are eaten
+	if w.PelletsCoordEaten.Len() >= TotalPellets {
+		return "Alle pellets verzameld!", "Runner"
+	}
+
+	return "", ""
 }
 
-func (w *World) GameOver(reason string) {
-	w.gameOverChan <- reason
+func (w *World) GameOver(reason string, winner string) {
+	w.gameOverChan <- GameOverInfo{Reason: reason, Winner: winner}
 }
 
-func (w *World) waitForGameOver() string {
+func (w *World) waitForGameOver() GameOverInfo {
 	return <-w.gameOverChan
 }
 

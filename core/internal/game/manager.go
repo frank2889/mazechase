@@ -86,7 +86,7 @@ func (manager *Manager) getWorld(lobby *lobby.Lobby) (*World, error) {
 		newWorld.BotManager = NewBotManager(newWorld, broadcastFunc)
 		
 		go func() {
-			reason := newWorld.waitForGameOver()
+			gameOverInfo := newWorld.waitForGameOver()
 			
 			// Stop all bots when game ends
 			if newWorld.BotManager != nil {
@@ -94,7 +94,7 @@ func (manager *Manager) getWorld(lobby *lobby.Lobby) (*World, error) {
 			}
 			
 			// endgame does not need any info
-			msg := EndGameMessage(reason).handler(MessageData{})
+			msg := EndGameMessage(gameOverInfo.Reason, gameOverInfo.Winner).handler(MessageData{})
 			marshal, err := json.Marshal(msg)
 			if err != nil {
 				log.Error().Err(err).Msg("Unable to marshal msg")
@@ -102,7 +102,7 @@ func (manager *Manager) getWorld(lobby *lobby.Lobby) (*World, error) {
 				pkg.Elog(manager.broadcastAll(newWorld, marshal))
 			}
 
-			log.Debug().Uint("id", lobby.ID).Str("reason", reason).Msg("game end deleting lobby")
+			log.Debug().Uint("id", lobby.ID).Str("reason", gameOverInfo.Reason).Str("winner", gameOverInfo.Winner).Msg("game end deleting lobby")
 			manager.activeLobbies.Delete(lobby.ID)
 		}()
 

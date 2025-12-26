@@ -4,6 +4,7 @@ import {addLobby, deleteLobby, getRelativeTime, listLobbies} from "../lib/lobby.
 import {getUserInfo, logout} from "../lib/auth.ts";
 import Snackbar, {type SnackbarMessage} from "./Snackbar.tsx";
 import {GAME_MODES, type GameMode} from "../lib/game/modes.ts";
+import {RenderModeToggle} from "./RenderModeToggle.tsx";
 import {
     Gamepad2, Trophy, Link2, Plus, ClipboardList, Play, Check, 
     Copy, Trash2, Users, Zap, Ghost, Flag, Swords, LogOut, X
@@ -178,13 +179,14 @@ const LobbyComponent: Component = () => {
                     MazeChase
                 </h1>
 
-                <div class="absolute left-20 flex gap-3">
+                <div class="absolute left-20 flex gap-3 items-center">
                     <button
                         onClick={() => setShowLeaderboard(true)}
                         class="bg-purple-600 hover:bg-purple-500 text-white font-semibold py-2 px-4 rounded-lg shadow-lg transition-colors duration-200 flex items-center gap-2"
                     >
                         <Trophy class="w-5 h-5" /> Leaderboard
                     </button>
+                    <RenderModeToggle />
                 </div>
 
                 <div class="absolute right-20 flex flex-col items-center">

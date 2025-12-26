@@ -3,13 +3,19 @@
  */
 
 import { GameEngine } from './engine';
-import { Maze3D, MazeConfig, TileType } from './maze';
-import { Player3D, SpriteType3D } from './player';
+import { Maze3D, TileType, type MazeConfig } from './maze';
+import { Player3D, type SpriteType3D } from './player';
+import { loadTiledMap, gameToWorld3D, SPAWN_POSITIONS } from './tilemap-loader';
+
+// Phaser tile size in pixels
+const PHASER_TILE_SIZE = 50;
 
 export interface GameState3D {
     players: Map<string, Player3D>;
     maze: Maze3D;
     isRunning: boolean;
+    mazeWidth: number;
+    mazeHeight: number;
 }
 
 export class Game3DScene {
@@ -17,6 +23,8 @@ export class Game3DScene {
     private maze: Maze3D;
     private players: Map<string, Player3D> = new Map();
     private lastTime: number = 0;
+    private mazeWidth: number = 0;
+    private mazeHeight: number = 0;
 
     constructor(canvas: HTMLCanvasElement) {
         // Check WebGL support
@@ -26,6 +34,33 @@ export class Game3DScene {
 
         this.engine = new GameEngine({ canvas, antialias: true });
         this.maze = new Maze3D(this.engine.babylonScene);
+    }
+
+    /**
+     * Load the real game map from Tiled JSON
+     */
+    async loadRealMap(mapUrl: string = '/gassets/map.json'): Promise<void> {
+        const config = await loadTiledMap(mapUrl);
+        this.mazeWidth = config.width;
+        this.mazeHeight = config.height;
+        this.buildMaze(config);
+        
+        // Focus camera on maze center
+        this.engine.focusOn(config.width / 2, config.height / 2);
+    }
+
+    /**
+     * Initialize players at their spawn positions
+     */
+    initPlayers(): void {
+        // Add all 4 players at spawn positions
+        const sprites: SpriteType3D[] = ['runner', 'ch0', 'ch1', 'ch2'];
+        
+        for (const spriteType of sprites) {
+            const spawnPos = SPAWN_POSITIONS[spriteType];
+            const pos3D = gameToWorld3D(spawnPos.x, spawnPos.y, PHASER_TILE_SIZE);
+            this.addPlayer(spriteType, spriteType, pos3D.x, pos3D.z);
+        }
     }
 
     /**
@@ -111,12 +146,13 @@ export class Game3DScene {
     }
 
     /**
-     * Update a player's position from pixel coordinates
+     * Update a player's position from pixel coordinates (Phaser game coordinates)
      */
-    updatePlayerPositionPixels(id: string, pixelX: number, pixelY: number, tileSize: number = 32): void {
+    updatePlayerPositionPixels(id: string, pixelX: number, pixelY: number): void {
         const player = this.players.get(id);
         if (player) {
-            player.setPositionFromPixels(pixelX, pixelY, tileSize);
+            const pos3D = gameToWorld3D(pixelX, pixelY, PHASER_TILE_SIZE);
+            player.setPosition(pos3D.x, pos3D.z);
         }
     }
 
@@ -194,5 +230,7 @@ export class Game3DScene {
 export { GameEngine } from './engine';
 export { Maze3D, TileType, TILE_SIZE_3D } from './maze';
 export { Player3D } from './player';
+export { loadTiledMap, gameToWorld3D, worldToTile, tileToWorld, SPAWN_POSITIONS } from './tilemap-loader';
 export type { SpriteType3D } from './player';
 export type { MazeConfig } from './maze';
+export type { SpriteId } from './tilemap-loader';

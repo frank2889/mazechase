@@ -88,12 +88,14 @@
         
         <div class="overlay">
             <h1>MazeChase 3D Test</h1>
-            <p>Dit is een proof-of-concept voor de 3D migratie van MazeChase.</p>
-            <p>De maze wordt gegenereerd met Babylon.js.</p>
+            <p>Dit is de echte game map in 3D.</p>
+            <p>Map: 30x20 tiles, 201 pellets, 12 power-ups</p>
             <div class="controls">
                 <p><kbd>Muis</kbd> + <kbd>Drag</kbd> - Camera roteren</p>
                 <p><kbd>Scroll</kbd> - Zoom in/uit</p>
-                <p><kbd>Arrow Keys</kbd> - Speler bewegen</p>
+                <p><kbd>WASD</kbd> of <kbd>Pijltjes</kbd> - Runner bewegen</p>
+                <p><kbd>P</kbd> - Power-up mode (3 sec)</p>
+                <p><kbd>E</kbd> - Pellet eten</p>
             </div>
         </div>
         
@@ -119,15 +121,13 @@
                 const canvas = document.getElementById('game-canvas');
                 const game = new Game3DScene(canvas);
                 
-                updateStatus('Building demo maze...');
-                game.initDemoMaze();
+                // Load the real game map
+                updateStatus('Loading real tilemap...');
+                await game.loadRealMap('/gassets/map.json');
                 
-                // Add test players
-                updateStatus('Adding players...');
-                const runner = game.addPlayer('runner', 'runner', 5, 5);
-                const chaser0 = game.addPlayer('ch0', 'ch0', 15, 10);
-                const chaser1 = game.addPlayer('ch1', 'ch1', 14, 10);
-                const chaser2 = game.addPlayer('ch2', 'ch2', 16, 10);
+                // Add players at their spawn positions
+                updateStatus('Adding players at spawn positions...');
+                game.initPlayers();
                 
                 // Enable camera controls for testing
                 const camera = game.getEngine().mainCamera;
@@ -141,30 +141,32 @@
                 // Update FPS display
                 setInterval(() => {
                     const fps = game.getEngine().babylonEngine.getFps().toFixed(0);
-                    updateStatus(`3D Engine running | FPS: ${fps}`);
+                    updateStatus(`Real map loaded | 30x20 tiles | FPS: ${fps}`);
                 }, 500);
 
-                // Keyboard controls for test
-                let runnerX = 5;
-                let runnerY = 5;
+                // Keyboard controls for testing - use pixel coordinates
+                const TILE_SIZE = 50; // Phaser tile size
+                let runnerPixelX = 110; // Runner spawn X
+                let runnerPixelY = 220; // Runner spawn Y
+                const MOVE_SPEED = TILE_SIZE; // Move one tile at a time
                 
                 document.addEventListener('keydown', (e) => {
                     switch(e.key) {
                         case 'ArrowUp':
                         case 'w':
-                            runnerY = Math.max(1, runnerY - 1);
+                            runnerPixelY = Math.max(TILE_SIZE, runnerPixelY - MOVE_SPEED);
                             break;
                         case 'ArrowDown':
                         case 's':
-                            runnerY = Math.min(13, runnerY + 1);
+                            runnerPixelY = Math.min(19 * TILE_SIZE, runnerPixelY + MOVE_SPEED);
                             break;
                         case 'ArrowLeft':
                         case 'a':
-                            runnerX = Math.max(1, runnerX - 1);
+                            runnerPixelX = Math.max(TILE_SIZE, runnerPixelX - MOVE_SPEED);
                             break;
                         case 'ArrowRight':
                         case 'd':
-                            runnerX = Math.min(18, runnerX + 1);
+                            runnerPixelX = Math.min(29 * TILE_SIZE, runnerPixelX + MOVE_SPEED);
                             break;
                         case 'p':
                             // Toggle power mode
@@ -172,11 +174,13 @@
                             setTimeout(() => game.setRunnerPoweredUp(false), 3000);
                             break;
                         case 'e':
-                            // Eat pellet at current position
-                            game.removePellet(runnerX, runnerY);
+                            // Eat pellet at current tile position
+                            const tileX = Math.floor(runnerPixelX / TILE_SIZE);
+                            const tileY = Math.floor(runnerPixelY / TILE_SIZE);
+                            game.removePellet(tileX, tileY);
                             break;
                     }
-                    game.updatePlayerPosition('runner', runnerX, runnerY);
+                    game.updatePlayerPositionPixels('runner', runnerPixelX, runnerPixelY);
                 });
 
                 // Make game accessible globally for debugging

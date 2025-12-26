@@ -12,3 +12,9 @@ plugins:
   - local: protoc-gen-connect-go
     out: ../core/generated
     opt: paths=source_relative
+
+  - local:
+      - npx
+      - "@bufbuild/protoc-gen-es"
+    out: ../ui-web/src/lib/generated
+    opt: target=ts

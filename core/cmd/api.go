@@ -128,11 +128,15 @@ func FrontendAuthMiddleware(next http.Handler, auth *user.Service) http.Handler 
 
 		isAuthPage := strings.HasPrefix(path, "/auth")
 		isAsset := strings.HasPrefix(path, "/_astro/") ||
+			strings.HasPrefix(path, "/gassets/") ||
+			strings.HasPrefix(path, "/audio/") ||
 			strings.HasSuffix(path, ".js") ||
 			strings.HasSuffix(path, ".css") ||
 			strings.HasSuffix(path, ".webp") ||
 			strings.HasSuffix(path, ".png") ||
 			strings.HasSuffix(path, ".jpg") ||
+			strings.HasSuffix(path, ".json") ||
+			strings.HasSuffix(path, ".mp3") ||
 			strings.HasSuffix(path, ".woff2") ||
 			strings.HasSuffix(path, ".ico")
 		isHTML := strings.HasSuffix(path, ".html") || strings.HasSuffix(path, "/") || path == "/"

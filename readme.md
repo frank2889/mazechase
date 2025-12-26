@@ -1,160 +1,424 @@
-# MazeChase 🎮
+# 🎮 MazeChase
 
-A real-time 4-player multiplayer maze chase game built with Phaser.js and Go.
+Een real-time multiplayer maze chase game voor het hele gezin! Gebouwd met moderne technologieën voor een soepele, responsieve ervaring op elk apparaat.
 
-Compete with up to 4 friends in an exciting arena battle - collect pellets, use power-ups, and outlast your opponents!
-
-<div align="center">
-  <img src=".github/img/lobby.png" alt="Game Lobby" width="400" />
-  <img src=".github/img/game.png" alt="Gameplay Screenshot" width="400" />
-</div>
-
-## 🎯 Game Overview
-
-MazeChase is a competitive multiplayer game where 4 players race through a maze to collect pellets and power-ups while trying to eliminate each other.
-
-### 👥 4 Unique Characters
-| Character | Color | Special Ability |
-|-----------|-------|-----------------|
-| **Azure** | Blue | Swift Runner - 10% faster movement |
-| **Crimson** | Red | Tank - Bonus points for eliminations |
-| **Jade** | Green | Collector - Bonus points for pellets |
-| **Amber** | Orange | Trickster - Faster acceleration |
-
-## ✨ Features & Optimizations
-
-### 🚀 Network Optimizations
-- **Message Batching**: 60% reduction in network packets
-- **Delta Compression**: 70% bandwidth savings  
-- **Rate Limiting**: Token bucket algorithm for DDoS protection
-- **Client Prediction**: Zero perceived latency gameplay
-
-### 🎮 Game Features
-- **4-Player Multiplayer**: Each player has their own unique character
-- **Leaderboard System**: Track wins, scores, and eliminations
-- **In-Game Chat**: Real-time messaging with quick-chat
-- **Sound System**: Immersive audio with music and effects
-
-### 📱 Mobile Support
-- **Touch Controls**: Virtual joystick, swipe gestures, D-pad
-- **Responsive UI**: Optimized for all screen sizes
-
-### 🔧 Developer Experience
-- **TypeScript Strict Mode**: Full type safety
-- **Comprehensive Testing**: Unit & integration tests
-- **CI/CD Pipeline**: Automated testing and deployment
-- **Monitoring**: Metrics, health checks, structured logging
+**Live Demo:** [mazechase-har7u.ondigitalocean.app](https://mazechase-har7u.ondigitalocean.app)
 
 ---
 
-### Core Features
+## 📖 Inhoudsopgave
 
-- **Real-time multiplayer gameplay** - Compete with up to 4 friends online
-- **WebSocket-powered** - Low-latency communication for smooth gameplay
-- **Unique characters** - 4 distinct players with different abilities
-- **Easy deployment** - Docker support for quick self-hosting
+- [Over het Spel](#-over-het-spel)
+- [Game Modes](#-game-modes)
+- [Tech Stack](#-tech-stack)
+- [Design System](#-design-system)
+- [Architectuur](#-architectuur)
+- [Installatie](#-installatie)
+- [Development](#-development)
+- [Deployment](#-deployment)
+- [API Referentie](#-api-referentie)
 
-## Quick Start
+---
 
-### Self-Hosting
+## 🎯 Over het Spel
 
-#### Using Docker (Recommended)
-```bash
-docker run -p 11300:11300 mazechase:latest
+MazeChase is een competitieve multiplayer game waar 4 spelers door een doolhof racen om pellets te verzamelen en elkaar te elimineren. Perfect voor familie game nights!
+
+### ✨ Features
+
+- **4-Speler Multiplayer** - Speel met vrienden of familie
+- **Bot Auto-fill** - Na 10 seconden worden lege plekken opgevuld met bots
+- **Single Player Mode** - Oefen solo tegen 3 bots
+- **Responsive Design** - Werkt op desktop, tablet en mobiel
+- **Touch Controls** - Virtuele joystick voor mobiele apparaten
+- **Nederlandse UI** - Volledig vertaald naar het Nederlands
+
+### 👥 Voorgedefinieerde Accounts
+
+| Gebruiker | Wachtwoord |
+|-----------|------------|
+| melanie   | melanie123 |
+| frank     | frank123   |
+| sophie    | sophie123  |
+| emma      | emma123    |
+
+---
+
+## 🎲 Game Modes
+
+### 🏆 Classic Mode
+Klassiek Pacman-achtig spel. Verzamel alle pellets om te winnen!
+
+### 🏁 Race Mode  
+Verzamel 50 pellets als eerste om te winnen. Snelheid is key!
+
+### ⚔️ Battle Royale
+Elimineer andere spelers. Laatste speler wint!
+
+---
+
+## 🛠️ Tech Stack
+
+### Backend (Go 1.25)
+| Technologie | Versie | Doel |
+|-------------|--------|------|
+| Go | 1.25 | Server runtime |
+| Melody | 1.4.0 | WebSocket handling |
+| GORM | 1.31.1 | ORM voor SQLite |
+| ConnectRPC | 1.19.1 | Type-safe gRPC-achtige API |
+| zerolog | 1.34.0 | Structured logging |
+| bcrypt | - | Password hashing |
+
+### Frontend (Node 24)
+| Technologie | Versie | Doel |
+|-------------|--------|------|
+| Astro | 5.15.9 | Static site generator |
+| Phaser | 3.90.0 | Game engine |
+| SolidJS | 1.9.9 | Reactive UI components |
+| TailwindCSS | 4.1.8 | Utility-first styling |
+| TypeScript | 5.8.3 | Type safety |
+| Lucide Icons | - | UI iconografie |
+
+### Tooling
+| Tool | Doel |
+|------|------|
+| Docker | Containerization |
+| buf | Protobuf code generation |
+| Vitest | Frontend testing |
+| GitHub Actions | CI/CD |
+
+---
+
+## 🎨 Design System
+
+### Kleurenpalet
+
+```css
+/* Primaire Kleuren */
+--purple-500: #8b5cf6;    /* Primary buttons, accents */
+--purple-600: #7c3aed;    /* Hover states */
+--purple-700: #6d28d9;    /* Active states */
+
+/* Secundaire Kleuren */  
+--cyan-400: #22d3ee;      /* Secondary accents, links */
+--cyan-500: #06b6d4;      /* Hover */
+
+/* Achtergronden */
+--slate-900: #0f172a;     /* Main background */
+--slate-800: #1e293b;     /* Cards, inputs */
+--slate-700: #334155;     /* Borders, dividers */
+
+/* Tekst */
+--white: #ffffff;         /* Primary text */
+--slate-300: #cbd5e1;     /* Secondary text */
+--slate-400: #94a3b8;     /* Muted text */
+
+/* Status Kleuren */
+--green-500: #22c55e;     /* Success, online */
+--red-500: #ef4444;       /* Error, danger */
+--yellow-500: #eab308;    /* Warning */
 ```
 
-#### Using Docker Compose
+### Iconografie
+Lucide Icons - consistent, modern icon set
+- `User`, `Users` - Account gerelateerd
+- `Gamepad2`, `Play`, `Bot` - Game controls
+- `Trophy`, `Target` - Game modes
+- `LogOut`, `Settings` - Navigatie
+
+### Typography
+- **Font Family:** System fonts (native stack)
+- **Headings:** Bold, tracking-tight
+- **Body:** Regular weight, relaxed line-height
+
+### Component Styling
+```css
+/* Buttons */
+.btn-primary {
+  @apply bg-purple-500 hover:bg-purple-600 text-white 
+         font-semibold py-3 px-6 rounded-lg 
+         transition-colors duration-200;
+}
+
+.btn-secondary {
+  @apply bg-cyan-500 hover:bg-cyan-600 text-white
+         font-semibold py-3 px-6 rounded-lg;
+}
+
+/* Cards */
+.card {
+  @apply bg-slate-800/50 backdrop-blur-sm 
+         border border-slate-700 rounded-xl p-6;
+}
+
+/* Inputs */
+.input {
+  @apply w-full px-4 py-3 bg-slate-800 border border-slate-600
+         rounded-lg text-white placeholder-slate-400
+         focus:border-purple-500 focus:ring-1 focus:ring-purple-500;
+}
+```
+
+---
+
+## 🏗️ Architectuur
+
+```
+mazechase/
+├── core/                    # Go Backend
+│   ├── cmd/
+│   │   ├── server/         # Entry point
+│   │   └── api.go          # HTTP/WebSocket setup
+│   ├── internal/
+│   │   ├── config/         # Environment config
+│   │   ├── database/       # GORM + SQLite
+│   │   ├── game/           # Game logic, WebSocket
+│   │   ├── lobby/          # Lobby management
+│   │   └── user/           # Auth, sessions
+│   └── generated/          # Protobuf generated code
+│
+├── ui-web/                  # Astro Frontend
+│   ├── src/
+│   │   ├── components/     # SolidJS components
+│   │   ├── lib/
+│   │   │   ├── game/       # Phaser game code
+│   │   │   ├── generated/  # Protobuf TS types
+│   │   │   ├── api.ts      # ConnectRPC client
+│   │   │   └── auth.ts     # Auth helpers
+│   │   ├── layouts/        # Page layouts
+│   │   └── pages/          # Astro pages
+│   └── public/             # Static assets
+│
+├── spec/                    # API Specifications
+│   ├── protos/             # Protobuf definitions
+│   ├── buf.yaml            # Buf config
+│   └── buf.gen.yaml        # Code generation config
+│
+├── tests/                   # Test scripts
+├── Dockerfile              # Multi-stage build
+├── docker-compose.yml      # Local development
+└── Makefile                # Build commands
+```
+
+### Data Flow
+
+```
+┌─────────────┐     WebSocket      ┌─────────────┐
+│   Browser   │◄──────────────────►│  Go Server  │
+│  (Phaser)   │                    │  (Melody)   │
+└─────────────┘                    └─────────────┘
+      │                                   │
+      │ ConnectRPC                        │ GORM
+      ▼                                   ▼
+┌─────────────┐                    ┌─────────────┐
+│  Auth/Lobby │                    │   SQLite    │
+│    APIs     │                    │  Database   │
+└─────────────┘                    └─────────────┘
+```
+
+---
+
+## �� Installatie
+
+### Vereisten
+- Go 1.25+
+- Node.js 24+
+- npm 10+
+
+### Quick Start (Docker)
+
+```bash
+docker run -p 8080:8080 ghcr.io/frank2889/mazechase:latest
+```
+
+### Docker Compose
+
 ```yaml
 version: '3.8'
 services:
   mazechase:
-    container_name: mazechase
-    image: mazechase:latest
+    image: ghcr.io/frank2889/mazechase:latest
     ports: 
-      - "11300:11300"
+      - "8080:8080"
     volumes:
       - ./appdata:/app/appdata/
+    environment:
+      - PORT=8080
+      - LOBBY_LIMIT=50
     restart: unless-stopped
 ```
 
-Then navigate to `http://localhost:11300` in your browser.
+---
 
-## License
+## 💻 Development
 
-This project is open source and available under the [MIT](LICENSE).
-
-## 🛠️ Tech Stack
-
-### Backend
-- **Go 1.25** with Melody WebSocket
-- **GORM + SQLite** for persistence
-- **ConnectRPC** for type-safe APIs
-- **zerolog** for structured logging
-
-### Frontend
-- **Astro 5.15** + **Phaser 3.90**
-- **SolidJS 1.9** for UI components
-- **TailwindCSS 4.1** for styling
-- **TypeScript 5.7** with strict mode
-
-### DevOps
-- **Docker** containerization
-- **GitHub Actions** CI/CD
-- **Vitest** for testing
-
-## 🧪 Running Tests
+### Setup
 
 ```bash
-# Backend tests
-cd core && go test -v ./...
+# Clone repository
+git clone https://github.com/frank2889/mazechase.git
+cd mazechase
 
-# Frontend tests
-cd ui-web && npm test
+# Install dependencies
+cd ui-web && npm install
+cd ../core && go mod download
 
-# With coverage
-npm run test:coverage
+# Generate protobuf code
+cd ../spec && buf generate
 ```
 
-## 📊 Performance Improvements
+### Run Development Servers
 
-| Optimization | Benefit |
-|-------------|---------|
-| Object Pooling | No GC stutter |
-| Frame Rate Control | Consistent 60 FPS |
-| Position Interpolation | Smooth movement |
-| Server Reconciliation | Accurate sync |
+```bash
+# Terminal 1: Backend
+cd core && go run cmd/server/main.go
 
-## 🚀 Deployment
+# Terminal 2: Frontend (hot reload)
+cd ui-web && npm run dev
+```
+
+### Makefile Commands
+
+```bash
+make build          # Build both backend and frontend
+make dev            # Start development servers
+make test           # Run all tests
+make lint           # Lint code
+make clean          # Clean build artifacts
+make proto          # Regenerate protobuf code
+```
+
+### Environment Variables
+
+| Variable | Default | Beschrijving |
+|----------|---------|--------------|
+| `PORT` | 8080 | Server port |
+| `LOBBY_LIMIT` | 100 | Max aantal lobbies |
+| `MP_DISABLE_AUTH` | false | Disable auth (dev only) |
+| `DB_PATH` | ./appdata/config/multipacman.db | Database locatie |
+
+---
+
+## ☁️ Deployment
 
 ### DigitalOcean App Platform
 
-1. Push to your Git repository
-2. Connect repo to DigitalOcean App Platform
-3. Configure build settings:
-   - **Build Command**: `cd core && go build -o bin/server cmd/server/main.go`
-   - **Run Command**: `./bin/server`
-4. Add environment variables as needed
-5. Deploy!
+De app deployed automatisch via GitHub push. Configuratie in `.do/app.yaml`:
 
-### Manual Server Deployment
+```yaml
+spec-version: 2
+name: mazechase
+region: ams
+
+services:
+  - name: mazechase
+    github:
+      repo: frank2889/mazechase
+      branch: main
+      deploy_on_push: true
+    dockerfile_path: Dockerfile
+    http_port: 8080
+    instance_size_slug: basic-xxs
+    envs:
+      - key: PORT
+        value: "8080"
+```
+
+### Manual Deployment
 
 ```bash
-# Clone and build
-git clone <your-repo-url>
-cd mazechase
-
-# Build backend
+# Build
 cd core && go build -o bin/server cmd/server/main.go
+cd ../ui-web && npm run build
 
-# Build frontend
-cd ../ui-web && npm install && npm run build
+# Copy frontend to backend
+cp -r ui-web/dist core/dist
 
-# Run server
+# Run
 ./core/bin/server
 ```
 
-## Acknowledgments
+---
 
-- Phaser.js community for the excellent game framework
-- Go community for libraries and tools
-- SolidJS for reactive UI components
+## 📡 API Referentie
+
+### Auth Service (ConnectRPC)
+
+```protobuf
+service AuthService {
+  rpc Login(AuthRequest) returns (UserResponse);
+  rpc Register(RegisterUserRequest) returns (RegisterUserResponse);
+  rpc Logout(Empty) returns (Empty);
+  rpc Test(AuthResponse) returns (UserResponse);  // Verify session
+}
+```
+
+### Lobby Service (ConnectRPC)
+
+```protobuf
+service LobbyService {
+  rpc CreateLobby(CreateLobbyRequest) returns (Lobby);
+  rpc GetLobbies(Empty) returns (LobbyList);
+  rpc JoinLobby(JoinLobbyRequest) returns (Lobby);
+  rpc LeaveLobby(LeaveLobbyRequest) returns (Empty);
+}
+```
+
+### WebSocket Messages (Game)
+
+| Type | Richting | Beschrijving |
+|------|----------|--------------|
+| `join` | Client → Server | Join game room |
+| `move` | Client → Server | Player movement |
+| `state` | Server → Client | Full game state |
+| `update` | Server → Client | Delta update |
+| `gameover` | Server → Client | Game ended |
+
+---
+
+## 📊 Performance
+
+| Optimalisatie | Effect |
+|---------------|--------|
+| Message Batching | 60% minder network packets |
+| Delta Compression | 70% bandwidth besparing |
+| Object Pooling | Geen GC stutter |
+| Client Prediction | Zero perceived latency |
+| Asset Caching | 1 jaar cache voor static assets |
+
+---
+
+## 🧪 Testing
+
+```bash
+# Backend tests
+cd core && go test -v -race ./...
+
+# Frontend tests  
+cd ui-web && npm test
+
+# Test coverage
+cd ui-web && npm run test:coverage
+```
+
+---
+
+## 📝 Licentie
+
+MIT License - zie [LICENSE](LICENSE)
+
+---
+
+## 🙏 Credits
+
+- **Phaser.js** - Game framework
+- **SolidJS** - Reactive UI
+- **Melody** - WebSocket library
+- **Lucide** - Icon set
+
+---
+
+<div align="center">
+  <p>Gemaakt met ❤️ voor familie game nights</p>
+  <p><strong>© 2025 MazeChase</strong></p>
+</div>

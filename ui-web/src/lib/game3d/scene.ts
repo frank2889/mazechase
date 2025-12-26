@@ -11,6 +11,7 @@ import { EntityRenderer } from './entities';
 import { ZoneRenderer, type TimePhase } from './zones';
 import { DynamicMaze } from './dynamicMaze';
 import { Scenery3D, WORLD_THEMES } from './scenery';
+import { Minimap3D, ScorePopup } from './minimap';
 import type { Zone, MazeUpdate, DangerEntityData, DynamicState } from '../game/connection';
 
 // Phaser tile size in pixels
@@ -43,6 +44,11 @@ export class Game3DScene {
     // Scenery and environment
     private scenery: Scenery3D;
     private wallPositions: Set<string> = new Set();
+    
+    // HUD elements
+    private minimap: Minimap3D | null = null;
+    private scorePopup: ScorePopup;
+    private mazeConfig: MazeConfig | null = null;
 
     constructor(canvas: HTMLCanvasElement) {
         // Check WebGL support
@@ -63,6 +69,9 @@ export class Game3DScene {
         const themes = Object.keys(WORLD_THEMES);
         const randomTheme = themes[Math.floor(Math.random() * themes.length)];
         this.scenery = new Scenery3D(this.engine.babylonScene, randomTheme);
+        
+        // Initialize score popup
+        this.scorePopup = new ScorePopup();
     }
 
     /**
@@ -72,6 +81,7 @@ export class Game3DScene {
         const config = await loadTiledMap(mapUrl);
         this.mazeWidth = config.width;
         this.mazeHeight = config.height;
+        this.mazeConfig = config;
         
         // Track wall positions for scenery placement
         for (let y = 0; y < config.height; y++) {
@@ -86,6 +96,10 @@ export class Game3DScene {
         
         // Add decorative scenery around the maze
         this.scenery.populateMazeEdges(config.width, config.height, this.wallPositions);
+        
+        // Initialize minimap
+        this.minimap = new Minimap3D({ size: 150, x: 20, y: 200 });
+        this.minimap.setMaze(config);
         
         // Focus camera on maze center
         this.engine.focusOn(config.width / 2, config.height / 2);
@@ -202,6 +216,11 @@ export class Game3DScene {
         if (player) {
             const pos3D = gameToWorld3D(pixelX, pixelY, PHASER_TILE_SIZE);
             player.setPosition(pos3D.x, pos3D.z);
+            
+            // Update minimap
+            if (this.minimap) {
+                this.minimap.updatePlayer(id, pos3D.x, pos3D.z);
+            }
         }
     }
 
@@ -211,6 +230,14 @@ export class Game3DScene {
     removePellet(tileX: number, tileY: number): void {
         this.maze.removePellet(tileX, tileY);
         this.particles.createPelletEatEffect(tileX, tileY);
+        
+        // Update minimap
+        if (this.minimap) {
+            this.minimap.removePellet(tileX, tileY);
+        }
+        
+        // Show score popup
+        this.showScoreAt(10, tileX, tileY);
     }
 
     /**
@@ -219,6 +246,33 @@ export class Game3DScene {
     removePowerUp(tileX: number, tileY: number): void {
         this.maze.removePowerUp(tileX, tileY);
         this.particles.createPowerUpEatEffect(tileX, tileY);
+        
+        // Update minimap
+        if (this.minimap) {
+            this.minimap.removePowerUp(tileX, tileY);
+        }
+        
+        // Show score popup
+        this.showScoreAt(50, tileX, tileY, '#00ffff');
+    }
+    
+    /**
+     * Show a score popup at world position
+     */
+    private showScoreAt(score: number, tileX: number, tileY: number, color: string = '#00ffc7'): void {
+        // Convert tile to screen position
+        const worldX = tileX + 0.5;
+        const worldY = 1;
+        const worldZ = tileY + 0.5;
+        
+        this.scorePopup.showAtWorldPos(
+            score,
+            worldX,
+            worldY,
+            worldZ,
+            this.engine.mainCamera,
+            this.engine.babylonScene
+        );
     }
 
     /**
@@ -421,6 +475,10 @@ export class Game3DScene {
         this.zoneRenderer.dispose();
         this.dynamicMaze.dispose();
         this.scenery.dispose();
+        if (this.minimap) {
+            this.minimap.dispose();
+        }
+        this.scorePopup.dispose();
         this.engine.dispose();
     }
 
@@ -437,6 +495,7 @@ export { GameEngine } from './engine';
 export { Maze3D, TileType, TILE_SIZE_3D } from './maze';
 export { Player3D } from './player';
 export { loadTiledMap, gameToWorld3D, worldToTile, tileToWorld, SPAWN_POSITIONS } from './tilemap-loader';
+export { Minimap3D, ScorePopup } from './minimap';
 export type { SpriteType3D } from './player';
 export type { MazeConfig } from './maze';
 export type { SpriteId } from './tilemap-loader';

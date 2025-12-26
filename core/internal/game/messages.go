@@ -38,6 +38,30 @@ func CheckGameOverMiddleware(existingFunc MessageHandlerFunc) MessageHandlerFunc
 	}
 }
 
+// CheckCollisionMiddleware checks for player-player collisions after movement
+func CheckCollisionMiddleware(existingFunc MessageHandlerFunc) MessageHandlerFunc {
+	return func(data MessageData) map[string]interface{} {
+		result := existingFunc(data)
+		
+		// Check for runner-chaser collision
+		collided, _, chaserId := data.world.CheckPlayerCollisions()
+		if collided {
+			if data.world.IsPoweredUp {
+				// Runner eats chaser
+				data.world.ChaserEatenAction(chaserId)
+				if result != nil {
+					result["chaserEaten"] = string(chaserId)
+				}
+			} else {
+				// Chaser catches runner - game over!
+				data.world.GameOver("Runner is gevangen!", "Chasers")
+			}
+		}
+		
+		return result
+	}
+}
+
 func registerMessageHandlers(opts ...MessageHandler) map[string]MessageHandlerFunc {
 	handlers := map[string]MessageHandlerFunc{}
 
@@ -67,9 +91,58 @@ func MovMessage() MessageHandler {
 	return MessageHandler{
 		messageName: name,
 		handler: func(data MessageData) map[string]interface{} {
+			// Get direction from message (new 3D mode)
+			dir, hasDir := data.msgInfo["dir"].(string)
+			
+			if hasDir && dir != "" {
+				// Direction-based movement: server calculates new position
+				newX, newY, moved := data.world.MovePlayerByDirection(data.playerSession, dir)
+				if !moved {
+					return nil // Wall collision, don't broadcast
+				}
+				
+				data.playerSession.Type = name
+				data.playerSession.Dir = dir
+				data.playerSession.X = newX
+				data.playerSession.Y = newY
+				
+				// Check if pellet was eaten
+				tileX, tileY := PixelToTile(newX, newY)
+				pelletEaten := false
+				powerUpEaten := false
+				
+				// Check last eaten pellet
+				if data.world.PelletsCoordEaten.Len() > 0 {
+					lastPellet := data.world.PelletsCoordEaten.GetLast()
+					if lastPellet != nil && int(lastPellet[0]) == tileX && int(lastPellet[1]) == tileY {
+						pelletEaten = true
+					}
+				}
+				
+				// Check last eaten power-up
+				if data.world.PowerUpsCoordsEaten.Len() > 0 {
+					lastPowerUp := data.world.PowerUpsCoordsEaten.GetLast()
+					if lastPowerUp != nil && int(lastPowerUp[0]) == tileX && int(lastPowerUp[1]) == tileY {
+						powerUpEaten = true
+					}
+				}
+				
+				result := data.playerSession.ToMap()
+				if pelletEaten {
+					result["pellet"] = map[string]int{"x": tileX, "y": tileY}
+					result["score"] = data.world.GetScore(data.playerSession.PlayerId)
+				}
+				if powerUpEaten {
+					result["powerUp"] = map[string]int{"x": tileX, "y": tileY}
+					result["powered"] = true
+				}
+				
+				return result
+			}
+			
+			// Legacy: x/y coordinates from message (old mode)
 			x, y, err := getCoordFromMessage(data.msgInfo)
-			dir, ok := data.msgInfo["dir"]
-			if err != nil || !ok {
+			if err != nil {
 				log.Error().Err(err).
 					Any("data", data.msgInfo).
 					Msg("Unable to find coordinates or direction from message")
@@ -78,7 +151,9 @@ func MovMessage() MessageHandler {
 
 			data.world.MovePlayer(data.playerSession, x, y)
 			data.playerSession.Type = name
-			data.playerSession.Dir = dir.(string)
+			if dir != "" {
+				data.playerSession.Dir = dir
+			}
 
 			return data.playerSession.ToMap()
 		},
@@ -86,14 +161,21 @@ func MovMessage() MessageHandler {
 }
 
 func EndGameMessage(reason string, winner string) MessageHandler {
-	name := "gameover"
+	mesName := "gameover"
 	return MessageHandler{
-		messageName: name,
-		handler: func(_ MessageData) map[string]interface{} {
+		messageName: mesName,
+		handler: func(data MessageData) map[string]interface{} {
+			// Get scores if world is available
+			scores := map[string]int{}
+			if data.world != nil {
+				scores = data.world.GetAllScores()
+			}
+			
 			return map[string]interface{}{
-				"type":   name,
+				"type":   mesName,
 				"reason": reason,
 				"winner": winner,
+				"scores": scores,
 			}
 		},
 	}

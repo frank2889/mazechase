@@ -338,6 +338,27 @@ function handlePosMessage(json: any) {
 
     // Notify 3D scene of position update
     gameEventHandlers.onPlayerMove?.(spriteId, x, y, dir);
+    
+    // Handle embedded pellet eaten
+    if (json.pellet) {
+        const pelletX = json.pellet.x as number;
+        const pelletY = json.pellet.y as number;
+        gameEventHandlers.onPelletEaten?.(pelletX, pelletY);
+    }
+    
+    // Handle embedded power-up eaten
+    if (json.powerUp) {
+        const powerUpX = json.powerUp.x as number;
+        const powerUpY = json.powerUp.y as number;
+        gameEventHandlers.onPowerUpEaten?.(powerUpX, powerUpY);
+    }
+    
+    // Handle score update
+    if (json.score !== undefined) {
+        const scores: Record<string, number> = {};
+        scores[spriteId] = json.score;
+        gameEventHandlers.onScoreUpdate?.(scores);
+    }
 }
 
 

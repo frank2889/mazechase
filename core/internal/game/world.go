@@ -33,17 +33,29 @@ type World struct {
 	HostPlayerId        string
 	CountdownStarted    bool
 	
+	// Maze collision data
+	MazeData        *MazeData
+	
+	// Player positions (for collision detection)
+	PlayerPositions map[string]*PointF
+	
 	// New dynamic game mechanics
 	DynamicWorld    *DynamicWorld
 	EntityManager   *EntityManager
 	MazeWidth       int
 	MazeHeight      int
+	
+	// Score tracking
+	Scores          map[string]int
+	
+	// Broadcast function reference
+	broadcastFunc   func([]byte) error
 }
 
 func NewWorldState() *World {
 	// Default maze dimensions (will be updated when maze loads)
-	mazeWidth := 28
-	mazeHeight := 31
+	mazeWidth := MazeWidth
+	mazeHeight := MazeHeight
 	
 	dynamicWorld := NewDynamicWorld(mazeWidth, mazeHeight)
 	entityManager := NewEntityManager(mazeWidth, mazeHeight, dynamicWorld)
@@ -63,10 +75,13 @@ func NewWorldState() *World {
 		botFillScheduled:    false,
 		HostPlayerId:        "",
 		CountdownStarted:    false,
+		MazeData:            NewMazeData(),
+		PlayerPositions:     make(map[string]*PointF),
 		DynamicWorld:        dynamicWorld,
 		EntityManager:       entityManager,
 		MazeWidth:           mazeWidth,
 		MazeHeight:          mazeHeight,
+		Scores:              make(map[string]int),
 	}
 }
 
@@ -86,6 +101,12 @@ func (w *World) Join(player *PlayerEntity, session *melody.Session) error {
 	player.SpriteType = spriteId
 	// pop this sprite
 	w.CharactersList = w.CharactersList[:len(w.CharactersList)-1]
+
+	// Initialize player at spawn position
+	w.InitPlayerPosition(player)
+	
+	// Initialize score
+	w.Scores[player.PlayerId] = 0
 
 	// assign new player to world
 	w.ConnectedPlayers.Store(player.PlayerId, session)
@@ -166,6 +187,8 @@ func (w *World) GetGameStateReport(secretToken, username, spriteId string, newPl
 		"isHost":         isHost,
 		"playerCount":    w.GetPlayerCount(),
 		"readyCount":     w.GetReadyCount(),
+		"scores":         w.GetAllScores(),
+		"spawnPositions": getSpawnPositionsPixels(),
 	}
 	return json.Marshal(data)
 }
@@ -173,6 +196,153 @@ func (w *World) GetGameStateReport(secretToken, username, spriteId string, newPl
 func (w *World) MovePlayer(player *PlayerEntity, x, y float64) {
 	player.X = x
 	player.Y = y
+	
+	// Update position cache for collision detection
+	w.worldLock.Lock()
+	w.PlayerPositions[player.PlayerId] = &PointF{X: x, Y: y}
+	w.worldLock.Unlock()
+}
+
+// MovePlayerByDirection moves a player in a direction with collision checking
+func (w *World) MovePlayerByDirection(player *PlayerEntity, dir string) (float64, float64, bool) {
+	speed := PlayerSpeed * TickRateSec
+	newX, newY := player.X, player.Y
+	
+	switch dir {
+	case "up":
+		newY -= speed
+	case "down":
+		newY += speed
+	case "left":
+		newX -= speed
+	case "right":
+		newX += speed
+	default:
+		return player.X, player.Y, false
+	}
+	
+	// Check wall collision
+	if !w.MazeData.CanMoveTo(player.X, player.Y, newX, newY) {
+		return player.X, player.Y, false
+	}
+	
+	// Update position
+	w.MovePlayer(player, newX, newY)
+	player.Dir = dir
+	
+	// Check pellet collision
+	tileX, tileY := PixelToTile(newX, newY)
+	if w.MazeData.EatPellet(tileX, tileY) {
+		w.PelletsCoordEaten.Add(float64(tileX), float64(tileY))
+		w.addScore(player.PlayerId, PelletScore)
+	}
+	
+	// Check power-up collision
+	if w.MazeData.EatPowerUp(tileX, tileY) {
+		w.PowerUpsCoordsEaten.Add(float64(tileX), float64(tileY))
+		w.addScore(player.PlayerId, PowerUpScore)
+		w.IsPoweredUp = true
+	}
+	
+	return newX, newY, true
+}
+
+// InitPlayerPosition sets spawn position based on sprite type
+func (w *World) InitPlayerPosition(player *PlayerEntity) {
+	spawn, ok := SpawnPositions[player.SpriteType]
+	if !ok {
+		spawn = TilePoint{X: 14, Y: 23} // Default to runner spawn
+	}
+	
+	// Convert tile to pixel (center of tile)
+	pixelX, pixelY := TileToPixel(spawn.X, spawn.Y)
+	player.X = pixelX
+	player.Y = pixelY
+	
+	w.worldLock.Lock()
+	w.PlayerPositions[player.PlayerId] = &PointF{X: pixelX, Y: pixelY}
+	w.worldLock.Unlock()
+}
+
+// addScore adds points to a player's score
+func (w *World) addScore(playerId string, points int) {
+	w.worldLock.Lock()
+	defer w.worldLock.Unlock()
+	w.Scores[playerId] += points
+}
+
+// GetScore returns a player's score
+func (w *World) GetScore(playerId string) int {
+	w.worldLock.Lock()
+	defer w.worldLock.Unlock()
+	return w.Scores[playerId]
+}
+
+// GetAllScores returns all player scores
+func (w *World) GetAllScores() map[string]int {
+	w.worldLock.Lock()
+	defer w.worldLock.Unlock()
+	scores := make(map[string]int)
+	for k, v := range w.Scores {
+		scores[k] = v
+	}
+	return scores
+}
+
+// CheckPlayerCollisions checks for runner-chaser collisions
+func (w *World) CheckPlayerCollisions() (collided bool, runnerId string, chaserId SpriteType) {
+	w.worldLock.Lock()
+	defer w.worldLock.Unlock()
+	
+	var runnerPos *PointF
+	var runnerPlayerId string
+	chaserPositions := make(map[SpriteType]*PointF)
+	
+	// Get all player positions
+	for _, session := range w.ConnectedPlayers.GetValues() {
+		if session == nil {
+			continue
+		}
+		player, err := getPlayerEntityFromSession(session)
+		if err != nil {
+			continue
+		}
+		
+		pos := w.PlayerPositions[player.PlayerId]
+		if pos == nil {
+			continue
+		}
+		
+		if player.SpriteType == Runner {
+			runnerPos = pos
+			runnerPlayerId = player.PlayerId
+		} else {
+			// Check if chaser is eaten
+			eaten := false
+			for _, eatenId := range w.ChasersIdsEaten {
+				if eatenId == player.SpriteType {
+					eaten = true
+					break
+				}
+			}
+			if !eaten {
+				chaserPositions[player.SpriteType] = pos
+			}
+		}
+	}
+	
+	if runnerPos == nil {
+		return false, "", ""
+	}
+	
+	// Check collision with each chaser
+	for chaserType, chaserPos := range chaserPositions {
+		if CollisionCheck(runnerPos.X, runnerPos.Y, chaserPos.X, chaserPos.Y) {
+			return true, runnerPlayerId, chaserType
+		}
+	}
+	
+	return false, "", ""
 }
 
 func (w *World) IsLobbyFull() bool {

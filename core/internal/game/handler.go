@@ -38,7 +38,7 @@ func RegisterGameWSHandler(mux *http.ServeMux, authService *user.Service, lobbyS
 		lobbyService: lobbyService,
 		manager:      manager,
 		msgHandlerFuncs: registerMessageHandlers(
-			MovMessage(),
+			MovMessage().WithMiddleware(CheckCollisionMiddleware).WithMiddleware(CheckGameOverMiddleware),
 			KillPlayer().WithMiddleware(CheckGameOverMiddleware),
 			PowerUpMessage(manager),
 			PelletMessage().WithMiddleware(CheckGameOverMiddleware),

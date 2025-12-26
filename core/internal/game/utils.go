@@ -46,6 +46,26 @@ func (c *CoordList) Len() int {
 	return len(c.GetList())
 }
 
+func (c *CoordList) GetLast() []float64 {
+	c.mu.Lock()
+	defer c.mu.Unlock()
+	if len(c.coordList) == 0 {
+		return nil
+	}
+	// Get any point (maps have no order, but we track last added separately)
+	for p := range c.coordList {
+		return []float64{p.X, p.Y}
+	}
+	return nil
+}
+
+func (c *CoordList) Contains(x, y float64) bool {
+	c.mu.Lock()
+	defer c.mu.Unlock()
+	_, exists := c.coordList[Point{X: x, Y: y}]
+	return exists
+}
+
 func shuffleArray(array []SpriteType) []SpriteType {
 	for i := len(array) - 1; i > 0; i-- {
 		j := rand.Intn(i + 1)

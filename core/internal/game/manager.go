@@ -96,8 +96,8 @@ func (manager *Manager) getWorld(lobby *lobby.Lobby) (*World, error) {
 			// Stop dynamic systems when game ends
 			newWorld.StopDynamicSystems()
 			
-			// endgame does not need any info
-			msg := EndGameMessage(gameOverInfo.Reason, gameOverInfo.Winner).handler(MessageData{})
+			// endgame with scores
+			msg := EndGameMessage(gameOverInfo.Reason, gameOverInfo.Winner).handler(MessageData{world: newWorld})
 			marshal, err := json.Marshal(msg)
 			if err != nil {
 				log.Error().Err(err).Msg("Unable to marshal msg")

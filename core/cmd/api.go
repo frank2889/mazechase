@@ -127,8 +127,24 @@ func FrontendAuthMiddleware(next http.Handler, auth *user.Service) http.Handler 
 		path := r.URL.Path
 
 		isAuthPage := strings.HasPrefix(path, "/auth")
-		isAsset := !(strings.HasSuffix(path, ".html") ||
-			strings.HasSuffix(path, "/"))
+		isAsset := strings.HasPrefix(path, "/_astro/") ||
+			strings.HasSuffix(path, ".js") ||
+			strings.HasSuffix(path, ".css") ||
+			strings.HasSuffix(path, ".webp") ||
+			strings.HasSuffix(path, ".png") ||
+			strings.HasSuffix(path, ".jpg") ||
+			strings.HasSuffix(path, ".woff2") ||
+			strings.HasSuffix(path, ".ico")
+		isHTML := strings.HasSuffix(path, ".html") || strings.HasSuffix(path, "/") || path == "/"
+
+		// Cache control: assets get long cache (1 year), HTML gets no cache
+		if isAsset {
+			w.Header().Set("Cache-Control", "public, max-age=31536000, immutable")
+		} else if isHTML {
+			w.Header().Set("Cache-Control", "no-cache, no-store, must-revalidate")
+			w.Header().Set("Pragma", "no-cache")
+			w.Header().Set("Expires", "0")
+		}
 
 		if isAuthPage || isAsset {
 			next.ServeHTTP(w, r)

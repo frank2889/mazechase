@@ -45,7 +45,11 @@ const LobbyComponent: Component = () => {
 
         setIsCreatingLobby(true);
 
-        const {err} = await addLobby(lobbyName);
+        // Add random 4-digit number to lobby name
+        const randomNum = Math.floor(1000 + Math.random() * 9000);
+        const fullLobbyName = `${lobbyName}#${randomNum}`;
+
+        const {err} = await addLobby(fullLobbyName);
         if (err) {
             showSnackbar(`Fout bij aanmaken lobby: ${err}`, 'error');
         }
@@ -461,6 +465,19 @@ const LobbyCard: Component<LobbyCardProps> = (props) => {
         }
     };
 
+    // Parse lobby name and number
+    const getLobbyDisplayInfo = () => {
+        const fullName = props.lobby.lobbyName;
+        const hashIndex = fullName.lastIndexOf('#');
+        if (hashIndex > 0) {
+            return {
+                name: fullName.substring(0, hashIndex),
+                code: fullName.substring(hashIndex)
+            };
+        }
+        return { name: fullName, code: `#${props.lobby.ID}` };
+    };
+
     return (
         <div
             ref={cardRef}
@@ -468,13 +485,13 @@ const LobbyCard: Component<LobbyCardProps> = (props) => {
         >
             {/* Lobby Name */}
             <h3 class="text-white text-lg font-semibold mb-1 truncate" title={props.lobby.lobbyName}>
-                {props.lobby.lobbyName}
+                {getLobbyDisplayInfo().name}
             </h3>
 
             {/* Lobby Code/ID for sharing */}
             <div class="bg-slate-900 rounded px-2 py-1 mb-2 flex justify-between items-center">
-                <span class="text-purple-400 font-mono text-sm">#{props.lobby.ID}</span>
-                <span class="text-gray-500 text-xs">of gebruik naam</span>
+                <span class="text-purple-400 font-mono text-sm">{getLobbyDisplayInfo().code}</span>
+                <span class="text-gray-500 text-xs">lobby code</span>
             </div>
 
             {/* Lobby Details */}

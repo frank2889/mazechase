@@ -27,6 +27,15 @@ type BotManager struct {
 	broadcast func([]byte) error
 }
 
+// GetBots returns a copy of the bots slice (thread-safe)
+func (bm *BotManager) GetBots() []*Bot {
+	bm.mutex.Lock()
+	defer bm.mutex.Unlock()
+	result := make([]*Bot, len(bm.bots))
+	copy(result, bm.bots)
+	return result
+}
+
 var botNames = []string{"Bot Alpha", "Bot Beta", "Bot Gamma", "Bot Delta"}
 var directions = []string{"up", "down", "left", "right"}
 
@@ -212,16 +221,21 @@ func (b *Bot) Start(broadcast func([]byte) error) {
 
 // chooseNewDirection picks a valid direction to move in
 func (b *Bot) chooseNewDirection(currentDir string) string {
-	// Shuffle directions for variety
-	shuffledDirs := make([]string, len(directions))
-	copy(shuffledDirs, directions)
-	rand.Shuffle(len(shuffledDirs), func(i, j int) {
-		shuffledDirs[i], shuffledDirs[j] = shuffledDirs[j], shuffledDirs[i]
-	})
+	// Get runner position for chase/flee behavior
+	runnerX, runnerY := b.getRunnerPosition()
 	
-	// Try each direction and pick one that's valid
+	// Determine if this bot should chase or flee
+	isChaser := b.PlayerEntity.SpriteType != Runner
+	
+	// Build a list of valid directions with scores
+	type dirScore struct {
+		dir   string
+		score float64
+	}
+	validDirs := make([]dirScore, 0, 4)
+	
 	speed := PlayerSpeed * 0.2 * 0.001 * 200
-	for _, dir := range shuffledDirs {
+	for _, dir := range directions {
 		testX, testY := b.PlayerEntity.X, b.PlayerEntity.Y
 		switch dir {
 		case "up":
@@ -235,12 +249,72 @@ func (b *Bot) chooseNewDirection(currentDir string) string {
 		}
 		
 		if b.World.MazeData == nil || b.World.MazeData.CanMoveTo(b.PlayerEntity.X, b.PlayerEntity.Y, testX, testY) {
-			return dir
+			// Calculate distance to runner from this new position
+			dx := testX - runnerX
+			dy := testY - runnerY
+			distToRunner := dx*dx + dy*dy // squared distance is fine for comparison
+			
+			// Score: chasers prefer smaller distance, runner prefers larger
+			score := distToRunner
+			if isChaser {
+				score = -distToRunner // Negative so smaller distance = better
+			}
+			
+			// Add some randomness to prevent predictable behavior (30% variation)
+			score += (rand.Float64() - 0.5) * distToRunner * 0.3
+			
+			validDirs = append(validDirs, dirScore{dir: dir, score: score})
 		}
 	}
 	
-	// Fallback to random
-	return directions[rand.Intn(len(directions))]
+	if len(validDirs) == 0 {
+		// Fallback to random
+		return directions[rand.Intn(len(directions))]
+	}
+	
+	// Pick direction with best score
+	bestDir := validDirs[0]
+	for _, ds := range validDirs[1:] {
+		if ds.score > bestDir.score {
+			bestDir = ds
+		}
+	}
+	
+	return bestDir.dir
+}
+
+// getRunnerPosition returns the runner's current position
+func (b *Bot) getRunnerPosition() (float64, float64) {
+	b.World.worldLock.Lock()
+	defer b.World.worldLock.Unlock()
+	
+	// Look through PlayerPositions to find the runner
+	for playerId, pos := range b.World.PlayerPositions {
+		if pos == nil {
+			continue
+		}
+		
+		// Check connected players for runner
+		session, exists := b.World.ConnectedPlayers.Load(playerId)
+		if exists && session != nil {
+			player, err := getPlayerEntityFromSession(session)
+			if err == nil && player.SpriteType == Runner {
+				return pos.X, pos.Y
+			}
+		}
+	}
+	
+	// Also check bots directly (they store position in PlayerEntity)
+	if b.World.BotManager != nil {
+		for _, bot := range b.World.BotManager.GetBots() {
+			if bot.PlayerEntity.SpriteType == Runner {
+				return bot.PlayerEntity.X, bot.PlayerEntity.Y
+			}
+		}
+	}
+	
+	// Fallback: return center position
+	return 700, 575
 }
 
 // Stop stops the bot

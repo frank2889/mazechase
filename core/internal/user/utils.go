@@ -19,6 +19,7 @@ Name:     AuthHeaderKey,
 Value:    user.Token,
 Path:     "/",
 HttpOnly: true,
+Secure:   true, // Required for HTTPS
 SameSite: http.SameSiteLaxMode,
 MaxAge:   86400 * 30, // 30 days
 }

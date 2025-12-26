@@ -19,10 +19,9 @@ func setCookie(user *User, response *connect.Response[v1.UserResponse]) {
 		Value:    user.Token,
 		Path:     "/",
 		HttpOnly: true,
-		SameSite: http.SameSiteLaxMode, // SameSite attribute
-		//Secure:   true,                 // Secure attribute (send only over HTTPS) - for production
-		// Domain: "example.com", // Uncomment and set if you need to specify the domain
-		// MaxAge: 86400, // Alternative to Expires: seconds for cookie to live (24 * 60 * 60)
+		SameSite: http.SameSiteLaxMode,
+		Secure:   true, // Required for HTTPS (DigitalOcean)
+		MaxAge:   86400 * 30, // 30 days
 	}
 
 	response.Header().Add("Set-Cookie", cookie.String())

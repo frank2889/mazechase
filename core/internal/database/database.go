@@ -7,6 +7,7 @@ import (
 	"github.com/rs/zerolog/log"
 	"gorm.io/driver/sqlite"
 	"gorm.io/gorm"
+	"gorm.io/gorm/logger"
 )
 
 func InitDB() *gorm.DB {
@@ -47,9 +48,12 @@ func seedDefaultUsers(db *gorm.DB) {
 		{"emma", "emma123"},
 	}
 
+	// Use silent session for checking existing users (to avoid "record not found" logs)
+	silentDB := db.Session(&gorm.Session{Logger: logger.Default.LogMode(logger.Silent)})
+
 	for _, u := range defaultUsers {
 		var existing user.User
-		result := db.Where("username = ?", u.Username).First(&existing)
+		result := silentDB.Where("username = ?", u.Username).First(&existing)
 		if result.Error == gorm.ErrRecordNotFound {
 			newUser := user.User{
 				Username: u.Username,

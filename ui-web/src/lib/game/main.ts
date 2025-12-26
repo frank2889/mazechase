@@ -275,9 +275,42 @@ function setupKeyboardInput(canvas: HTMLCanvasElement) {
 }
 
 /**
- * Setup touch controls for mobile
+ * Setup touch controls for mobile with continuous movement
  */
 function setupTouchControls(container: HTMLElement) {
+    let touchDirection: string | null = null;
+    let touchMoveInterval: ReturnType<typeof setInterval> | null = null;
+    const TOUCH_MOVE_RATE_MS = 50;
+    
+    function startTouchMoving(direction: string) {
+        touchDirection = direction;
+        
+        // Send immediately
+        import('./connection.ts').then(({sendPosMessage}) => {
+            sendPosMessage(direction);
+        });
+        
+        // Then continue sending at interval
+        if (touchMoveInterval) {
+            clearInterval(touchMoveInterval);
+        }
+        touchMoveInterval = setInterval(() => {
+            if (touchDirection) {
+                import('./connection.ts').then(({sendPosMessage}) => {
+                    sendPosMessage(touchDirection!);
+                });
+            }
+        }, TOUCH_MOVE_RATE_MS);
+    }
+    
+    function stopTouchMoving() {
+        touchDirection = null;
+        if (touchMoveInterval) {
+            clearInterval(touchMoveInterval);
+            touchMoveInterval = null;
+        }
+    }
+    
     // Create touch control overlay
     const controlsDiv = document.createElement('div');
     controlsDiv.id = 'touch-controls';
@@ -289,28 +322,30 @@ function setupTouchControls(container: HTMLElement) {
                 left: 50%;
                 transform: translateX(-50%);
                 display: grid;
-                grid-template-columns: repeat(3, 60px);
-                grid-template-rows: repeat(3, 60px);
-                gap: 5px;
+                grid-template-columns: repeat(3, 70px);
+                grid-template-rows: repeat(3, 70px);
+                gap: 8px;
                 z-index: 1000;
             }
             .touch-btn {
-                width: 60px;
-                height: 60px;
+                width: 70px;
+                height: 70px;
                 background: rgba(0, 255, 199, 0.3);
                 border: 2px solid rgba(0, 255, 199, 0.6);
-                border-radius: 10px;
+                border-radius: 12px;
                 display: flex;
                 align-items: center;
                 justify-content: center;
-                font-size: 24px;
+                font-size: 28px;
                 color: white;
                 user-select: none;
                 -webkit-user-select: none;
                 touch-action: manipulation;
+                transition: background 0.1s;
             }
-            .touch-btn:active {
-                background: rgba(0, 255, 199, 0.6);
+            .touch-btn.active {
+                background: rgba(0, 255, 199, 0.7);
+                transform: scale(0.95);
             }
             .touch-btn.empty {
                 visibility: hidden;
@@ -329,16 +364,34 @@ function setupTouchControls(container: HTMLElement) {
     
     document.body.appendChild(controlsDiv);
     
-    // Add touch handlers
+    // Add touch handlers with continuous movement
     controlsDiv.querySelectorAll('.touch-btn[data-dir]').forEach(btn => {
         btn.addEventListener('touchstart', (e) => {
             e.preventDefault();
             const direction = (btn as HTMLElement).dataset.dir;
             if (direction) {
-                import('./connection.ts').then(({sendPosMessage}) => {
-                    sendPosMessage(direction);
-                });
+                btn.classList.add('active');
+                startTouchMoving(direction);
             }
+        });
+        
+        btn.addEventListener('touchend', (e) => {
+            e.preventDefault();
+            btn.classList.remove('active');
+            stopTouchMoving();
+        });
+        
+        btn.addEventListener('touchcancel', (e) => {
+            e.preventDefault();
+            btn.classList.remove('active');
+            stopTouchMoving();
+        });
+    });
+    
+    // Also stop on any touchend outside buttons
+    document.addEventListener('touchend', () => {
+        controlsDiv.querySelectorAll('.touch-btn.active').forEach(btn => {
+            btn.classList.remove('active');
         });
     });
 }
@@ -358,16 +411,18 @@ function setupGameEventHandlers() {
                 game3d.removePellet(tileX, tileY);
             }
         },
-        onPowerUpEaten: (tileX: number, tileY: number) => {
+        onPowerUpEaten: (tileX: number, tileY: number, duration?: number) => {
             if (game3d) {
                 game3d.removePowerUp(tileX, tileY);
                 game3d.setRunnerPoweredUp(true);
             }
+            showPowerUpTimer(duration || 8);
         },
         onPowerUpEnd: () => {
             if (game3d) {
                 game3d.setRunnerPoweredUp(false);
             }
+            hidePowerUpTimer();
         },
         onPlayerCaught: (runnerId: string, _chaserId: string) => {
             console.log(`Player ${runnerId} was caught!`);
@@ -445,14 +500,36 @@ function setupGameEventHandlers() {
  * Show game over screen
  */
 function showGameOver(winner: string, scores: Record<string, number>) {
+    const spriteNames: Record<string, string> = {
+        'runner': '🟡 Runner',
+        'ch0': '🔴 Chaser 1',
+        'ch1': '🟣 Chaser 2', 
+        'ch2': '🟢 Chaser 3',
+        'Chasers': '👻 Chasers',
+        'Runner': '🟡 Runner'
+    };
+    
     const overlay = document.createElement('div');
     overlay.id = 'game-over-overlay';
+    
+    // Sort scores by value descending
+    const sortedScores = Object.entries(scores)
+        .sort(([, a], [, b]) => b - a)
+        .map(([name, score], index) => {
+            const displayName = spriteNames[name] || name;
+            const medal = index === 0 ? '🥇' : index === 1 ? '🥈' : index === 2 ? '🥉' : '';
+            return `<div class="score-row">${medal} ${displayName}: <span class="score-value">${score}</span></div>`;
+        })
+        .join('');
+    
+    const winnerDisplay = spriteNames[winner] || winner;
+    
     overlay.innerHTML = `
         <style>
             #game-over-overlay {
                 position: fixed;
                 inset: 0;
-                background: rgba(0, 0, 0, 0.85);
+                background: rgba(0, 0, 0, 0.9);
                 display: flex;
                 flex-direction: column;
                 align-items: center;
@@ -460,19 +537,47 @@ function showGameOver(winner: string, scores: Record<string, number>) {
                 z-index: 2000;
                 color: white;
                 font-family: system-ui, sans-serif;
+                animation: fadeIn 0.5s ease;
+            }
+            @keyframes fadeIn {
+                from { opacity: 0; transform: scale(0.9); }
+                to { opacity: 1; transform: scale(1); }
             }
             #game-over-overlay h1 {
-                font-size: 48px;
+                font-size: 56px;
                 color: #00ffc7;
-                margin-bottom: 20px;
+                margin-bottom: 10px;
+                text-shadow: 0 0 30px rgba(0, 255, 199, 0.5);
             }
             #game-over-overlay .winner {
-                font-size: 32px;
+                font-size: 28px;
                 margin-bottom: 30px;
+                padding: 10px 30px;
+                background: rgba(0, 255, 199, 0.2);
+                border-radius: 20px;
+                border: 2px solid #00ffc7;
             }
-            #game-over-overlay .scores {
-                font-size: 20px;
+            #game-over-overlay .scores-container {
+                background: rgba(0, 0, 0, 0.5);
+                padding: 20px 40px;
+                border-radius: 12px;
                 margin-bottom: 30px;
+                min-width: 250px;
+            }
+            #game-over-overlay .score-row {
+                font-size: 20px;
+                margin: 10px 0;
+                display: flex;
+                justify-content: space-between;
+                gap: 20px;
+            }
+            #game-over-overlay .score-value {
+                color: #00ffc7;
+                font-weight: bold;
+            }
+            #game-over-overlay .buttons {
+                display: flex;
+                gap: 15px;
             }
             #game-over-overlay button {
                 padding: 15px 40px;
@@ -482,17 +587,32 @@ function showGameOver(winner: string, scores: Record<string, number>) {
                 border: none;
                 border-radius: 8px;
                 cursor: pointer;
+                font-weight: bold;
+                transition: all 0.2s;
             }
             #game-over-overlay button:hover {
                 background: #00e6b3;
+                transform: translateY(-2px);
+                box-shadow: 0 5px 20px rgba(0, 255, 199, 0.4);
+            }
+            #game-over-overlay button.secondary {
+                background: transparent;
+                color: #00ffc7;
+                border: 2px solid #00ffc7;
+            }
+            #game-over-overlay button.secondary:hover {
+                background: rgba(0, 255, 199, 0.2);
             }
         </style>
-        <h1>Game Over!</h1>
-        <div class="winner">Winnaar: ${winner}</div>
-        <div class="scores">
-            ${Object.entries(scores).map(([name, score]) => `${name}: ${score}`).join(' | ')}
+        <h1>🎮 Game Over!</h1>
+        <div class="winner">🏆 Winnaar: ${winnerDisplay}</div>
+        <div class="scores-container">
+            ${sortedScores || '<div class="score-row">Geen scores beschikbaar</div>'}
         </div>
-        <button onclick="window.location.href='/lobby'">Terug naar Lobby</button>
+        <div class="buttons">
+            <button onclick="window.location.reload()">🔄 Opnieuw</button>
+            <button class="secondary" onclick="window.location.href='/lobby'">🏠 Lobby</button>
+        </div>
     `;
     document.body.appendChild(overlay);
 }
@@ -501,6 +621,13 @@ function showGameOver(winner: string, scores: Record<string, number>) {
  * Update score display
  */
 function updateScoreDisplay(scores: Record<string, number>) {
+    const spriteNames: Record<string, string> = {
+        'runner': '🟡 Runner',
+        'ch0': '🔴 Chaser 1',
+        'ch1': '🟣 Chaser 2', 
+        'ch2': '🟢 Chaser 3'
+    };
+    
     let scoreDiv = document.getElementById('score-display');
     if (!scoreDiv) {
         scoreDiv = document.createElement('div');
@@ -509,20 +636,26 @@ function updateScoreDisplay(scores: Record<string, number>) {
             position: fixed;
             top: 20px;
             left: 20px;
-            background: rgba(0, 0, 0, 0.7);
+            background: rgba(0, 0, 0, 0.8);
             padding: 15px 20px;
-            border-radius: 8px;
+            border-radius: 10px;
+            border: 1px solid rgba(0, 255, 199, 0.3);
             color: white;
-            font-family: monospace;
+            font-family: 'Courier New', monospace;
             font-size: 16px;
             z-index: 1000;
+            min-width: 150px;
         `;
         document.body.appendChild(scoreDiv);
     }
     
-    scoreDiv.innerHTML = Object.entries(scores)
-        .map(([name, score]) => `<div>${name}: ${score}</div>`)
-        .join('');
+    scoreDiv.innerHTML = `<div style="color:#00ffc7;margin-bottom:8px;font-weight:bold;">SCORE</div>` +
+        Object.entries(scores)
+            .map(([name, score]) => {
+                const displayName = spriteNames[name] || name;
+                return `<div style="margin:4px 0;">${displayName}: <span style="color:#00ffc7">${score}</span></div>`;
+            })
+            .join('');
 }
 
 /**
@@ -988,6 +1121,91 @@ function showCaughtByEntity(entityType: string) {
     `;
     
     document.body.appendChild(overlay);
+}
+
+/**
+ * Power-up timer state
+ */
+let powerUpTimerInterval: ReturnType<typeof setInterval> | null = null;
+let powerUpEndTime: number = 0;
+
+/**
+ * Show and start the power-up countdown timer
+ */
+function showPowerUpTimer(durationSeconds: number) {
+    powerUpEndTime = Date.now() + durationSeconds * 1000;
+    
+    let timerDiv = document.getElementById('powerup-timer');
+    if (!timerDiv) {
+        timerDiv = document.createElement('div');
+        timerDiv.id = 'powerup-timer';
+        timerDiv.style.cssText = `
+            position: fixed;
+            top: 80px;
+            right: 20px;
+            background: linear-gradient(135deg, rgba(0, 255, 199, 0.3), rgba(255, 0, 255, 0.3));
+            padding: 12px 20px;
+            border-radius: 10px;
+            border: 2px solid #00ffc7;
+            color: #00ffc7;
+            font-family: 'Courier New', monospace;
+            font-size: 18px;
+            font-weight: bold;
+            z-index: 1000;
+            text-shadow: 0 0 10px rgba(0, 255, 199, 0.8);
+            animation: powerUpPulse 0.5s ease infinite alternate;
+        `;
+        
+        // Add animation style
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes powerUpPulse {
+                from { box-shadow: 0 0 10px rgba(0, 255, 199, 0.5); }
+                to { box-shadow: 0 0 25px rgba(0, 255, 199, 0.9); }
+            }
+        `;
+        document.head.appendChild(style);
+        document.body.appendChild(timerDiv);
+    }
+    
+    // Clear any existing interval
+    if (powerUpTimerInterval) {
+        clearInterval(powerUpTimerInterval);
+    }
+    
+    // Update timer every 100ms
+    powerUpTimerInterval = setInterval(() => {
+        const remaining = Math.max(0, powerUpEndTime - Date.now()) / 1000;
+        
+        if (timerDiv) {
+            timerDiv.textContent = `⚡ POWER: ${remaining.toFixed(1)}s`;
+            
+            // Change color when low
+            if (remaining <= 2) {
+                timerDiv.style.borderColor = '#ff4444';
+                timerDiv.style.color = '#ff4444';
+            }
+        }
+        
+        if (remaining <= 0) {
+            hidePowerUpTimer();
+        }
+    }, 100);
+}
+
+/**
+ * Hide and clear the power-up timer
+ */
+function hidePowerUpTimer() {
+    if (powerUpTimerInterval) {
+        clearInterval(powerUpTimerInterval);
+        powerUpTimerInterval = null;
+    }
+    
+    const timerDiv = document.getElementById('powerup-timer');
+    if (timerDiv) {
+        timerDiv.remove();
+    }
 }
 
 /**

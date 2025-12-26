@@ -21,6 +21,8 @@ type World struct {
 	gameOverChan        chan GameOverInfo
 	MatchStarted        bool
 	IsPoweredUp         bool
+	PowerUpEndTime      time.Time
+	PowerUpTimer        *time.Timer
 	CharactersList      []SpriteType
 	ChasersIdsEaten     []SpriteType
 	ConnectedPlayers    *pkg.Map[string, *melody.Session]
@@ -237,11 +239,10 @@ func (w *World) MovePlayerByDirection(player *PlayerEntity, dir string) (float64
 		w.addScore(player.PlayerId, PelletScore)
 	}
 	
-	// Check power-up collision
+	// Check power-up collision (use EatPowerUp which handles timer)
 	if w.MazeData.EatPowerUp(tileX, tileY) {
-		w.PowerUpsCoordsEaten.Add(float64(tileX), float64(tileY))
 		w.addScore(player.PlayerId, PowerUpScore)
-		w.IsPoweredUp = true
+		w.EatPowerUp(float64(tileX), float64(tileY))
 	}
 	
 	return newX, newY, true
@@ -411,13 +412,61 @@ func (w *World) EatPellet(pelletX, PelletY float64) {
 }
 
 func (w *World) EatPowerUp(powerUpX, powerUpY float64) {
+	w.worldLock.Lock()
+	defer w.worldLock.Unlock()
+	
 	if w.IsPoweredUp {
-		// already powered up do nothing
+		// Extend the power-up time
+		w.PowerUpEndTime = time.Now().Add(PowerUpDuration)
+		// Restart the timer
+		if w.PowerUpTimer != nil {
+			w.PowerUpTimer.Stop()
+		}
+		w.startPowerUpTimerUnlocked()
 		return
 	}
 
 	w.PowerUpsCoordsEaten.Add(powerUpX, powerUpY)
 	w.IsPoweredUp = true
+	w.PowerUpEndTime = time.Now().Add(PowerUpDuration)
+	
+	// Broadcast power-up start to all clients
+	if w.broadcastFunc != nil {
+		msg, _ := json.Marshal(map[string]interface{}{
+			"type":     "pow",
+			"x":        powerUpX,
+			"y":        powerUpY,
+			"duration": PowerUpDurationSec,
+		})
+		w.broadcastFunc(msg)
+	}
+	log.Info().Float64("x", powerUpX).Float64("y", powerUpY).Msg("Power-up started")
+	
+	// Start power-up timer
+	w.startPowerUpTimerUnlocked()
+}
+
+// startPowerUpTimerUnlocked starts the power-up duration timer (must be called with lock held)
+func (w *World) startPowerUpTimerUnlocked() {
+	// Cancel existing timer if any
+	if w.PowerUpTimer != nil {
+		w.PowerUpTimer.Stop()
+	}
+	
+	w.PowerUpTimer = time.AfterFunc(PowerUpDuration, func() {
+		w.worldLock.Lock()
+		w.IsPoweredUp = false
+		w.worldLock.Unlock()
+		
+		// Broadcast power-up end to all clients
+		if w.broadcastFunc != nil {
+			msg, _ := json.Marshal(map[string]interface{}{
+				"type": "powend",
+			})
+			w.broadcastFunc(msg)
+		}
+		log.Info().Msg("Power-up ended")
+	})
 }
 
 func (w *World) ChaserEatenAction(chaserID SpriteType) {

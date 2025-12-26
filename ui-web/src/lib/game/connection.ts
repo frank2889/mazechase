@@ -13,7 +13,7 @@ let prevGameState: any = {}
 export interface GameEventHandlers {
     onPlayerMove?: (spriteId: string, x: number, y: number, dir: string) => void;
     onPelletEaten?: (tileX: number, tileY: number) => void;
-    onPowerUpEaten?: (tileX: number, tileY: number) => void;
+    onPowerUpEaten?: (tileX: number, tileY: number, duration?: number) => void;
     onPowerUpEnd?: () => void;
     onPlayerCaught?: (runnerId: string, chaserId: string) => void;
     onGameOver?: (winner: string, scores: Record<string, number>) => void;
@@ -386,10 +386,11 @@ function handlePellet(json: any) {
 function handlePowerPelletStart(json: any) {
     const x = json.x as number
     const y = json.y as number
-    console.log(`Power eaten at x:${x}, y:${y}`)
+    const duration = json.duration as number || 8
+    console.log(`Power eaten at x:${x}, y:${y}, duration:${duration}s`)
 
     // Notify 3D scene
-    gameEventHandlers.onPowerUpEaten?.(x, y);
+    gameEventHandlers.onPowerUpEaten?.(x, y, duration);
 }
 
 

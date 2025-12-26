@@ -79,10 +79,11 @@ func (manager *Manager) getWorld(lobby *lobby.Lobby) (*World, error) {
 		newWorld := NewWorldState()
 		manager.activeLobbies.Store(lobby.ID, newWorld)
 		
-		// Create broadcast function for bots
+		// Create broadcast function for bots and power-up timer
 		broadcastFunc := func(msg []byte) error {
 			return manager.broadcastAll(newWorld, msg)
 		}
+		newWorld.broadcastFunc = broadcastFunc
 		newWorld.BotManager = NewBotManager(newWorld, broadcastFunc)
 		
 		go func() {

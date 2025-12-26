@@ -1,5 +1,7 @@
 package game
 
+import "time"
+
 // Game configuration constants - centralized for easy tuning
 
 // Tile and movement
@@ -35,9 +37,10 @@ var PowerUpPositions = []TilePoint{
 
 // Game mechanics
 const (
-	PowerUpDuration = 8   // Seconds
-	TotalPelletsMax = 201 // Maximum pellets on standard map
-	CollisionRadius = 20  // Pixels - collision detection radius
+	PowerUpDurationSec = 8                                  // Seconds
+	PowerUpDuration    = PowerUpDurationSec * time.Second   // As time.Duration
+	TotalPelletsMax    = 201                                // Maximum pellets on standard map
+	CollisionRadius    = 20                                 // Pixels - collision detection radius
 )
 
 // Scoring

@@ -182,48 +182,96 @@ async function start3DGame() {
 }
 
 /**
- * Setup keyboard input for 3D game
+ * Setup keyboard input for 3D game with continuous movement
  */
 function setupKeyboardInput(canvas: HTMLCanvasElement) {
     canvas.tabIndex = 1;
     canvas.focus();
     
+    let currentDirection: string | null = null;
+    let moveInterval: ReturnType<typeof setInterval> | null = null;
+    const MOVE_RATE_MS = 50; // Send movement every 50ms for smooth continuous movement
+    
+    function startMoving(direction: string) {
+        currentDirection = direction;
+        
+        // Send immediately
+        import('./connection.ts').then(({sendPosMessage}) => {
+            sendPosMessage(direction);
+        });
+        
+        // Then continue sending at interval
+        if (moveInterval) {
+            clearInterval(moveInterval);
+        }
+        moveInterval = setInterval(() => {
+            if (currentDirection) {
+                import('./connection.ts').then(({sendPosMessage}) => {
+                    sendPosMessage(currentDirection!);
+                });
+            }
+        }, MOVE_RATE_MS);
+    }
+    
+    function stopMoving() {
+        currentDirection = null;
+        if (moveInterval) {
+            clearInterval(moveInterval);
+            moveInterval = null;
+        }
+    }
+    
+    const keyToDirection: Record<string, string> = {
+        'ArrowUp': 'up',
+        'w': 'up',
+        'W': 'up',
+        'ArrowDown': 'down',
+        's': 'down',
+        'S': 'down',
+        'ArrowLeft': 'left',
+        'a': 'left',
+        'A': 'left',
+        'ArrowRight': 'right',
+        'd': 'right',
+        'D': 'right'
+    };
+    
+    const activeKeys = new Set<string>();
+    
     document.addEventListener('keydown', (e) => {
         if (!game3d) return;
         
-        let direction: string | null = null;
-        
-        switch(e.key) {
-            case 'ArrowUp':
-            case 'w':
-            case 'W':
-                direction = 'up';
-                break;
-            case 'ArrowDown':
-            case 's':
-            case 'S':
-                direction = 'down';
-                break;
-            case 'ArrowLeft':
-            case 'a':
-            case 'A':
-                direction = 'left';
-                break;
-            case 'ArrowRight':
-            case 'd':
-            case 'D':
-                direction = 'right';
-                break;
-        }
-        
+        const direction = keyToDirection[e.key];
         if (direction) {
             e.preventDefault();
-            // Send movement to server
-            import('./connection.ts').then(({sendPosMessage}) => {
-                sendPosMessage(direction!);
-            });
+            activeKeys.add(e.key);
+            startMoving(direction);
         }
     });
+    
+    document.addEventListener('keyup', (e) => {
+        if (!game3d) return;
+        
+        const direction = keyToDirection[e.key];
+        if (direction) {
+            activeKeys.delete(e.key);
+            
+            // Check if any other direction key is still held
+            for (const key of activeKeys) {
+                const otherDir = keyToDirection[key];
+                if (otherDir) {
+                    startMoving(otherDir);
+                    return;
+                }
+            }
+            
+            // No keys held, stop moving
+            stopMoving();
+        }
+    });
+    
+    // Stop on blur
+    window.addEventListener('blur', stopMoving);
 }
 
 /**

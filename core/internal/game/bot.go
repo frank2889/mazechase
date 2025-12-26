@@ -111,30 +111,22 @@ func (bm *BotManager) createBotUnlocked(index int) *Bot {
 
 // getStartX returns the starting X position for a sprite
 func getStartX(sprite SpriteType) float64 {
-	switch sprite {
-	case Runner:
-		return 110
-	case Chaser1: // ch0
-		return 670.17
-	case Chaser2: // ch1
-		return 723.5
-	case Chaser3: // ch2
-		return 776.83
-	default:
-		return 400
+	spawn, ok := SpawnPositions[sprite]
+	if !ok {
+		return 700
 	}
+	x, _ := TileToPixel(spawn.X, spawn.Y)
+	return x
 }
 
 // getStartY returns the starting Y position for a sprite
 func getStartY(sprite SpriteType) float64 {
-	switch sprite {
-	case Runner:
-		return 220
-	case Chaser1, Chaser2, Chaser3:
-		return 424.5
-	default:
-		return 400
+	spawn, ok := SpawnPositions[sprite]
+	if !ok {
+		return 575
 	}
+	_, y := TileToPixel(spawn.X, spawn.Y)
+	return y
 }
 
 // Start begins the bot's movement loop
@@ -152,6 +144,7 @@ func (b *Bot) Start(broadcast func([]byte) error) {
 
 	currentDir := directions[rand.Intn(len(directions))]
 	directionChangeCounter := 0
+	stuckCounter := 0
 
 	for {
 		select {
@@ -161,12 +154,12 @@ func (b *Bot) Start(broadcast func([]byte) error) {
 			// Change direction occasionally or randomly
 			directionChangeCounter++
 			if directionChangeCounter > 10+rand.Intn(20) || rand.Float32() < 0.1 {
-				currentDir = directions[rand.Intn(len(directions))]
+				currentDir = b.chooseNewDirection(currentDir)
 				directionChangeCounter = 0
 			}
 
 			// Calculate new position based on direction
-			speed := 8.0 // pixels per tick
+			speed := PlayerSpeed * 0.2 * 0.001 * 200 // Adjust for tick rate
 			newX, newY := b.PlayerEntity.X, b.PlayerEntity.Y
 
 			switch currentDir {
@@ -180,26 +173,26 @@ func (b *Bot) Start(broadcast func([]byte) error) {
 				newX += speed
 			}
 
-			// Simple boundary checking
-			if newX < 50 {
-				newX = 50
-				currentDir = "right"
+			// Check wall collision using maze data
+			if b.World.MazeData != nil && !b.World.MazeData.CanMoveTo(b.PlayerEntity.X, b.PlayerEntity.Y, newX, newY) {
+				// Hit a wall, choose new direction
+				stuckCounter++
+				if stuckCounter > 3 {
+					currentDir = b.chooseNewDirection(currentDir)
+					stuckCounter = 0
+				}
+				continue
 			}
-			if newX > 1500 {
-				newX = 1500
-				currentDir = "left"
-			}
-			if newY < 50 {
-				newY = 50
-				currentDir = "down"
-			}
-			if newY > 1000 {
-				newY = 1000
-				currentDir = "up"
-			}
-
+			
+			stuckCounter = 0
 			b.PlayerEntity.X = newX
 			b.PlayerEntity.Y = newY
+			b.PlayerEntity.Dir = currentDir
+			
+			// Update world position tracking
+			b.World.worldLock.Lock()
+			b.World.PlayerPositions[b.PlayerEntity.PlayerId] = &PointF{X: newX, Y: newY}
+			b.World.worldLock.Unlock()
 
 			// Broadcast position to all players
 			posMsg := map[string]interface{}{
@@ -215,6 +208,39 @@ func (b *Bot) Start(broadcast func([]byte) error) {
 			}
 		}
 	}
+}
+
+// chooseNewDirection picks a valid direction to move in
+func (b *Bot) chooseNewDirection(currentDir string) string {
+	// Shuffle directions for variety
+	shuffledDirs := make([]string, len(directions))
+	copy(shuffledDirs, directions)
+	rand.Shuffle(len(shuffledDirs), func(i, j int) {
+		shuffledDirs[i], shuffledDirs[j] = shuffledDirs[j], shuffledDirs[i]
+	})
+	
+	// Try each direction and pick one that's valid
+	speed := PlayerSpeed * 0.2 * 0.001 * 200
+	for _, dir := range shuffledDirs {
+		testX, testY := b.PlayerEntity.X, b.PlayerEntity.Y
+		switch dir {
+		case "up":
+			testY -= speed
+		case "down":
+			testY += speed
+		case "left":
+			testX -= speed
+		case "right":
+			testX += speed
+		}
+		
+		if b.World.MazeData == nil || b.World.MazeData.CanMoveTo(b.PlayerEntity.X, b.PlayerEntity.Y, testX, testY) {
+			return dir
+		}
+	}
+	
+	// Fallback to random
+	return directions[rand.Intn(len(directions))]
 }
 
 // Stop stops the bot

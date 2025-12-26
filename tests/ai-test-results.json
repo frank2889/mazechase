@@ -1,0 +1,194 @@
+{
+  "timestamp": "2025-12-26T20:44:32.778Z",
+  "testers": [
+    {
+      "name": "Emma",
+      "age": 8,
+      "observations": [
+        {
+          "phase": "Lobby creatie",
+          "success": false,
+          "details": "Kon geen lobby maken: 404 page not found\n, gebruik fallback lobby 1"
+        },
+        {
+          "phase": "Lobby laden",
+          "success": true,
+          "details": "Lobby pagina laadt correct"
+        },
+        {
+          "phase": "Game assets",
+          "success": true,
+          "details": "Map.json laadt correct"
+        },
+        {
+          "phase": "WebSocket",
+          "success": true,
+          "details": "Verbinding gemaakt"
+        },
+        {
+          "phase": "Game State",
+          "success": true,
+          "details": "Ontvangen als ch0, isHost: true"
+        },
+        {
+          "phase": "Bot Movement",
+          "success": true,
+          "details": "Bots bewegen actief door de maze"
+        },
+        {
+          "phase": "Bot AI",
+          "success": false,
+          "details": "Slechts 1 bots gezien"
+        },
+        {
+          "phase": "Berichten",
+          "success": true,
+          "details": "42 berichten ontvangen in 3 seconden"
+        }
+      ],
+      "evaluation": "**Eerste Indruk (1-10):** 7  \nHet spel ziet er best leuk uit met al die verschillende thema's zoals Neon Night en Ghost Forest. Ik houd van kleurrijke dingen, en de 3D graphics maken het best cool, maar het is soms een beetje donker en lastig om alles goed te zien.\n\n**Gameplay (1-10):** 8  \nHet spelconcept is heel leuk! Het lijkt een beetje op Pac-Man, wat ik leuk vind, maar dan met een twist omdat ik ook de spoken kan vangen als ik een power-up heb. Het is spannend om te rennen en te proberen alle pellets te verzamelen.\n\n**Moeilijkheidsgraad (1-10):** 6  \nHet was soms lastig om te begrijpen wat ik precies moest doen, en ik kon maar één bot zien in plaats van drie. Dat maakte het een beetje verwarrend. Als je niet weet waar de andere bots zijn, is het moeilijker om te winnen.\n\n**Family-vriendelijk (1-10):** 9  \nIk denk dat dit spel heel leuk is om samen met mijn broer of vrienden te spelen. We kunnen elkaar uitdagen en zien wie de beste Runner of Chaser is.\n\n**Verslavend (1-10):** 7  \nIk zou het zeker nog een keer willen spelen, vooral als de bots beter werken. Het is leuk om te proberen mijn score te verbeteren en misschien eens alle Chasers te vangen!\n\n**Sterke Punten (top 3):**\n1. Verschillende visuele thema's maken het spannend en afwisselend.\n2. Het concept van Runner en Chasers maakt het spel spannend en uitdagend.\n3. De score popups en leaderboard zorgen ervoor dat ik mijn best wil blijven doen.\n\n**Verbeterpunten (top 3):**\n1. Het was moeilijk om een lobby te maken, dat was vervelend.\n2. Er waren niet genoeg bots, waardoor het spel soms saai was.\n3. Het spel was soms een beetje donker, wat het lastig maakte om alles goed te zien.\n\n**Concrete Suggesties (minimaal 2):**\n1. Zorg ervoor dat er altijd genoeg bots zijn die goed rondlopen, zodat het spel uitdagender wordt.\n2. Maak de thema's iets helderder, zodat ik alles beter kan zien en niet zo snel gefrustreerd raak.\n3. Fix het probleem met de lobby, zodat ik makkelijk met vrienden kan spelen zonder problemen.\n\nIk hoop dat deze ideeën helpen om het spel nog leuker te maken! 😊"
+    },
+    {
+      "name": "Tim",
+      "age": 16,
+      "observations": [
+        {
+          "phase": "Lobby creatie",
+          "success": false,
+          "details": "Kon geen lobby maken: 404 page not found\n, gebruik fallback lobby 1"
+        },
+        {
+          "phase": "Lobby laden",
+          "success": true,
+          "details": "Lobby pagina laadt correct"
+        },
+        {
+          "phase": "Game assets",
+          "success": true,
+          "details": "Map.json laadt correct"
+        },
+        {
+          "phase": "WebSocket",
+          "success": true,
+          "details": "Verbinding gemaakt"
+        },
+        {
+          "phase": "Game State",
+          "success": true,
+          "details": "Ontvangen als runner, isHost: false"
+        },
+        {
+          "phase": "Bot Movement",
+          "success": true,
+          "details": "Bots bewegen actief door de maze"
+        },
+        {
+          "phase": "Bot AI",
+          "success": false,
+          "details": "Slechts 1 bots gezien"
+        },
+        {
+          "phase": "Berichten",
+          "success": true,
+          "details": "39 berichten ontvangen in 3 seconden"
+        }
+      ],
+      "evaluation": "**Feedback van Tim, de 16-jarige gamer:**\n\n**1. EERSTE INDRUK (5/10):**\nMazeChase ziet er niet slecht uit, vooral met de 3D graphics en de verschillende thema's zoals Neon Night. Maar eerlijk gezegd voelt het een beetje als een halve poging. Het heeft niet echt die wow-factor zoals sommige andere games die ik speel.\n\n**2. GAMEPLAY (6/10):**\nHet concept is best grappig, een soort Pac-Man maar dan met een twist. Het idee om als Runner of Chaser te spelen is cool, maar het mist diepte. Na een paar rondes voelt het een beetje repetitief aan.\n\n**3. MOEILIJKHEIDSGRAAD (4/10):**\nVoor iemand van mijn leeftijd is het niet echt uitdagend genoeg. De AI van de bots is niet geweldig, en als je een beetje skills hebt, ben je snel door de uitdaging heen. Meer complexiteit zou tof zijn.\n\n**4. FAMILY-VRIENDELIJK (7/10):**\nHet is best leuk voor even met vrienden of fam chillen, vooral omdat het niet te moeilijk is. Maar als je competitief ingesteld bent, zoals ik, ontbreekt er wel wat.\n\n**5. VERSLAVEND (3/10):**\nEerlijk is eerlijk, ik heb het nu getest, maar ik zie mezelf dit niet vaker spelen. Het heeft niet die hooks die je terug laten komen zoals een Fortnite of Valorant.\n\n**STERKE PUNTEN (top 3):**\n1. **Graphics en thema's:** De verschillende thema's zoals Neon Night zien er best fris uit.\n2. **Eenvoudig concept:** Het is snel te begrijpen, wat het toegankelijk maakt voor beginnende spelers.\n3. **Leaderboards:** Altijd een pluspunt om je scores te vergelijken, hoewel het hier niet super motiverend is.\n\n**VERBETERPUNTEN (top 3):**\n1. **AI van de bots:** Ze zijn niet echt uitdagend, wat de game te makkelijk maakt.\n2. **Diepgang in gameplay:** Na een paar potjes heb je het wel gezien. Er moet meer variatie komen.\n3. **Technische issues:** Zoals geen lobby kunnen maken, dat moet gewoon werken.\n\n**CONCRETE SUGGESTIES (minimaal 2):**\n1. **Verbeter de AI:** Maak de bots slimmer en uitdagender. Voeg misschien verschillende moeilijkheidsgraden toe.\n2. **Meer power-ups en variatie:** Introduceer meer soorten power-ups of speciale acties die de game dynamischer maken.\n3. **Competitieve elementen:** Voeg misschien een rangladder toe of speciale toernooien die het competitieve element versterken.\n\nAl met al is MazeChase een leuk concept, maar mist het de diepgang en uitdaging die ik zoek in een game. Met wat updates kan het vast beter worden!"
+    },
+    {
+      "name": "Sandra",
+      "age": 38,
+      "observations": [
+        {
+          "phase": "Lobby creatie",
+          "success": false,
+          "details": "Kon geen lobby maken: 404 page not found\n, gebruik fallback lobby 1"
+        },
+        {
+          "phase": "Lobby laden",
+          "success": true,
+          "details": "Lobby pagina laadt correct"
+        },
+        {
+          "phase": "Game assets",
+          "success": true,
+          "details": "Map.json laadt correct"
+        },
+        {
+          "phase": "WebSocket",
+          "success": true,
+          "details": "Verbinding gemaakt"
+        },
+        {
+          "phase": "Game State",
+          "success": true,
+          "details": "Ontvangen als ch0, isHost: false"
+        },
+        {
+          "phase": "Bot Movement",
+          "success": true,
+          "details": "Bots bewegen actief door de maze"
+        },
+        {
+          "phase": "Bot AI",
+          "success": false,
+          "details": "Slechts 1 bots gezien"
+        },
+        {
+          "phase": "Berichten",
+          "success": true,
+          "details": "39 berichten ontvangen in 3 seconden"
+        }
+      ],
+      "evaluation": "Als Sandra, een 38-jarige moeder die graag quality time met haar gezin doorbrengt, heb ik MazeChase getest en hier is mijn feedback:\n\n1. **EERSTE INDRUK (1-10):** 7\n   - Het spel ziet er visueel aantrekkelijk uit met zijn verschillende thema's zoals Neon Night en Ghost Forest. De 3D graphics zijn leuk, maar niet baanbrekend.\n\n2. **GAMEPLAY (1-10):** 6\n   - Het concept van de game is eenvoudig en doet denken aan Pac-Man, wat nostalgisch is en makkelijk te begrijpen. De twist met de power-ups is een leuke toevoeging, maar het voelt een beetje beperkt.\n\n3. **MOEILIJKHEIDSGRAAD (1-10):** 7\n   - De controls zijn eenvoudig en toegankelijk, wat fijn is voor de kinderen. Het spel is echter snel afgelopen, waardoor er weinig tijd is om echt beter te worden of strategieën te ontwikkelen.\n\n4. **FAMILY-VRIENDELIJK (1-10):** 8\n   - Het spel is zeker geschikt voor gezinnen. Het bevat geen gewelddadige beelden en de spelduur is kort genoeg om tussen andere activiteiten door te spelen.\n\n5. **VERSLAVEND (1-10):** 5\n   - Hoewel het spel leuk is voor een paar rondes, is het niet zo verslavend dat ik het steeds opnieuw zou willen spelen. Het mist diepgang en variatie voor langere speelplezier.\n\n**STERKE PUNTEN (top 3):**\n\n1. **Toegankelijkheid:** Het spel is makkelijk te leren, wat ideaal is voor alle leeftijden in ons gezin.\n2. **Korte speelduur:** Perfect om even tussendoor te spelen zonder dat het uren van de avond in beslag neemt.\n3. **Visuele thema's:** De verschillende thema's maken het visueel aantrekkelijk en leuk voor kinderen.\n\n**VERBETERPUNTEN (top 3):**\n\n1. **Technische problemen:** Het probleem met het maken van een lobby moet echt opgelost worden voor een naadloze ervaring.\n2. **Bot AI:** Er waren problemen met de bot AI, waardoor het spel soms minder uitdagend was.\n3. **Herhalingsfactor:** Na een paar rondes wordt het spel voorspelbaar en zou het meer variatie kunnen gebruiken.\n\n**CONCRETE SUGGESTIES (minimaal 2):**\n\n1. **Verbeter de AI van de bots:** Zodat ze een grotere en meer onvoorspelbare uitdaging vormen, wat het spel spannender maakt.\n2. **Meer variatie in spelmodi:** Het toevoegen van verschillende uitdagingen of doelen kan de herspeelbaarheid verhogen en het spel spannender maken voor het hele gezin.\n\nOver het algemeen is MazeChase een leuke aanvulling voor een korte, gezellige speelsessie met het gezin, maar er is ruimte voor verbetering om de ervaring nog leuker te maken."
+    },
+    {
+      "name": "Peter",
+      "age": 45,
+      "observations": [
+        {
+          "phase": "Lobby creatie",
+          "success": false,
+          "details": "Kon geen lobby maken: 404 page not found\n, gebruik fallback lobby 1"
+        },
+        {
+          "phase": "Lobby laden",
+          "success": true,
+          "details": "Lobby pagina laadt correct"
+        },
+        {
+          "phase": "Game assets",
+          "success": true,
+          "details": "Map.json laadt correct"
+        },
+        {
+          "phase": "WebSocket",
+          "success": true,
+          "details": "Verbinding gemaakt"
+        },
+        {
+          "phase": "Game State",
+          "success": true,
+          "details": "Ontvangen als runner, isHost: false"
+        },
+        {
+          "phase": "Bot Movement",
+          "success": true,
+          "details": "Bots bewegen actief door de maze"
+        },
+        {
+          "phase": "Bot AI",
+          "success": false,
+          "details": "Slechts 1 bots gezien"
+        },
+        {
+          "phase": "Berichten",
+          "success": true,
+          "details": "45 berichten ontvangen in 3 seconden"
+        }
+      ],
+      "evaluation": "Als Peter, de 45-jarige nostalgische gamer, ben ik altijd op zoek naar dat retro gevoel dat me terugbrengt naar de dagen van Pac-Man en Tetris. Laten we eens kijken hoe MazeChase zich staande houdt in die context.\n\n1. **EERSTE INDRUK (6/10):** Het spel ziet er behoorlijk modern uit met die 3D graphics en verschillende thema's. Visueel interessant, maar het mist toch die eenvoudige charme van 8-bit graphics die me zo aanspreekt. De neon-achtige thema's geven wel een aardige knipoog naar de jaren '80, maar voelen soms iets te druk aan.\n\n2. **GAMEPLAY (7/10):** Het concept van MazeChase doet me denken aan een moderne draai aan Pac-Man, wat ik op prijs stel. De twist met meerdere spelers en rollen voegt een nieuwe dimensie toe, maar ik mis de eenvoud van gewoon heen en weer rennen voor de high score. Het is leuk, maar misschien iets te complex voor mijn pure retro smaak.\n\n3. **MOEILIJKHEIDSGRAAD (5/10):** Het spel voelt iets onevenwichtig aan, vooral als de bots niet allemaal actief zijn. Dat veroorzaakt een gebrek aan uitdaging. Wanneer de AI niet goed werkt, haalt dat de spanning weg die ik ken uit de arcadehallen.\n\n4. **FAMILY-VRIENDELIJK (8/10):** Zeker geschikt om samen te spelen, vooral met de multiplayer optie. De snelle sessies van drie minuten zijn ideaal voor korte, competitieve spelletjes met familie en vrienden. Het heeft dat sociale aspect van de oude arcadehallen, wat ik waardeer.\n\n5. **VERSLAVEND (6/10):** Het spel heeft potentie, maar ik mis die drang om meteen nog een potje te spelen als ik klaar ben. Het heeft niet helemaal die magnetische aantrekkingskracht van de echte klassiekers.\n\n**STERKE PUNTEN:**\n1. Het spelconcept met de twist van rollen is fris en biedt interessante mogelijkheden.\n2. De korte speelsessies van drie minuten zijn perfect voor snelle, spannende potjes.\n3. De verschillende visuele thema's geven een moderne draai aan het retrogevoel.\n\n**VERBETERPUNTEN:**\n1. De complexiteit doet wat afbreuk aan het klassieke, eenvoudige spelplezier.\n2. De AI van de bots lijkt niet altijd goed te werken, wat de uitdaging vermindert.\n3. Het maken van een lobby werkte niet, dat kan frustrerend zijn voor nieuwe spelers.\n\n**CONCRETE SUGGESTIES:**\n1. Zorg ervoor dat de AI consistent functioneert, zodat de moeilijkheidsgraad constant blijft en de spanning behouden blijft.\n2. Voeg optionele retro graphics toe voor spelers zoals ik, die die klassieke look en feel waarderen.\n3. Los technische problemen zoals het niet kunnen maken van een lobby op om de toegankelijkheid te verbeteren.\n\nAl met al, MazeChase heeft potentieel, maar er zijn nog wat hobbels die gladgestreken moeten worden om mij volledig te overtuigen. Met wat aanpassingen zou het zomaar een moderne klassieker kunnen worden!"
+    }
+  ],
+  "improvementPlan": "## PRIORITEIT 1 - KRITIEK (Moet nu gefixed)\n1. **Lobby Probleem:** Het onvermogen om een lobby te maken is een kritieke technische issue dat de multiplayer ervaring belemmert.\n2. **Bot AI:** De inconsistente en niet-uitdagende AI van de bots vermindert de speluitdaging, wat essentieel is voor zowel solo als multiplayer gameplay.\n\n## PRIORITEIT 2 - BELANGRIJK (Voor volgende versie)\n1. **Visuele Helderheid:** De thema's zijn soms te donker, wat het moeilijk maakt om het speelveld goed te zien.\n2. **Gameplay Variatie:** Het spel kan repetitief aanvoelen; meer variatie in spelmodi en power-ups is nodig om de herspeelbaarheid te verhogen.\n3. **Diepgang en Complexiteit:** Meer diepgang in gameplay, zoals verschillende moeilijkheidsgraden en competitieve elementen, zou de ervaring verbeteren.\n\n## PRIORITEIT 3 - NICE TO HAVE (Toekomstige updates)\n1. **Retro Graphics Optie:** Voor spelers die nostalgisch zijn ingesteld, zoals Peter, kan een optionele retro graphics modus interessant zijn.\n2. **Rangladders en Toernooien:** Competitieve elementen zoals rangladders kunnen de betrokkenheid van spelers verhogen.\n3. **Extra Visuele Thema's:** Meer thema's kunnen de visuele aantrekkelijkheid en variatie van het spel vergroten.\n\n## CONCRETE IMPLEMENTATIE SUGGESTIES\n1. **Lobby Probleem:** Herzie het netwerkcode en matchmaking systeem om ervoor te zorgen dat spelers gemakkelijk een lobby kunnen maken en deelnemen. Overweeg het gebruik van betrouwbare netwerkprotocollen zoals WebRTC voor stabielere verbindingen.\n2. **Bot AI:** Verhoog de complexiteit van de AI door machine learning technieken toe te passen, zoals reinforcement learning, om bots te trainen die beter kunnen anticiperen op spelersacties.\n3. **Visuele Helderheid:** Pas de belichting en texturen aan binnen de thema's om de zichtbaarheid te verbeteren. Voeg sliders toe voor helderheid en contrast in de instellingen.\n4. **Gameplay Variatie:** Ontwikkel nieuwe spelmodi zoals een \"Capture the Flag\" mode of \"Time Attack\" voor meer variatie. Voeg nieuwe power-ups toe zoals \"Speed Boost\" of \"Invisibility\".\n5. **Diepgang en Complexiteit:** Introduceer moeilijkheidsgraden voor de AI en voeg een progressiesysteem toe met beloningen voor het voltooien van uitdagingen.\n\n## BALANS AANBEVELINGEN\n1. **Snelheid:** Pas de snelheid van de Runner en Chasers aan om een beter evenwicht te creëren tussen uitdaging en speelbaarheid, met de mogelijkheid om deze aan te passen per moeilijkheidsgraad.\n2. **Scores:** Verfijn het scoresysteem zodat het meer beloningen biedt voor strategisch spel, zoals bonuspunten voor snelle rondes of het vangen van Chasers.\n3. **Power-up Timing:** Herzie de duur en frequentie van power-ups om ervoor te zorgen dat ze het spel uitdagender maken zonder het oneerlijk te maken.\n\nDoor deze verbeteringen te implementeren, kan MazeChase een gezinsvriendelijke game worden die zowel kinderen als volwassenen aanspreekt, met een bordspel-achtig gevoel dat toch competitief blijft."
+}

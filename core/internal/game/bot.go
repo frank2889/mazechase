@@ -3,11 +3,26 @@ package game
 import (
 	"encoding/json"
 	"fmt"
+	"math"
 	"math/rand"
 	"sync"
 	"time"
 
 	"github.com/rs/zerolog/log"
+)
+
+// BotStrategy defines different AI behavior patterns
+type BotStrategy int
+
+const (
+	// StrategyChaser - Direct pursuit of the runner
+	StrategyChaser BotStrategy = iota
+	// StrategyAmbush - Tries to intercept runner at junctions
+	StrategyAmbush
+	// StrategyBlocker - Tries to block escape routes
+	StrategyBlocker
+	// StrategyPatrol - Patrols a section of the maze
+	StrategyPatrol
 )
 
 // Bot represents an AI-controlled player
@@ -17,6 +32,12 @@ type Bot struct {
 	stopChan     chan struct{}
 	isRunning    bool
 	mutex        sync.Mutex
+	Strategy     BotStrategy  // AI behavior pattern
+	TargetX      float64      // Target position for patrol/ambush
+	TargetY      float64
+	LastRunnerX  float64      // Track runner movement for prediction
+	LastRunnerY  float64
+	AggressionLevel float64   // 0.0 to 1.0 - how aggressively to chase
 }
 
 // BotManager manages all bots in a world
@@ -96,14 +117,29 @@ func (bm *BotManager) createBotUnlocked(index int) *Bot {
 	// Store in connected players (nil session for bots)
 	bm.world.ConnectedPlayers.Store(player.PlayerId, nil)
 
+	// Assign different strategies to different bots for variety
+	strategies := []BotStrategy{StrategyChaser, StrategyAmbush, StrategyBlocker, StrategyPatrol}
+	strategy := strategies[index%len(strategies)]
+	
+	// Vary aggression level based on bot type
+	aggressionLevels := []float64{0.9, 0.7, 0.5, 0.3} // Alpha is aggressive, others vary
+	aggression := aggressionLevels[index%len(aggressionLevels)]
+
 	bot := &Bot{
-		PlayerEntity: player,
-		World:        bm.world,
-		stopChan:     make(chan struct{}),
-		isRunning:    false,
+		PlayerEntity:    player,
+		World:           bm.world,
+		stopChan:        make(chan struct{}),
+		isRunning:       false,
+		Strategy:        strategy,
+		AggressionLevel: aggression,
 	}
 
-	log.Info().Str("name", botName).Str("sprite", string(spriteId)).Msg("Bot created")
+	log.Info().
+		Str("name", botName).
+		Str("sprite", string(spriteId)).
+		Int("strategy", int(strategy)).
+		Float64("aggression", aggression).
+		Msg("Bot created with strategy")
 
 	// Broadcast bot join to other players
 	joinMsg := map[string]interface{}{
@@ -219,13 +255,16 @@ func (b *Bot) Start(broadcast func([]byte) error) {
 	}
 }
 
-// chooseNewDirection picks a valid direction to move in
+// chooseNewDirection picks a valid direction to move in based on bot strategy
 func (b *Bot) chooseNewDirection(currentDir string) string {
 	// Get runner position for chase/flee behavior
 	runnerX, runnerY := b.getRunnerPosition()
 	
 	// Determine if this bot should chase or flee
 	isChaser := b.PlayerEntity.SpriteType != Runner
+	
+	// Calculate target position based on strategy
+	targetX, targetY := b.calculateTargetPosition(runnerX, runnerY, isChaser)
 	
 	// Build a list of valid directions with scores
 	type dirScore struct {
@@ -249,19 +288,22 @@ func (b *Bot) chooseNewDirection(currentDir string) string {
 		}
 		
 		if b.World.MazeData == nil || b.World.MazeData.CanMoveTo(b.PlayerEntity.X, b.PlayerEntity.Y, testX, testY) {
-			// Calculate distance to runner from this new position
-			dx := testX - runnerX
-			dy := testY - runnerY
-			distToRunner := dx*dx + dy*dy // squared distance is fine for comparison
+			// Calculate distance to target from this new position
+			dx := testX - targetX
+			dy := testY - targetY
+			distToTarget := math.Sqrt(dx*dx + dy*dy)
 			
-			// Score: chasers prefer smaller distance, runner prefers larger
-			score := distToRunner
-			if isChaser {
-				score = -distToRunner // Negative so smaller distance = better
+			// Score: prefer smaller distance to target
+			score := -distToTarget // Negative so smaller distance = higher score
+			
+			// Apply aggression - higher aggression means less randomness
+			randomFactor := 1.0 - b.AggressionLevel
+			score += (rand.Float64() - 0.5) * 100 * randomFactor
+			
+			// Penalize reversing direction (avoid back and forth)
+			if isOppositeDirection(dir, currentDir) {
+				score -= 50
 			}
-			
-			// Add some randomness to prevent predictable behavior (30% variation)
-			score += (rand.Float64() - 0.5) * distToRunner * 0.3
 			
 			validDirs = append(validDirs, dirScore{dir: dir, score: score})
 		}
@@ -280,7 +322,195 @@ func (b *Bot) chooseNewDirection(currentDir string) string {
 		}
 	}
 	
+	// Update last known runner position for prediction
+	b.LastRunnerX = runnerX
+	b.LastRunnerY = runnerY
+	
 	return bestDir.dir
+}
+
+// isOppositeDirection checks if two directions are opposites
+func isOppositeDirection(dir1, dir2 string) bool {
+	opposites := map[string]string{
+		"up": "down", "down": "up",
+		"left": "right", "right": "left",
+	}
+	return opposites[dir1] == dir2
+}
+
+// calculateTargetPosition determines where the bot should move based on strategy
+func (b *Bot) calculateTargetPosition(runnerX, runnerY float64, isChaser bool) (float64, float64) {
+	if !isChaser {
+		// Runner bot should flee from chasers
+		return b.calculateFleePosition()
+	}
+	
+	switch b.Strategy {
+	case StrategyChaser:
+		// Direct pursuit - go straight for the runner
+		return runnerX, runnerY
+		
+	case StrategyAmbush:
+		// Try to predict where runner is going and intercept
+		return b.calculateInterceptPosition(runnerX, runnerY)
+		
+	case StrategyBlocker:
+		// Try to block the path ahead of the runner
+		return b.calculateBlockPosition(runnerX, runnerY)
+		
+	case StrategyPatrol:
+		// Patrol between key points, chase if runner is nearby
+		return b.calculatePatrolPosition(runnerX, runnerY)
+		
+	default:
+		return runnerX, runnerY
+	}
+}
+
+// calculateInterceptPosition predicts runner movement and intercepts
+func (b *Bot) calculateInterceptPosition(runnerX, runnerY float64) (float64, float64) {
+	// Calculate runner velocity based on last known position
+	velX := runnerX - b.LastRunnerX
+	velY := runnerY - b.LastRunnerY
+	
+	// Predict where runner will be in ~1 second (5 ticks)
+	predictedX := runnerX + velX*5
+	predictedY := runnerY + velY*5
+	
+	// Clamp to maze bounds
+	predictedX = math.Max(50, math.Min(predictedX, 1350))
+	predictedY = math.Max(50, math.Min(predictedY, 1150))
+	
+	return predictedX, predictedY
+}
+
+// calculateBlockPosition tries to get ahead of the runner
+func (b *Bot) calculateBlockPosition(runnerX, runnerY float64) (float64, float64) {
+	// Get direction of runner movement
+	velX := runnerX - b.LastRunnerX
+	velY := runnerY - b.LastRunnerY
+	
+	// Position ourselves ahead of where runner is heading
+	aheadX := runnerX + velX*10
+	aheadY := runnerY + velY*10
+	
+	// If we're already close to runner, just chase directly
+	dx := b.PlayerEntity.X - runnerX
+	dy := b.PlayerEntity.Y - runnerY
+	distToRunner := math.Sqrt(dx*dx + dy*dy)
+	
+	if distToRunner < 100 {
+		return runnerX, runnerY
+	}
+	
+	return aheadX, aheadY
+}
+
+// calculatePatrolPosition patrols key areas but chases if runner is nearby
+func (b *Bot) calculatePatrolPosition(runnerX, runnerY float64) (float64, float64) {
+	// Key patrol points (corners and center of maze)
+	patrolPoints := []struct{ x, y float64 }{
+		{200, 200}, {1200, 200},  // Top corners
+		{200, 1000}, {1200, 1000}, // Bottom corners
+		{700, 600}, // Center
+	}
+	
+	// Check if runner is nearby (within chase range)
+	dx := b.PlayerEntity.X - runnerX
+	dy := b.PlayerEntity.Y - runnerY
+	distToRunner := math.Sqrt(dx*dx + dy*dy)
+	
+	if distToRunner < 200 {
+		// Runner is close, chase them!
+		return runnerX, runnerY
+	}
+	
+	// Find nearest patrol point we're not already at
+	bestPoint := patrolPoints[0]
+	bestDist := math.MaxFloat64
+	
+	for _, pt := range patrolPoints {
+		dx := b.PlayerEntity.X - pt.x
+		dy := b.PlayerEntity.Y - pt.y
+		dist := math.Sqrt(dx*dx + dy*dy)
+		
+		// Skip if we're already at this point
+		if dist < 50 {
+			continue
+		}
+		
+		if dist < bestDist {
+			bestDist = dist
+			bestPoint = pt
+		}
+	}
+	
+	return bestPoint.x, bestPoint.y
+}
+
+// calculateFleePosition finds the best direction to flee from chasers
+func (b *Bot) calculateFleePosition() (float64, float64) {
+	// Get positions of all chasers
+	chaserPositions := b.getChaserPositions()
+	
+	if len(chaserPositions) == 0 {
+		// No chasers, just wander
+		return b.PlayerEntity.X + float64(rand.Intn(200)-100), b.PlayerEntity.Y + float64(rand.Intn(200)-100)
+	}
+	
+	// Calculate average chaser position
+	avgX, avgY := 0.0, 0.0
+	for _, pos := range chaserPositions {
+		avgX += pos.X
+		avgY += pos.Y
+	}
+	avgX /= float64(len(chaserPositions))
+	avgY /= float64(len(chaserPositions))
+	
+	// Move away from average chaser position
+	fleeX := b.PlayerEntity.X + (b.PlayerEntity.X - avgX)
+	fleeY := b.PlayerEntity.Y + (b.PlayerEntity.Y - avgY)
+	
+	// Clamp to maze bounds
+	fleeX = math.Max(50, math.Min(fleeX, 1350))
+	fleeY = math.Max(50, math.Min(fleeY, 1150))
+	
+	return fleeX, fleeY
+}
+
+// getChaserPositions returns positions of all chaser bots/players
+func (b *Bot) getChaserPositions() []PointF {
+	b.World.worldLock.Lock()
+	defer b.World.worldLock.Unlock()
+	
+	positions := make([]PointF, 0)
+	
+	// Check all player positions
+	for playerId, pos := range b.World.PlayerPositions {
+		if pos == nil || playerId == b.PlayerEntity.PlayerId {
+			continue
+		}
+		
+		// Check if this is a chaser
+		session, exists := b.World.ConnectedPlayers.Load(playerId)
+		if exists && session != nil {
+			player, err := getPlayerEntityFromSession(session)
+			if err == nil && player.SpriteType != Runner {
+				positions = append(positions, *pos)
+			}
+		}
+	}
+	
+	// Also check bot chasers
+	if b.World.BotManager != nil {
+		for _, bot := range b.World.BotManager.GetBots() {
+			if bot.PlayerEntity.PlayerId != b.PlayerEntity.PlayerId && bot.PlayerEntity.SpriteType != Runner {
+				positions = append(positions, PointF{X: bot.PlayerEntity.X, Y: bot.PlayerEntity.Y})
+			}
+		}
+	}
+	
+	return positions
 }
 
 // getRunnerPosition returns the runner's current position

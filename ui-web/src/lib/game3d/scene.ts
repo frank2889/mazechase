@@ -10,6 +10,7 @@ import { ParticleManager } from './particles';
 import { EntityRenderer } from './entities';
 import { ZoneRenderer, type TimePhase } from './zones';
 import { DynamicMaze } from './dynamicMaze';
+import { Scenery3D, WORLD_THEMES } from './scenery';
 import type { Zone, MazeUpdate, DangerEntityData, DynamicState } from '../game/connection';
 
 // Phaser tile size in pixels
@@ -38,6 +39,10 @@ export class Game3DScene {
     private entityRenderer: EntityRenderer;
     private zoneRenderer: ZoneRenderer;
     private dynamicMaze: DynamicMaze;
+    
+    // Scenery and environment
+    private scenery: Scenery3D;
+    private wallPositions: Set<string> = new Set();
 
     constructor(canvas: HTMLCanvasElement) {
         // Check WebGL support
@@ -53,6 +58,11 @@ export class Game3DScene {
         this.entityRenderer = new EntityRenderer(this.engine.babylonScene, this.maze.getGlowLayer());
         this.zoneRenderer = new ZoneRenderer(this.engine.babylonScene);
         this.dynamicMaze = new DynamicMaze(this.engine.babylonScene);
+        
+        // Initialize scenery with random theme
+        const themes = Object.keys(WORLD_THEMES);
+        const randomTheme = themes[Math.floor(Math.random() * themes.length)];
+        this.scenery = new Scenery3D(this.engine.babylonScene, randomTheme);
     }
 
     /**
@@ -62,7 +72,20 @@ export class Game3DScene {
         const config = await loadTiledMap(mapUrl);
         this.mazeWidth = config.width;
         this.mazeHeight = config.height;
+        
+        // Track wall positions for scenery placement
+        for (let y = 0; y < config.height; y++) {
+            for (let x = 0; x < config.width; x++) {
+                if (config.tiles[y][x] === TileType.WALL) {
+                    this.wallPositions.add(`${x}_${y}`);
+                }
+            }
+        }
+        
         this.buildMaze(config);
+        
+        // Add decorative scenery around the maze
+        this.scenery.populateMazeEdges(config.width, config.height, this.wallPositions);
         
         // Focus camera on maze center
         this.engine.focusOn(config.width / 2, config.height / 2);
@@ -397,6 +420,7 @@ export class Game3DScene {
         this.entityRenderer.dispose();
         this.zoneRenderer.dispose();
         this.dynamicMaze.dispose();
+        this.scenery.dispose();
         this.engine.dispose();
     }
 

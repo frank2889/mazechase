@@ -139,10 +139,10 @@ import Layout from "../../layouts/Layout.astro";
             return;
         }
         
-        // Small delay to ensure cookie is set before redirect
+        // Wait for cookie to be set and server to process
         setTimeout(() => {
             window.location.href = "/lobby";
-        }, 100);
+        }, 500);
     };
 
     document.addEventListener('DOMContentLoaded', () => {

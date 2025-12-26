@@ -35,9 +35,9 @@ import GameLayout from "../../layouts/GameLayout.astro";
 
 <style>
     :global(body) {
-        background-color: black;
+        background: linear-gradient(to bottom, #0f172a, #1e1b4b, #0f172a);
         color: white;
-        font-family: Arial, sans-serif;
+        font-family: 'Play', sans-serif;
         margin: 0;
         padding: 0;
         overflow: hidden;
@@ -59,24 +59,28 @@ import GameLayout from "../../layouts/GameLayout.astro";
     }
 
     .nav-button {
-        display: inline-block;
-        padding: 8px 16px;
-        background-color: rgba(42, 42, 46, 0.9);
-        color: #f5f5f6;
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        padding: 10px 18px;
+        background: linear-gradient(135deg, #7c3aed, #8b5cf6);
+        color: white;
         text-decoration: none;
-        border: 2px solid #707070;
-        border-radius: 8px;
+        border: none;
+        border-radius: 10px;
         cursor: pointer;
         font-family: 'Play', sans-serif;
         font-weight: 700;
         font-size: 14px;
         text-align: center;
-        transition: background-color 0.3s ease, border-color 0.3s ease;
+        transition: all 0.3s ease;
+        box-shadow: 0 4px 15px rgba(139, 92, 246, 0.3);
     }
 
     .nav-button:hover {
-        background-color: #3a3a3e;
-        border-color: #888888;
+        background: linear-gradient(135deg, #8b5cf6, #a78bfa);
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(139, 92, 246, 0.4);
     }
 
     #game-container {
@@ -93,6 +97,8 @@ import GameLayout from "../../layouts/GameLayout.astro";
         max-height: 100vh;
         width: auto;
         height: auto;
+        border-radius: 8px;
+        box-shadow: 0 0 40px rgba(139, 92, 246, 0.2);
     }
 
     #the-game canvas {
@@ -101,6 +107,7 @@ import GameLayout from "../../layouts/GameLayout.astro";
         width: auto !important;
         height: auto !important;
         object-fit: contain;
+        border-radius: 8px;
     }
 
     /* Touch Controls */
@@ -125,20 +132,21 @@ import GameLayout from "../../layouts/GameLayout.astro";
         width: 60px;
         height: 60px;
         border-radius: 50%;
-        background: rgba(255, 215, 0, 0.8);
-        border: 3px solid #ffd700;
-        color: #000;
+        background: linear-gradient(135deg, #7c3aed, #8b5cf6);
+        border: 3px solid #a78bfa;
+        color: white;
         font-size: 24px;
         font-weight: bold;
         cursor: pointer;
         touch-action: manipulation;
         -webkit-tap-highlight-color: transparent;
         transition: transform 0.1s, background-color 0.1s;
+        box-shadow: 0 4px 15px rgba(139, 92, 246, 0.4);
     }
 
     .control-btn:active {
         transform: scale(0.9);
-        background: rgba(255, 170, 0, 0.9);
+        background: linear-gradient(135deg, #6d28d9, #7c3aed);
     }
 
     .control-spacer {

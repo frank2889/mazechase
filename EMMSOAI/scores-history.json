@@ -1,69 +1,22 @@
 [
   {
-    "timestamp": "2026-01-01T12:39:43.885Z",
-    "average": 7.125,
+    "timestamp": "2026-01-01T15:10:30.769Z",
+    "average": 8.5,
     "testers": [
       {
         "name": "Yuki",
-        "score": 8,
-        "isExpert": true
-      },
-      {
-        "name": "Marcus",
-        "score": 8,
-        "isExpert": true
-      },
-      {
-        "name": "Elena",
-        "score": 6,
-        "isExpert": true
-      },
-      {
-        "name": "David",
-        "score": 7,
-        "isExpert": true
-      },
-      {
-        "name": "Ava",
-        "score": 8,
-        "isExpert": true
-      },
-      {
-        "name": "Alex",
-        "score": 7,
-        "isExpert": true
-      },
-      {
-        "name": "Kenji",
-        "score": 6,
-        "isExpert": true
-      },
-      {
-        "name": "Marcus",
-        "score": 7,
+        "score": 8.5,
         "isExpert": true
       }
     ]
   },
   {
-    "timestamp": "2026-01-01T12:39:43.898Z",
+    "timestamp": "2026-01-01T15:10:30.774Z",
     "date": "1-1-2026",
     "scores": {
-      "Sofia": 8,
-      "Emma": 8,
-      "Tim": 7,
-      "Sandra": 7,
-      "Peter": 7,
-      "Yuki": 8,
-      "Marcus": 7,
-      "Elena": 6,
-      "David": 7,
-      "Ava": 8,
-      "Grandma Mei": 5,
-      "Alex": 7,
-      "Kenji": 6
+      "Yuki": 8.5
     },
-    "overallAverage": 7,
-    "testerCount": 14
+    "overallAverage": 8.5,
+    "testerCount": 1
   }
 ]

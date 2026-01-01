@@ -141,7 +141,7 @@ export class Game3DScene {
             try {
                 const mazeData = JSON.parse(serverData);
                 console.log('Using server-provided maze data:', mazeData.width, 'x', mazeData.height);
-                this.loadFromServerData(mazeData);
+                await this.loadFromServerData(mazeData);
                 return;
             } catch (e) {
                 console.warn('Failed to parse server maze data, falling back to file:', e);
@@ -150,27 +150,27 @@ export class Game3DScene {
         
         // Fallback to loading from file
         const config = await loadTiledMap(mapUrl);
-        this.loadFromMazeConfig(config);
+        await this.loadFromMazeConfig(config);
     }
     
     /**
      * Load maze directly from server-provided data
      * This is the preferred method - no static JSON files needed
      */
-    loadFromServerData(mazeData: { width: number; height: number; tiles: number[][] }): void {
+    async loadFromServerData(mazeData: { width: number; height: number; tiles: number[][] }): Promise<void> {
         // Server sends tiles in same format as MazeConfig
         const config: MazeConfig = {
             width: mazeData.width,
             height: mazeData.height,
             tiles: mazeData.tiles
         };
-        this.loadFromMazeConfig(config);
+        await this.loadFromMazeConfig(config);
     }
     
     /**
      * Internal method to build maze from config
      */
-    private loadFromMazeConfig(config: MazeConfig): void {
+    private async loadFromMazeConfig(config: MazeConfig): Promise<void> {
         this.mazeWidth = config.width;
         this.mazeHeight = config.height;
         this.mazeConfig = config;
@@ -184,7 +184,7 @@ export class Game3DScene {
             }
         }
         
-        this.buildMaze(config);
+        await this.buildMaze(config);
         
         // Register existing walls with dynamic maze system for collision tracking
         const wallMeshes = this.maze.getWallMeshes();
@@ -237,7 +237,7 @@ export class Game3DScene {
     /**
      * Initialize with a demo maze (for testing)
      */
-    initDemoMaze(): void {
+    async initDemoMaze(): Promise<void> {
         // Create a simple test maze
         const width = 20;
         const height = 15;
@@ -266,7 +266,7 @@ export class Game3DScene {
             }
         }
 
-        this.buildMaze({ width, height, tiles });
+        await this.buildMaze({ width, height, tiles });
 
         // Focus camera on maze center
         this.engine.focusOn(width / 2, height / 2);
@@ -274,8 +274,13 @@ export class Game3DScene {
 
     /**
      * Build maze from config
+     * Now async to preload 3D models (dungeon walls, floors, etc.)
      */
-    buildMaze(config: MazeConfig): void {
+    async buildMaze(config: MazeConfig): Promise<void> {
+        // Preload dungeon models before building
+        const modelsLoaded = await this.maze.preloadModels();
+        console.log(`🏰 Dungeon models loaded: ${modelsLoaded}`);
+        
         this.maze.buildFromTilemap(config);
     }
 

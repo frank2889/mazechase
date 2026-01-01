@@ -260,26 +260,32 @@ export class ModelLoader {
      */
     private async loadWallModels(): Promise<void> {
         const wallTypes = ['straight', 'corner', 'end'] as const;
+        console.log('🧱 Loading wall models from dungeon set...');
         
         for (const type of wallTypes) {
             const path = this.modelManifest.walls[type];
             if (!path) continue;
 
             try {
+                console.log(`  → Checking: ${path}`);
                 const exists = await this.checkModelExists(path);
                 if (exists) {
+                    console.log(`  ✓ Found: ${path}`);
                     const mesh = await this.loadModel(`wall_${type}`, path);
                     if (mesh) {
                         this.wallTemplates.set(type, mesh);
                         mesh.setEnabled(false); // Template - don't render directly
+                        console.log(`  ✅ Loaded wall_${type}`);
                     }
                 } else {
-                    console.log(`⚠️ Wall model not found: ${path} - will use primitive`);
+                    console.log(`  ⚠️ Wall model not found: ${path} - will use primitive`);
                 }
             } catch (error) {
-                console.warn(`Failed to load wall_${type}:`, error);
+                console.warn(`  ❌ Failed to load wall_${type}:`, error);
             }
         }
+        
+        console.log(`🧱 Wall templates loaded: ${this.wallTemplates.size}/${wallTypes.length}`);
     }
 
     /**

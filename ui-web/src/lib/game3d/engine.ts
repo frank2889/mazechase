@@ -1,10 +1,11 @@
 /**
  * Babylon.js Engine Wrapper for MazeChase 3D
  * 
+ * THIRD-PERSON CAMERA following behind the bouncing ball!
  * This module provides the core 3D engine setup and utilities.
  */
 
-import { Engine, Scene, ArcRotateCamera, HemisphericLight, PointLight, Vector3, Color4, Color3 } from '@babylonjs/core';
+import { Engine, Scene, FollowCamera, HemisphericLight, PointLight, Vector3, Color4, Color3, Mesh } from '@babylonjs/core';
 
 export interface GameEngineConfig {
     canvas: HTMLCanvasElement;
@@ -14,8 +15,9 @@ export interface GameEngineConfig {
 export class GameEngine {
     private engine: Engine;
     private scene: Scene;
-    private camera: ArcRotateCamera;
+    private camera: FollowCamera;
     private isRunning: boolean = false;
+    private targetMesh: Mesh | null = null;
 
     constructor(config: GameEngineConfig) {
         // Create the Babylon.js engine
@@ -28,29 +30,22 @@ export class GameEngine {
         this.scene = new Scene(this.engine);
         this.scene.clearColor = new Color4(0.05, 0.05, 0.1, 1); // Dark blue background
 
-        // Create isometric-style camera
-        this.camera = new ArcRotateCamera(
-            'mainCamera',
-            -Math.PI / 4,      // Alpha (horizontal rotation)
-            Math.PI / 3,       // Beta (vertical angle - about 60 degrees)
-            50,                // Radius (distance from target)
-            new Vector3(15, 0, 10), // Target (center of typical maze)
+        // THIRD-PERSON FollowCamera - follows behind the player ball!
+        this.camera = new FollowCamera(
+            'followCamera',
+            new Vector3(0, 10, -10), // Initial position
             this.scene
         );
         
-        // Camera limits for isometric feel
-        this.camera.lowerBetaLimit = Math.PI / 4;   // Min 45 degrees
-        this.camera.upperBetaLimit = Math.PI / 2.5; // Max ~72 degrees
-        this.camera.lowerRadiusLimit = 20;
-        this.camera.upperRadiusLimit = 100;
+        // Follow camera settings for smooth third-person view
+        this.camera.radius = 12;           // Distance behind the ball
+        this.camera.heightOffset = 8;      // Height above the ball
+        this.camera.rotationOffset = 180;  // Look at the ball from behind
+        this.camera.cameraAcceleration = 0.05;  // Smooth follow speed
+        this.camera.maxCameraSpeed = 20;   // Max camera movement speed
         
-        // Enable zoom with mouse wheel only
-        this.camera.attachControl(config.canvas, false);
-        this.camera.inputs.removeByType('ArcRotateCameraPointersInput'); // Disable mouse drag
-        this.camera.inputs.removeByType('ArcRotateCameraKeyboardMoveInput'); // Disable keyboard
-        
-        // Custom zoom handler for smoother control
-        this.setupZoomControls(config.canvas);
+        // Set field of view for better perspective
+        this.camera.fov = 1.0;
 
         // Add ambient lighting
         const ambientLight = new HemisphericLight(
@@ -116,8 +111,16 @@ export class GameEngine {
         return this.engine;
     }
 
-    get mainCamera(): ArcRotateCamera {
+    get mainCamera(): FollowCamera {
         return this.camera;
+    }
+
+    /**
+     * Set the target mesh for the camera to follow (the player ball!)
+     */
+    setFollowTarget(mesh: Mesh): void {
+        this.targetMesh = mesh;
+        this.camera.lockedTarget = mesh;
     }
 
     /**
@@ -157,40 +160,37 @@ export class GameEngine {
     }
 
     /**
-     * Focus camera on a specific position
+     * Focus camera on a specific position (creates temp target)
      */
     focusOn(x: number, z: number): void {
-        this.camera.setTarget(new Vector3(x, 0, z));
+        // For FollowCamera, we need a target mesh - just set initial position
+        this.camera.position = new Vector3(x, 10, z - 10);
     }
 
     /**
-     * Smoothly follow a target position
+     * Camera now automatically follows - these are kept for compatibility
      */
     private targetFollowPos: Vector3 | null = null;
     private followLerpSpeed: number = 3;
 
     followTarget(x: number, z: number): void {
+        // FollowCamera handles this automatically via lockedTarget
         this.targetFollowPos = new Vector3(x, 0, z);
     }
 
     /**
-     * Update camera follow (call in render loop)
+     * Update camera follow - FollowCamera handles this automatically
      */
     updateCameraFollow(deltaTime: number): void {
-        if (!this.targetFollowPos) return;
-        
-        const currentTarget = this.camera.target;
-        const lerpFactor = Math.min(1, this.followLerpSpeed * deltaTime);
-        
-        const newTarget = Vector3.Lerp(currentTarget, this.targetFollowPos, lerpFactor);
-        this.camera.setTarget(newTarget);
+        // FollowCamera auto-follows lockedTarget - no manual update needed
     }
 
     /**
-     * Set camera follow speed
+     * Set camera follow speed (adjusts acceleration)
      */
     setFollowSpeed(speed: number): void {
         this.followLerpSpeed = speed;
+        this.camera.cameraAcceleration = speed * 0.02;
     }
 
     /**
@@ -207,59 +207,17 @@ export class GameEngine {
         canvas.addEventListener('wheel', (event) => {
             event.preventDefault();
             
-            const zoomSpeed = 0.1;
+            const zoomSpeed = 0.5;
             const delta = event.deltaY > 0 ? 1 : -1;
-            const newRadius = this.camera.radius + delta * zoomSpeed * this.camera.radius;
-            
-            // Clamp to limits
-            this.camera.radius = Math.max(
-                this.camera.lowerRadiusLimit!,
-                Math.min(this.camera.upperRadiusLimit!, newRadius)
-            );
+            this.camera.radius = Math.max(5, Math.min(30, this.camera.radius + delta * zoomSpeed));
         }, { passive: false });
-        
-        // Touch pinch zoom for mobile
-        let initialPinchDistance = 0;
-        let initialRadius = 0;
-        
-        canvas.addEventListener('touchstart', (event) => {
-            if (event.touches.length === 2) {
-                initialPinchDistance = this.getTouchDistance(event.touches);
-                initialRadius = this.camera.radius;
-            }
-        }, { passive: true });
-        
-        canvas.addEventListener('touchmove', (event) => {
-            if (event.touches.length === 2) {
-                const currentDistance = this.getTouchDistance(event.touches);
-                const scale = initialPinchDistance / currentDistance;
-                const newRadius = initialRadius * scale;
-                
-                this.camera.radius = Math.max(
-                    this.camera.lowerRadiusLimit!,
-                    Math.min(this.camera.upperRadiusLimit!, newRadius)
-                );
-            }
-        }, { passive: true });
     }
 
     /**
-     * Get distance between two touch points
-     */
-    private getTouchDistance(touches: TouchList): number {
-        const dx = touches[0].clientX - touches[1].clientX;
-        const dy = touches[0].clientY - touches[1].clientY;
-        return Math.sqrt(dx * dx + dy * dy);
-    }
-
-    /**
-     * Set camera zoom level (radius)
+     * Set camera zoom level (radius/distance from player)
      */
     setZoom(radius: number): void {
-        this.camera.radius = Math.max(
-            this.camera.lowerRadiusLimit!,
-            Math.min(this.camera.upperRadiusLimit!, radius)
-        );
+        this.camera.radius = Math.max(5, Math.min(30, radius));
     }
 
     /**

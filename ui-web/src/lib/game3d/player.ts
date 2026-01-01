@@ -521,6 +521,13 @@ export class Player3D {
     }
 
     /**
+     * Get the mesh for camera targeting
+     */
+    getMesh(): Mesh {
+        return this.mesh;
+    }
+
+    /**
      * Move to a specific tile position (with smooth interpolation)
      */
     moveTo(tileX: number, tileY: number): void {

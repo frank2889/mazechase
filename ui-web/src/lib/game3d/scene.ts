@@ -218,10 +218,20 @@ export class Game3DScene {
     }
 
     /**
-     * Set which player the camera should follow
+     * Set which player the camera should follow (THIRD-PERSON!)
      */
     setFollowPlayer(playerId: string): void {
         this.followPlayerId = playerId;
+        
+        // Get the player and attach camera to their mesh
+        const player = this.players.get(playerId);
+        if (player) {
+            const mesh = player.getMesh();
+            if (mesh) {
+                this.engine.setFollowTarget(mesh);
+                console.log(`🎥 Camera now following: ${playerId}`);
+            }
+        }
     }
 
     /**

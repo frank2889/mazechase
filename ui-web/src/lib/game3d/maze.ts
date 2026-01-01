@@ -158,6 +158,7 @@ export class Maze3D {
      * Create unique materials for each quadrant
      * SIMPLIFIED: All quadrants use same theme now
      * SPRINT 2: Enhanced with metallic reflections and better texturing
+     * NOW USES TEXTURE SPRITES from /sprites/ folder!
      */
     private createQuadrantMaterials(): void {
         // Use only unified theme - all quadrants are the same now
@@ -166,17 +167,32 @@ export class Maze3D {
         for (const theme of allThemes) {
             const key = theme.name;
             
-            // Wall material with ENHANCED metallic glow (Sprint 2 - Yuki visual upgrade)
+            // Wall material with TEXTURE from /sprites/wall_tile.png
             const wallMat = new StandardMaterial(`wall_${key}`, this.scene);
-            wallMat.diffuseColor = theme.wallPrimary;
+            try {
+                const wallTexture = new Texture('/sprites/wall_tile.png', this.scene);
+                wallTexture.uScale = 1;
+                wallTexture.vScale = 1;
+                wallMat.diffuseTexture = wallTexture;
+            } catch (e) {
+                console.warn('Wall texture not loaded, using color fallback');
+                wallMat.diffuseColor = theme.wallPrimary;
+            }
             wallMat.specularColor = new Color3(0.6, 0.4, 0.8); // Metallic purple reflection
             wallMat.emissiveColor = theme.wallEmissive;
             wallMat.specularPower = 64; // Sharper highlights for glossy look
-            wallMat.alpha = 0.95; // Slight transparency for depth
             
-            // Floor material with subtle grip texture look
+            // Floor material with TEXTURE from /sprites/floor_tile.png
             const floorMat = new StandardMaterial(`floor_${key}`, this.scene);
-            floorMat.diffuseColor = theme.floorColor;
+            try {
+                const floorTexture = new Texture('/sprites/floor_tile.png', this.scene);
+                floorTexture.uScale = 1;
+                floorTexture.vScale = 1;
+                floorMat.diffuseTexture = floorTexture;
+            } catch (e) {
+                console.warn('Floor texture not loaded, using color fallback');
+                floorMat.diffuseColor = theme.floorColor;
+            }
             floorMat.emissiveColor = theme.floorEmissive;
             floorMat.specularColor = new Color3(0.15, 0.1, 0.2); // Subtle reflection
             floorMat.specularPower = 8; // Matte finish (rough for grip)
@@ -263,6 +279,9 @@ export class Maze3D {
         // Sprint 4: Collect pellet positions first for instancing
         const pelletPositions: Vector3[] = [];
         const pelletKeys: string[] = [];
+        
+        // SPRINT 6: Collect all potential pellet positions first, then scatter
+        const allPelletCandidates: { x: number; y: number; pos: Vector3 }[] = [];
 
         // Process each tile
         for (let y = 0; y < height; y++) {
@@ -275,18 +294,31 @@ export class Maze3D {
                         this.createWall(x, y, pos);
                         break;
                     case TileType.PELLET:
-                        if (this.usePelletInstancing) {
-                            // Collect for batch instancing
-                            pelletPositions.push(new Vector3(pos.x, TILE_SIZE_3D * 0.2, pos.z));
-                            pelletKeys.push(`${x}_${y}`);
-                        } else {
-                            this.createPellet(x, y, pos);
-                        }
+                        // Collect candidates, don't create yet
+                        allPelletCandidates.push({ x, y, pos });
                         break;
                     case TileType.POWER_UP:
                         this.createPowerUp(x, y, pos);
                         break;
                 }
+            }
+        }
+        
+        // SPRINT 6: Scatter pellets - only keep 50-100 (not 1000+)
+        // Shuffle and take first N pellets for nice distribution
+        const MAX_PELLETS = 80;
+        const shuffled = allPelletCandidates.sort(() => Math.random() - 0.5);
+        const selectedPellets = shuffled.slice(0, Math.min(MAX_PELLETS, shuffled.length));
+        
+        console.log(`[Maze3D] Scattered ${selectedPellets.length} pellets from ${allPelletCandidates.length} candidates`);
+        
+        // Now create the selected pellets
+        for (const pellet of selectedPellets) {
+            if (this.usePelletInstancing) {
+                pelletPositions.push(new Vector3(pellet.pos.x, TILE_SIZE_3D * 0.2, pellet.pos.z));
+                pelletKeys.push(`${pellet.x}_${pellet.y}`);
+            } else {
+                this.createPellet(pellet.x, pellet.y, pellet.pos);
             }
         }
         

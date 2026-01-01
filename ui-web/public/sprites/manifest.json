@@ -1,0 +1,15 @@
+{
+  "generated": "2025-12-27T20:30:00.000000",
+  "note": "Simplified Dec 2025 - only 3 power-ups now",
+  "sprites": {
+    "runner": "/sprites/runner.png",
+    "chaser_1": "/sprites/chaser_cyan.png",
+    "chaser_2": "/sprites/chaser_magenta.png",
+    "chaser_3": "/sprites/chaser_green.png",
+    "powerup_classic": "/sprites/powerup_classic.png",
+    "powerup_speed": "/sprites/powerup_speed.png",
+    "powerup_magnet": "/sprites/powerup_magnet.png",
+    "wall_tile": "/sprites/wall_tile.png",
+    "floor_tile": "/sprites/floor_tile.png"
+  }
+}

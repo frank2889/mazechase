@@ -1,0 +1,84 @@
+@import "tailwindcss";
+@import "./accessibility.css";
+@import "./animations.css";
+@import "./performance.css";
+@import "./monetization.css";
+@import "./sprint2-fixes.css";
+@import "./sprint2-visual.css";
+@import "./ui-improvements.css";
+
+/* MazeChase Custom Theme Colors */
+@theme {
+    /* Primary brand colors - Purple/Magenta */
+    --color-brand-primary: #8B5CF6;
+    --color-brand-light: #A78BFA;
+    --color-brand-dark: #7C3AED;
+    
+    /* Accent colors */
+    --color-accent-cyan: #22D3EE;
+    --color-accent-magenta: #EC4899;
+    --color-accent-lime: #84CC16;
+    --color-accent-orange: #F97316;
+    
+    /* Game player colors */
+    --color-runner: #22D3EE;      /* Cyan - the runner */
+    --color-chaser-1: #EC4899;    /* Magenta */
+    --color-chaser-2: #8B5CF6;    /* Purple */
+    --color-chaser-3: #F97316;    /* Orange */
+    
+    /* UI Surface colors */
+    --color-surface-dark: #0F0F1A;
+    --color-surface-base: #1A1A2E;
+    --color-surface-card: #252542;
+    --color-surface-border: #3D3D5C;
+}
+
+/* Base body styling */
+body {
+    background: linear-gradient(180deg, #0F0F1A 0%, #1A1A2E 50%, #0F0F1A 100%);
+    min-height: 100vh;
+}
+
+/* ═══════════════════════════════════════════════════════════════════
+   Sprint 7: Neon Night Theme - Bold contrasting colors
+   Toggle with [data-theme="neon-night"] on <html> or <body>
+   ═══════════════════════════════════════════════════════════════════ */
+[data-theme="neon-night"] {
+    /* Override primary colors with neon variants */
+    --color-brand-primary: #FF00FF;     /* Hot magenta */
+    --color-brand-light: #FF66FF;
+    --color-brand-dark: #CC00CC;
+    
+    /* Neon accent colors */
+    --color-accent-cyan: #00FFFF;       /* Electric cyan */
+    --color-accent-magenta: #FF00FF;    /* Hot pink */
+    --color-accent-lime: #00FF00;       /* Neon green */
+    --color-accent-orange: #FF6600;     /* Neon orange */
+    
+    /* Player colors - high contrast */
+    --color-runner: #00FFFF;            /* Electric cyan */
+    --color-chaser-1: #FF00FF;          /* Hot magenta */
+    --color-chaser-2: #FF00AA;          /* Neon pink */
+    --color-chaser-3: #FF6600;          /* Neon orange */
+    
+    /* Dark surfaces with subtle glow */
+    --color-surface-dark: #050510;
+    --color-surface-base: #0A0A1F;
+    --color-surface-card: #15152A;
+    --color-surface-border: #3300FF40;
+    
+    /* Add glow to body */
+    background: radial-gradient(ellipse at center, #0A0A2F 0%, #050510 100%);
+}
+
+/* Neon glow effects for UI elements */
+[data-theme="neon-night"] button,
+[data-theme="neon-night"] .card {
+    box-shadow: 0 0 10px var(--color-brand-primary), 
+                0 0 20px color-mix(in srgb, var(--color-brand-primary) 50%, transparent);
+}
+
+[data-theme="neon-night"] .game-score {
+    text-shadow: 0 0 10px var(--color-accent-cyan),
+                 0 0 20px var(--color-accent-cyan);
+}

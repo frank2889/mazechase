@@ -1,0 +1,13 @@
+services:
+  mazechase:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    environment:
+      LOBBY_LIMIT: 1
+    ports:
+        - "8080:5000"
+    volumes:
+      - ./appdata/:/app/appdata/
+    restart: unless-stopped
+

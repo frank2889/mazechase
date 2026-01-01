@@ -1,0 +1,375 @@
+/* 
+ * Sprint 2 Visual Upgrades - UI Overhaul
+ * Based on Yuki's Visual Design Analysis
+ * 
+ * Key improvements:
+ * - Enhanced button designs with hover/click animations
+ * - Score/HUD styling with bold sans-serif
+ * - Panels with blur and pastel overlay
+ * - Better focus states and accessibility
+ */
+
+/* ============================================
+   BUTTON REDESIGNS - Rounded with animations
+   ============================================ */
+
+/* Primary action buttons - Yuki recommendation: "rounded rectangles with hover glow" */
+.btn-action,
+.btn-play,
+.btn-start,
+.game-button {
+  /* Rounded pill shape */
+  border-radius: 16px;
+  padding: 16px 32px;
+  
+  /* Gradient background */
+  background: linear-gradient(135deg, #8B5CF6 0%, #A78BFA 50%, #C4B5FD 100%);
+  color: #FFFFFF;
+  font-weight: 700;
+  font-size: 18px;
+  letter-spacing: 0.5px;
+  
+  /* Border glow */
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  box-shadow: 
+    0 4px 15px rgba(139, 92, 246, 0.4),
+    inset 0 1px 0 rgba(255, 255, 255, 0.2);
+  
+  /* Smooth transitions */
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  transform: translateY(0);
+  
+  /* Prevent selection */
+  user-select: none;
+  cursor: pointer;
+}
+
+.btn-action:hover,
+.btn-play:hover,
+.btn-start:hover,
+.game-button:hover {
+  /* Lift up effect */
+  transform: translateY(-3px);
+  
+  /* Brighter glow */
+  box-shadow: 
+    0 8px 25px rgba(139, 92, 246, 0.6),
+    0 0 30px rgba(167, 139, 250, 0.4),
+    inset 0 1px 0 rgba(255, 255, 255, 0.3);
+  
+  /* Slightly brighter */
+  background: linear-gradient(135deg, #9D6FF7 0%, #B794FA 50%, #D4C5FD 100%);
+}
+
+.btn-action:active,
+.btn-play:active,
+.btn-start:active,
+.game-button:active {
+  /* Press down effect */
+  transform: translateY(1px);
+  
+  /* Reduced shadow on press */
+  box-shadow: 
+    0 2px 10px rgba(139, 92, 246, 0.4),
+    inset 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+/* Secondary buttons - outlined style */
+.btn-outline,
+.btn-secondary-game {
+  background: transparent;
+  border: 2px solid rgba(139, 92, 246, 0.6);
+  color: #A78BFA;
+  border-radius: 12px;
+  padding: 12px 24px;
+  
+  transition: all 0.2s ease;
+}
+
+.btn-outline:hover,
+.btn-secondary-game:hover {
+  background: rgba(139, 92, 246, 0.15);
+  border-color: #A78BFA;
+  color: #C4B5FD;
+}
+
+/* ============================================
+   SCORE & HUD STYLING - Bold sans-serif
+   ============================================ */
+
+/* Score container */
+.score-display,
+.game-score,
+.hud-score {
+  font-family: 'Inter', 'Segoe UI', system-ui, sans-serif;
+  font-weight: 800;
+  font-size: 28px;
+  color: #FFE135;
+  
+  /* Glow effect */
+  text-shadow: 
+    0 0 10px rgba(255, 225, 53, 0.5),
+    0 2px 4px rgba(0, 0, 0, 0.5);
+  
+  /* Pill background */
+  background: rgba(0, 0, 0, 0.6);
+  padding: 8px 20px;
+  border-radius: 20px;
+  border: 2px solid rgba(255, 225, 53, 0.3);
+}
+
+/* Score popup animation */
+@keyframes scorePopup {
+  0% {
+    transform: scale(0.5) translateY(0);
+    opacity: 0;
+  }
+  50% {
+    transform: scale(1.2) translateY(-10px);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(1) translateY(-20px);
+    opacity: 0;
+  }
+}
+
+.score-popup {
+  animation: scorePopup 0.6s ease-out forwards;
+  font-weight: 800;
+  color: #FFE135;
+  text-shadow: 0 0 10px rgba(255, 225, 53, 0.8);
+}
+
+/* Timer styling */
+.game-timer,
+.hud-timer {
+  font-family: 'JetBrains Mono', 'Fira Code', monospace;
+  font-weight: 700;
+  font-size: 24px;
+  color: #22D3EE;
+  letter-spacing: 2px;
+  
+  text-shadow: 0 0 8px rgba(34, 211, 238, 0.5);
+  
+  background: rgba(0, 0, 0, 0.6);
+  padding: 6px 16px;
+  border-radius: 8px;
+  border: 2px solid rgba(34, 211, 238, 0.3);
+}
+
+/* ============================================
+   PANELS & MODALS - Blur + pastel overlay
+   ============================================ */
+
+/* Game panels */
+.game-panel,
+.modal-game,
+.popup-panel {
+  /* Blur background */
+  background: rgba(26, 26, 46, 0.85);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  
+  /* Border */
+  border: 3px solid rgba(139, 92, 246, 0.4);
+  border-radius: 20px;
+  
+  /* Shadow */
+  box-shadow: 
+    0 10px 40px rgba(0, 0, 0, 0.5),
+    0 0 30px rgba(139, 92, 246, 0.2);
+  
+  /* Padding */
+  padding: 24px;
+  
+  /* Pastel overlay gradient */
+  position: relative;
+  overflow: hidden;
+}
+
+.game-panel::before,
+.modal-game::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, 
+    #8B5CF6 0%, 
+    #EC4899 25%, 
+    #22D3EE 50%, 
+    #84CC16 75%, 
+    #8B5CF6 100%
+  );
+  background-size: 200% 100%;
+  animation: gradientSlide 3s ease infinite;
+}
+
+@keyframes gradientSlide {
+  0%, 100% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+}
+
+/* Panel headers */
+.panel-header,
+.modal-header {
+  font-size: 24px;
+  font-weight: 700;
+  color: #FFFFFF;
+  margin-bottom: 16px;
+  padding-bottom: 12px;
+  border-bottom: 2px solid rgba(139, 92, 246, 0.3);
+}
+
+/* ============================================
+   POWER-UP INDICATORS - Enhanced visibility
+   ============================================ */
+
+.power-up-active {
+  position: relative;
+  padding: 8px 16px;
+  border-radius: 12px;
+  
+  animation: powerUpPulse 1s ease-in-out infinite;
+}
+
+@keyframes powerUpPulse {
+  0%, 100% {
+    box-shadow: 0 0 10px currentColor;
+  }
+  50% {
+    box-shadow: 0 0 25px currentColor, 0 0 40px currentColor;
+  }
+}
+
+.power-up-speed { 
+  background: rgba(249, 115, 22, 0.3); 
+  border: 2px solid #F97316;
+  color: #FDBA74;
+}
+
+.power-up-invincible { 
+  background: rgba(34, 211, 238, 0.3); 
+  border: 2px solid #22D3EE;
+  color: #A5F3FC;
+}
+
+.power-up-magnet { 
+  background: rgba(139, 92, 246, 0.3); 
+  border: 2px solid #8B5CF6;
+  color: #C4B5FD;
+}
+
+/* ============================================
+   PLAYER NAME TAGS - Enhanced readability
+   ============================================ */
+
+.player-nametag {
+  font-family: 'Inter', system-ui, sans-serif;
+  font-weight: 600;
+  font-size: 14px;
+  
+  background: rgba(0, 0, 0, 0.75);
+  padding: 4px 12px;
+  border-radius: 8px;
+  
+  /* Border matches player color */
+  border: 2px solid currentColor;
+  
+  /* Shadow for depth */
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
+  
+  /* Prevent wrapping */
+  white-space: nowrap;
+}
+
+/* ============================================
+   MENU TRANSITIONS - Smooth entry/exit
+   ============================================ */
+
+.menu-enter {
+  animation: menuSlideIn 0.3s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+
+.menu-exit {
+  animation: menuSlideOut 0.2s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+
+@keyframes menuSlideIn {
+  from {
+    opacity: 0;
+    transform: translateY(-20px) scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes menuSlideOut {
+  from {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+  to {
+    opacity: 0;
+    transform: translateY(10px) scale(0.98);
+  }
+}
+
+/* ============================================
+   FOCUS INDICATORS - Accessibility
+   ============================================ */
+
+/* Enhanced focus for game elements */
+.game-button:focus-visible,
+.btn-action:focus-visible,
+.menu-item:focus-visible {
+  outline: 3px solid #22D3EE;
+  outline-offset: 3px;
+  
+  /* Extra glow for visibility */
+  box-shadow: 
+    0 0 0 6px rgba(34, 211, 238, 0.3),
+    0 4px 15px rgba(34, 211, 238, 0.4);
+}
+
+/* ============================================
+   LOADING STATES - Polished animations
+   ============================================ */
+
+.loading-spinner-game {
+  width: 48px;
+  height: 48px;
+  border: 4px solid rgba(139, 92, 246, 0.2);
+  border-top-color: #8B5CF6;
+  border-radius: 50%;
+  animation: spinSmooth 0.8s linear infinite;
+}
+
+@keyframes spinSmooth {
+  to { transform: rotate(360deg); }
+}
+
+.loading-dots {
+  display: flex;
+  gap: 8px;
+}
+
+.loading-dots span {
+  width: 12px;
+  height: 12px;
+  background: #8B5CF6;
+  border-radius: 50%;
+  animation: dotBounce 0.6s ease-in-out infinite;
+}
+
+.loading-dots span:nth-child(2) { animation-delay: 0.1s; }
+.loading-dots span:nth-child(3) { animation-delay: 0.2s; }
+
+@keyframes dotBounce {
+  0%, 100% { transform: translateY(0); opacity: 0.5; }
+  50% { transform: translateY(-8px); opacity: 1; }
+}

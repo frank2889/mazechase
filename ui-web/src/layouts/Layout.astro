@@ -1,0 +1,106 @@
+---
+import '../styles/global.css'
+
+import chaserOrange from "../assets/chaser-orange.png"
+import chaserMagenta from "../assets/chaser-magenta.png"
+import chaserPurple from "../assets/chaser-purple.png"
+import chaserLime from "../assets/chaser-lime.png"
+import runner from "../assets/runner.png"
+
+import {Image} from 'astro:assets';
+
+const {title = ""} = Astro.props;
+let pageTitle = "MazeChase"
+
+if (title) {
+    pageTitle += ` | ${title}`
+}
+---
+
+<html lang="en">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width"/>
+    <link rel="icon" type="image/x-icon" href="/favicon.ico"/>
+    <meta name="generator" content={Astro.generator}/>
+    <title>{pageTitle}</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Play:wght@400;700&display=swap" rel="stylesheet">
+</head>
+
+<body>
+
+<slot/>
+
+<Image id="orange-chaser" src={chaserOrange} alt="Chaser Orange" width="150" height="150"/>
+<Image id="magenta-chaser" src={chaserMagenta} alt="Chaser Magenta" width="150" height="150"/>
+<Image id="lime-chaser" src={chaserLime} alt="Chaser Lime" width="150" height="150"/>
+<Image id="purple-chaser" src={chaserPurple} alt="Chaser Purple" width="150" height="150"/>
+<Image id="runner" src={runner} alt="Runner" width="175" height="175"/>
+
+</body>
+
+</html>
+
+<style>
+    * {
+        font-family: "Play", sans-serif !important;
+    }
+
+    body {
+        background-color: #000;
+    }
+
+    h2 {
+        font-family: "Press Start 2P", system-ui;
+        font-weight: 400;
+        font-style: normal;
+        color: #FFF;
+        z-index: 1;
+    }
+
+
+    #runner {
+        position: absolute;
+        bottom: 400px;
+        left: 300px;
+        -webkit-transform: scaleX(-1);
+        transform: scaleX(-1);
+        z-index: -1;
+    }
+
+    #magenta-chaser {
+        position: absolute;
+        top: 100px;
+        left: 200px;
+        -webkit-transform: scaleX(-1);
+        transform: scaleX(-1);
+        z-index: -1;
+    }
+
+    #orange-chaser {
+        position: absolute;
+        top: 150px;
+        right: 300px;
+        z-index: -1;
+    }
+
+    #purple-chaser {
+        position: absolute;
+        bottom: 50px;
+        left: 100px;
+        -webkit-transform: scaleX(-1);
+        transform: scaleX(-1);
+        z-index: -1;
+    }
+
+    #lime-chaser {
+        position: absolute;
+        bottom: 100px;
+        right: 50px;
+        z-index: -1;
+    }
+
+</style>

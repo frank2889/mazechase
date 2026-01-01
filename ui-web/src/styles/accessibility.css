@@ -1,0 +1,611 @@
+/* 
+ * 🎯 Accessibility & Readability Fixes
+ * Sprint 1 - Based on AI Tester Feedback
+ * 
+ * Issues Fixed:
+ * - Text too small for older players (Sandra)
+ * - Poor contrast in some areas
+ * - Better touch targets for mobile
+ * 
+ * Sprint 5 (Dec 30 2025) - AI Tester Evaluation:
+ * - Added .large-text mode for Grandma Mei's suggestion
+ * - Bigger fonts and buttons for seniors
+ */
+
+/* ============================================
+   BASE FONT SIZE - Larger for readability
+   ============================================ */
+:root {
+  /* Increase base font size for better readability */
+  --font-size-base: 16px;
+  --font-size-sm: 14px;
+  --font-size-md: 18px;
+  --font-size-lg: 22px;
+  --font-size-xl: 28px;
+  --font-size-2xl: 36px;
+  --font-size-3xl: 48px;
+  
+  /* Touch target minimums */
+  --touch-target-min: 44px;
+  
+  /* High contrast colors */
+  --text-primary: #FFFFFF;
+  --text-secondary: #E0E0E0;
+  --text-muted: #A0A0A0;
+}
+
+/* ============================================
+   LARGE TEXT MODE - AI Tester: Grandma Mei
+   Add class="large-text" to <html> for bigger fonts
+   ============================================ */
+html.large-text {
+  --font-size-base: 20px;
+  --font-size-sm: 18px;
+  --font-size-md: 24px;
+  --font-size-lg: 28px;
+  --font-size-xl: 36px;
+  --font-size-2xl: 44px;
+  --font-size-3xl: 56px;
+  --touch-target-min: 56px;
+}
+
+html.large-text button,
+html.large-text .btn {
+  padding: 16px 32px;
+  min-height: 56px;
+  font-size: var(--font-size-lg);
+}
+
+/* ============================================
+   TYPOGRAPHY - Larger, clearer text
+   ============================================ */
+body {
+  font-size: var(--font-size-base);
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Headings - larger and bolder */
+h1 {
+  font-size: var(--font-size-3xl);
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+
+h2 {
+  font-size: var(--font-size-2xl);
+  font-weight: 700;
+}
+
+h3 {
+  font-size: var(--font-size-xl);
+  font-weight: 600;
+}
+
+h4 {
+  font-size: var(--font-size-lg);
+  font-weight: 600;
+}
+
+/* Paragraph text */
+p {
+  font-size: var(--font-size-md);
+  line-height: 1.7;
+}
+
+/* Small text - not too small! */
+.text-sm, small {
+  font-size: var(--font-size-sm) !important;
+}
+
+/* ============================================
+   BUTTONS - Larger touch targets
+   ============================================ */
+button, 
+.btn,
+[role="button"],
+input[type="button"],
+input[type="submit"] {
+  min-height: var(--touch-target-min);
+  min-width: var(--touch-target-min);
+  padding: 12px 24px;
+  font-size: var(--font-size-md);
+  font-weight: 600;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+button:hover, .btn:hover {
+  transform: translateY(-2px);
+}
+
+button:active, .btn:active {
+  transform: translateY(0);
+}
+
+/* Primary button - high contrast */
+.btn-primary {
+  background: linear-gradient(135deg, #22D3EE, #06B6D4);
+  color: #000000;
+  font-weight: 700;
+  text-shadow: none;
+}
+
+/* ============================================
+   GAME HUD - Larger, clearer
+   ============================================ */
+.game-hud {
+  font-size: var(--font-size-lg);
+}
+
+.game-hud .score,
+.game-hud .timer,
+.game-hud .pellet-count {
+  font-size: var(--font-size-xl);
+  font-weight: 700;
+  text-shadow: 2px 2px 4px rgba(0,0,0,0.8);
+}
+
+.game-hud .label {
+  font-size: var(--font-size-md);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+/* ============================================
+   INPUT FIELDS - Larger and clearer
+   ============================================ */
+input[type="text"],
+input[type="email"],
+input[type="password"],
+input[type="number"],
+textarea,
+select {
+  min-height: var(--touch-target-min);
+  padding: 12px 16px;
+  font-size: var(--font-size-md);
+  border-radius: 8px;
+  border: 2px solid var(--color-surface-border, #3D3D5C);
+  background: var(--color-surface-card, #252542);
+  color: var(--text-primary);
+}
+
+input:focus, textarea:focus, select:focus {
+  outline: 3px solid var(--color-accent-cyan, #22D3EE);
+  outline-offset: 2px;
+}
+
+/* Placeholder text - good contrast */
+::placeholder {
+  color: var(--text-muted);
+  opacity: 1;
+}
+
+/* ============================================
+   SHOP & MONETIZATION - Clear pricing
+   ============================================ */
+.price {
+  font-size: var(--font-size-xl);
+  font-weight: 700;
+  color: #22D3EE;
+}
+
+.price-original {
+  font-size: var(--font-size-md);
+  text-decoration: line-through;
+  color: var(--text-muted);
+}
+
+.discount-badge {
+  font-size: var(--font-size-sm);
+  font-weight: 700;
+  padding: 4px 10px;
+  background: #10B981;
+  color: #000;
+  border-radius: 20px;
+}
+
+/* Product cards - clear hierarchy */
+.product-card h3 {
+  font-size: var(--font-size-lg);
+  margin-bottom: 8px;
+}
+
+.product-card p {
+  font-size: var(--font-size-base);
+  color: var(--text-secondary);
+}
+
+/* ============================================
+   ACCESSIBILITY - Focus states
+   ============================================ */
+:focus-visible {
+  outline: 3px solid #22D3EE;
+  outline-offset: 3px;
+}
+
+/* Skip link for keyboard navigation */
+.skip-link {
+  position: absolute;
+  top: -100px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: #22D3EE;
+  color: #000;
+  padding: 12px 24px;
+  border-radius: 8px;
+  font-weight: 600;
+  z-index: 10000;
+  transition: top 0.2s ease;
+}
+
+.skip-link:focus {
+  top: 10px;
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+  :root {
+    --text-primary: #FFFFFF;
+    --text-secondary: #FFFFFF;
+    --color-surface-border: #FFFFFF;
+  }
+  
+  button, .btn {
+    border: 2px solid #FFFFFF;
+  }
+}
+
+/* Reduced motion for accessibility */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* ============================================
+   MOBILE RESPONSIVE - Larger touch targets
+   ============================================ */
+@media (max-width: 768px) {
+  :root {
+    --font-size-base: 18px;
+    --touch-target-min: 48px;
+  }
+  
+  /* Even larger buttons on mobile */
+  button, .btn {
+    min-height: 52px;
+    padding: 14px 28px;
+    font-size: 18px;
+  }
+  
+  /* Larger text on mobile */
+  h1 { font-size: 32px; }
+  h2 { font-size: 26px; }
+  h3 { font-size: 22px; }
+  p { font-size: 18px; }
+  
+  /* More spacing between interactive elements */
+  .btn + .btn {
+    margin-top: 12px;
+  }
+}
+
+/* ============================================
+   DIFFICULTY SELECTOR - Clear options
+   ============================================ */
+.difficulty-option {
+  padding: 16px 24px;
+  font-size: var(--font-size-lg);
+  border-radius: 12px;
+  min-height: 60px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.difficulty-easy {
+  background: linear-gradient(135deg, #10B981, #059669);
+  color: #000;
+}
+
+.difficulty-medium {
+  background: linear-gradient(135deg, #F59E0B, #D97706);
+  color: #000;
+}
+
+.difficulty-hard {
+  background: linear-gradient(135deg, #EF4444, #DC2626);
+  color: #FFF;
+}
+
+.difficulty-option .label {
+  font-weight: 700;
+  font-size: var(--font-size-lg);
+}
+
+.difficulty-option .description {
+  font-size: var(--font-size-sm);
+  opacity: 0.9;
+}
+/* ============================================
+   SENIOR-FRIENDLY MODE (Grandma Mei - 72yr)
+   Larger text, better contrast, slower animations
+   ============================================ */
+
+/* Accessibility toggle in settings */
+.accessibility-toggle {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 20px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  margin-bottom: 12px;
+}
+
+.accessibility-toggle label {
+  font-size: var(--font-size-lg);
+  font-weight: 600;
+}
+
+/* Senior mode styles - applied when data-senior-mode="true" */
+[data-senior-mode="true"] {
+  /* Even larger base font */
+  --font-size-base: 20px;
+  --font-size-sm: 18px;
+  --font-size-md: 22px;
+  --font-size-lg: 28px;
+  --font-size-xl: 36px;
+  --font-size-2xl: 44px;
+  --font-size-3xl: 56px;
+  
+  /* Larger touch targets */
+  --touch-target-min: 56px;
+  
+  /* Higher contrast */
+  --text-primary: #FFFFFF;
+  --text-secondary: #F0F0F0;
+}
+
+[data-senior-mode="true"] body {
+  font-size: 20px;
+  line-height: 1.8;
+  letter-spacing: 0.01em;
+}
+
+[data-senior-mode="true"] button,
+[data-senior-mode="true"] .btn {
+  min-height: 60px;
+  min-width: 60px;
+  padding: 16px 32px;
+  font-size: 22px;
+  font-weight: 700;
+  border-width: 3px;
+}
+
+[data-senior-mode="true"] h1 { font-size: 56px; }
+[data-senior-mode="true"] h2 { font-size: 44px; }
+[data-senior-mode="true"] h3 { font-size: 36px; }
+[data-senior-mode="true"] p { font-size: 22px; }
+
+/* Slower, gentler animations */
+[data-senior-mode="true"] * {
+  transition-duration: 0.3s !important;
+}
+
+/* Pause button always visible */
+[data-senior-mode="true"] .pause-game-btn {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  z-index: 1000;
+  background: #EF4444;
+  color: white;
+  font-size: 24px;
+  padding: 20px 32px;
+  border-radius: 16px;
+  border: 3px solid white;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.5);
+}
+
+/* Game speed indicator */
+[data-senior-mode="true"] .game-speed-indicator {
+  position: fixed;
+  bottom: 20px;
+  left: 20px;
+  background: rgba(0,0,0,0.8);
+  color: white;
+  padding: 12px 20px;
+  border-radius: 10px;
+  font-size: 20px;
+  font-weight: 600;
+}
+
+/* Input fields - even larger */
+[data-senior-mode="true"] input,
+[data-senior-mode="true"] textarea,
+[data-senior-mode="true"] select {
+  min-height: 60px;
+  font-size: 22px;
+  padding: 16px 20px;
+}
+
+/* Game HUD - much larger */
+[data-senior-mode="true"] .game-hud {
+  font-size: 28px;
+}
+
+[data-senior-mode="true"] .game-hud .score,
+[data-senior-mode="true"] .game-hud .timer {
+  font-size: 40px;
+  text-shadow: 3px 3px 6px rgba(0,0,0,0.9);
+}
+
+/* Navigation - always visible */
+[data-senior-mode="true"] .nav-button {
+  position: fixed;
+  top: 10px;
+  left: 10px;
+  font-size: 20px;
+  padding: 16px 28px;
+}
+
+/* Touch controls - much larger */
+[data-senior-mode="true"] #touch-controls .control-btn {
+  width: 90px;
+  height: 90px;
+  font-size: 36px;
+}
+
+/* Power-up indicators - high visibility */
+[data-senior-mode="true"] .power-up-active {
+  border: 4px solid #22D3EE;
+  box-shadow: 0 0 30px rgba(34, 211, 238, 0.8);
+}
+
+/* Tutorial tooltips - larger */
+[data-senior-mode="true"] .tutorial-tooltip {
+  font-size: 22px;
+  padding: 20px 28px;
+  max-width: 400px;
+}
+
+/* ============================================
+   EASY/RELAXED MODE - Slower gameplay
+   ============================================ */
+[data-relaxed-mode="true"] .game-timer {
+  color: #10B981; /* Green to indicate relaxed */
+}
+
+[data-relaxed-mode="true"]::after {
+  content: "🐢 Relaxed Mode";
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  background: rgba(16, 185, 129, 0.9);
+  color: white;
+  padding: 10px 20px;
+  border-radius: 20px;
+  font-size: 16px;
+  font-weight: 600;
+}
+
+/* ============================================
+   SPRINT 4.5 FIXES - Based on Grandma Mei Feedback
+   High Contrast Mode Enhancements
+   ============================================ */
+
+/* Force high contrast on all text */
+[data-senior-mode="true"] * {
+  text-shadow: 1px 1px 0 rgba(0,0,0,0.5) !important;
+}
+
+/* Score and timer - maximum readability */
+[data-senior-mode="true"] .score-display,
+[data-senior-mode="true"] .game-score,
+[data-senior-mode="true"] .timer-display {
+  font-size: 48px !important;
+  font-weight: 800 !important;
+  color: #FFFFFF !important;
+  background: rgba(0, 0, 0, 0.7) !important;
+  padding: 12px 24px !important;
+  border-radius: 12px !important;
+  border: 3px solid #22D3EE !important;
+}
+
+/* Menu items - impossible to miss */
+[data-senior-mode="true"] .menu-item,
+[data-senior-mode="true"] .lobby-btn,
+[data-senior-mode="true"] .game-btn {
+  font-size: 24px !important;
+  padding: 20px 32px !important;
+  background: linear-gradient(135deg, #1E3A5F, #0F2744) !important;
+  border: 3px solid #22D3EE !important;
+  color: #FFFFFF !important;
+}
+
+[data-senior-mode="true"] .menu-item:hover,
+[data-senior-mode="true"] .lobby-btn:hover,
+[data-senior-mode="true"] .game-btn:hover {
+  background: linear-gradient(135deg, #22D3EE, #06B6D4) !important;
+  color: #000000 !important;
+  transform: scale(1.05);
+}
+
+/* Player names - clearly visible */
+[data-senior-mode="true"] .player-name,
+[data-senior-mode="true"] .username {
+  font-size: 20px !important;
+  font-weight: 700 !important;
+  background: rgba(0, 0, 0, 0.8) !important;
+  padding: 6px 12px !important;
+  border-radius: 8px !important;
+}
+
+/* Status messages - large and clear */
+[data-senior-mode="true"] .game-message,
+[data-senior-mode="true"] .status-text,
+[data-senior-mode="true"] .notification {
+  font-size: 28px !important;
+  font-weight: 700 !important;
+  padding: 16px 32px !important;
+  background: rgba(0, 0, 0, 0.9) !important;
+  border: 2px solid #F59E0B !important;
+}
+
+/* Win/Lose screens - celebratory but readable */
+[data-senior-mode="true"] .game-over-text,
+[data-senior-mode="true"] .victory-text {
+  font-size: 56px !important;
+  font-weight: 900 !important;
+  letter-spacing: 2px !important;
+}
+
+/* Accessibility toggle button - always visible */
+.accessibility-toggle {
+  position: fixed;
+  bottom: 20px;
+  left: 20px;
+  z-index: 9999;
+  background: rgba(34, 211, 238, 0.9);
+  color: #000;
+  border: none;
+  padding: 12px 20px;
+  border-radius: 24px;
+  font-size: 18px;
+  font-weight: 700;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  transition: all 0.2s ease;
+}
+
+.accessibility-toggle:hover {
+  background: #22D3EE;
+  transform: scale(1.05);
+}
+
+.accessibility-toggle .icon {
+  font-size: 24px;
+}
+
+/* Reduced motion for vestibular issues */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+  
+  .particle, 
+  .trail-effect,
+  .pulse-animation {
+    display: none !important;
+  }
+}

@@ -1,0 +1,487 @@
+/* 
+ * ⚡ Performance Optimizations - Sprint 1
+ * Based on AI Tester Feedback (Elena)
+ * 
+ * Issues Fixed:
+ * - Heavy shaders on mobile devices
+ * - Reduce GPU load on budget phones
+ * - Simplified effects for low-end devices
+ */
+
+/* ============================================
+   PERFORMANCE TIERS
+   ============================================ */
+:root {
+  --enable-blur: 1;
+  --enable-shadows: 1;
+  --enable-gradients: 1;
+  --enable-animations: 1;
+}
+
+/* Low power mode detection */
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --enable-animations: 0;
+  }
+}
+
+/* ============================================
+   REDUCED MOTION MODE
+   ============================================ */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+  
+  /* Disable particle effects */
+  .particle, .sparkle, .glow-effect {
+    display: none !important;
+  }
+}
+
+/* ============================================
+   MOBILE PERFORMANCE MODE
+   ============================================ */
+@media (max-width: 768px) {
+  /* Reduce blur effects on mobile */
+  .backdrop-blur, [class*="backdrop-blur"] {
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+    background: rgba(15, 15, 26, 0.95) !important;
+  }
+  
+  /* Simplify box shadows */
+  .shadow-lg, .shadow-xl, .shadow-2xl {
+    box-shadow: 0 4px 10px rgba(0,0,0,0.3) !important;
+  }
+  
+  /* Reduce gradient complexity */
+  .bg-gradient-to-r, .bg-gradient-to-b {
+    background: var(--color-surface-base) !important;
+  }
+  
+  /* Disable expensive filters */
+  .filter, [class*="filter"] {
+    filter: none !important;
+  }
+  
+  /* Simplify transforms */
+  .transform-gpu {
+    transform: none !important;
+    will-change: auto !important;
+  }
+}
+
+/* ============================================
+   BATTERY SAVER MODE (via class)
+   ============================================ */
+.battery-saver {
+  /* Disable all non-essential animations */
+  * {
+    animation: none !important;
+    transition: none !important;
+  }
+  
+  /* Remove blur effects */
+  .backdrop-blur, [class*="backdrop-blur"] {
+    backdrop-filter: none !important;
+    background: rgba(15, 15, 26, 0.98) !important;
+  }
+  
+  /* Flatten shadows */
+  [class*="shadow"] {
+    box-shadow: none !important;
+  }
+  
+  /* Remove glow effects */
+  [class*="glow"], .neon-glow {
+    text-shadow: none !important;
+    box-shadow: none !important;
+    filter: none !important;
+  }
+  
+  /* Static gradients */
+  [class*="gradient"] {
+    background: var(--color-surface-card) !important;
+    animation: none !important;
+  }
+}
+
+/* ============================================
+   OPTIMIZED GAME CANVAS STYLES
+   ============================================ */
+#game-canvas, .game-container canvas {
+  /* Use GPU acceleration wisely */
+  transform: translateZ(0);
+  will-change: transform;
+  
+  /* Prevent subpixel rendering issues */
+  image-rendering: -webkit-optimize-contrast;
+  image-rendering: crisp-edges;
+  
+  /* Disable pointer events on canvas for better touch perf */
+  touch-action: none;
+}
+
+/* ============================================
+   LAZY LOAD ANIMATIONS
+   ============================================ */
+/* Only animate when visible */
+.animate-on-visible {
+  opacity: 0;
+  transform: translateY(20px);
+}
+
+.animate-on-visible.visible {
+  opacity: 1;
+  transform: translateY(0);
+  transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+/* ============================================
+   OPTIMIZED PARTICLES
+   ============================================ */
+/* Use simpler particles on mobile */
+@media (max-width: 768px) {
+  .particle {
+    /* Reduce particle count by hiding every other one */
+    &:nth-child(2n) {
+      display: none;
+    }
+    
+    /* Simpler animation */
+    animation-duration: 1s !important;
+    animation-timing-function: linear !important;
+  }
+  
+  /* Reduce trail effects */
+  .trail-effect {
+    opacity: 0.3;
+  }
+}
+
+/* ============================================
+   FONT LOADING OPTIMIZATION
+   ============================================ */
+/* Display fallback font while loading */
+.font-loading body {
+  font-family: system-ui, -apple-system, sans-serif;
+}
+
+/* Smooth font swap */
+.fonts-loaded body {
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  transition: font-family 0.1s ease;
+}
+
+/* ============================================
+   IMAGE OPTIMIZATION HINTS
+   ============================================ */
+img {
+  /* Prevent layout shift */
+  aspect-ratio: attr(width) / attr(height);
+  
+  /* Lazy decode */
+  content-visibility: auto;
+}
+
+/* Sprite sheets - use GPU */
+.sprite {
+  will-change: background-position;
+  transform: translateZ(0);
+}
+
+/* ============================================
+   SCROLL PERFORMANCE
+   ============================================ */
+.scroll-container {
+  /* Hardware acceleration for scroll */
+  -webkit-overflow-scrolling: touch;
+  scroll-behavior: smooth;
+  overscroll-behavior: contain;
+}
+
+/* Infinite scroll optimization */
+.virtual-list {
+  contain: strict;
+  content-visibility: auto;
+}
+
+/* ============================================
+   LOW-END DEVICE DETECTION
+   Note: Applied via JS based on device caps
+   ============================================ */
+.low-end-device {
+  /* Disable all expensive effects */
+  *::before, *::after {
+    display: none !important;
+  }
+  
+  /* Simple backgrounds only */
+  body {
+    background: #0F0F1A !important;
+  }
+  
+  /* No shadows */
+  * {
+    box-shadow: none !important;
+    text-shadow: none !important;
+  }
+  
+  /* No blur */
+  * {
+    backdrop-filter: none !important;
+    filter: none !important;
+  }
+  
+  /* Basic borders instead of glow */
+  button, .btn {
+    border: 2px solid currentColor !important;
+  }
+}
+
+/* ============================================
+   SPRINT 4: QUALITY SETTINGS UI
+   ============================================ */
+.quality-settings {
+  background: rgba(15, 15, 26, 0.95);
+  border-radius: 16px;
+  padding: 24px;
+  max-width: 400px;
+}
+
+.quality-settings h3 {
+  font-size: 1.25rem;
+  margin-bottom: 16px;
+  color: var(--text-primary);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.quality-preset-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.quality-preset {
+  display: flex;
+  align-items: center;
+  padding: 12px 16px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 2px solid transparent;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.quality-preset:hover {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: rgba(255, 255, 255, 0.1);
+}
+
+.quality-preset.active {
+  background: rgba(78, 205, 196, 0.2);
+  border-color: var(--accent-primary);
+}
+
+.quality-preset-icon {
+  font-size: 1.5rem;
+  margin-right: 12px;
+}
+
+.quality-preset-info {
+  flex: 1;
+}
+
+.quality-preset-name {
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-bottom: 2px;
+}
+
+.quality-preset-desc {
+  font-size: 0.75rem;
+  color: var(--text-secondary);
+}
+
+.quality-preset-fps {
+  font-size: 0.75rem;
+  color: var(--accent-primary);
+  font-weight: 600;
+}
+
+/* Quality indicator badge */
+.quality-badge {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 0.65rem;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+.quality-badge.potato { background: #666; color: #fff; }
+.quality-badge.low { background: #f39c12; color: #000; }
+.quality-badge.medium { background: #3498db; color: #fff; }
+.quality-badge.high { background: #9b59b6; color: #fff; }
+.quality-badge.ultra { background: linear-gradient(135deg, #ff6b6b, #f7dc6f); color: #000; }
+
+/* Performance stats display */
+.perf-stats {
+  position: fixed;
+  top: 60px;
+  right: 16px;
+  background: rgba(0, 0, 0, 0.75);
+  border-radius: 8px;
+  padding: 8px 12px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.7rem;
+  color: #0f0;
+  z-index: 9999;
+  pointer-events: none;
+}
+
+.perf-stats.warning { color: #ff0; }
+.perf-stats.critical { color: #f00; }
+
+.perf-stats-row {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.perf-stats-label {
+  opacity: 0.7;
+}
+
+.perf-stats-value {
+  font-weight: 600;
+}
+
+/* Auto-quality indicator */
+.auto-quality-indicator {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 12px;
+  background: rgba(78, 205, 196, 0.1);
+  border-radius: 8px;
+  margin-top: 16px;
+}
+
+.auto-quality-indicator svg {
+  width: 16px;
+  height: 16px;
+  color: var(--accent-primary);
+}
+
+.auto-quality-indicator span {
+  font-size: 0.75rem;
+  color: var(--text-secondary);
+}
+
+/* Theme performance warning */
+.theme-perf-warning {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  padding: 12px;
+  background: rgba(243, 156, 18, 0.15);
+  border: 1px solid rgba(243, 156, 18, 0.3);
+  border-radius: 8px;
+  margin-top: 12px;
+}
+
+.theme-perf-warning svg {
+  flex-shrink: 0;
+  width: 16px;
+  height: 16px;
+  color: #f39c12;
+}
+
+.theme-perf-warning p {
+  font-size: 0.75rem;
+  color: #f39c12;
+  margin: 0;
+  line-height: 1.4;
+}
+
+/* Loading optimization - skeleton screens */
+.skeleton {
+  background: linear-gradient(
+    90deg,
+    rgba(255, 255, 255, 0.05) 25%,
+    rgba(255, 255, 255, 0.1) 50%,
+    rgba(255, 255, 255, 0.05) 75%
+  );
+  background-size: 200% 100%;
+  animation: skeleton-shimmer 1.5s infinite;
+  border-radius: 8px;
+}
+
+@keyframes skeleton-shimmer {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
+.skeleton-text {
+  height: 1em;
+  margin-bottom: 0.5em;
+}
+
+.skeleton-text.short { width: 60%; }
+.skeleton-text.medium { width: 80%; }
+.skeleton-text.long { width: 100%; }
+
+.skeleton-avatar {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+}
+
+.skeleton-card {
+  height: 120px;
+  border-radius: 12px;
+}
+
+/* Reduce motion for skeleton on low-end */
+@media (prefers-reduced-motion: reduce) {
+  .skeleton {
+    animation: none;
+    background: rgba(255, 255, 255, 0.1);
+  }
+}
+
+/* Progressive image loading */
+.progressive-image {
+  position: relative;
+  overflow: hidden;
+}
+
+.progressive-image .placeholder {
+  filter: blur(20px);
+  transform: scale(1.1);
+  transition: opacity 0.3s ease;
+}
+
+.progressive-image .full-image {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.progressive-image.loaded .placeholder {
+  opacity: 0;
+}
+
+.progressive-image.loaded .full-image {
+  opacity: 1;
+}

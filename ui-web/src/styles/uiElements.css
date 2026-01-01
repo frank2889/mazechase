@@ -1,0 +1,534 @@
+/**
+ * UI Elements Enhanced Styles
+ * 
+ * AI Tester Suggestion (Yuki - Visual Artist):
+ * "Increase contrast of UI elements using accent colors for better visibility.
+ * Ensure better readability and user experience across themes."
+ */
+
+/* =========================================
+   HIGH CONTRAST UI VARIABLES
+   ========================================= */
+
+:root {
+  /* Primary Colors - High Contrast */
+  --ui-text-primary: #FFFFFF;
+  --ui-text-secondary: rgba(255, 255, 255, 0.85);
+  --ui-text-muted: rgba(255, 255, 255, 0.65);
+  
+  /* Backgrounds with improved contrast */
+  --ui-bg-solid: #1a1a2e;
+  --ui-bg-elevated: #252542;
+  --ui-bg-overlay: rgba(0, 0, 0, 0.85);
+  --ui-bg-glass: rgba(30, 30, 60, 0.9);
+  
+  /* Accent Colors - Vibrant for visibility */
+  --ui-accent-primary: #00D4FF;
+  --ui-accent-secondary: #FF6B9D;
+  --ui-accent-success: #00FF88;
+  --ui-accent-warning: #FFD93D;
+  --ui-accent-danger: #FF4757;
+  
+  /* Borders */
+  --ui-border-subtle: rgba(255, 255, 255, 0.15);
+  --ui-border-strong: rgba(255, 255, 255, 0.3);
+  --ui-border-accent: var(--ui-accent-primary);
+  
+  /* Shadows for depth */
+  --ui-shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.3);
+  --ui-shadow-md: 0 4px 16px rgba(0, 0, 0, 0.4);
+  --ui-shadow-lg: 0 8px 32px rgba(0, 0, 0, 0.5);
+  --ui-shadow-glow: 0 0 20px rgba(0, 212, 255, 0.3);
+  
+  /* Typography */
+  --ui-font-weight-normal: 400;
+  --ui-font-weight-medium: 500;
+  --ui-font-weight-bold: 700;
+  
+  /* Transitions */
+  --ui-transition-fast: 150ms ease;
+  --ui-transition-normal: 250ms ease;
+  --ui-transition-slow: 400ms ease;
+}
+
+/* =========================================
+   BUTTONS - Enhanced Contrast
+   ========================================= */
+
+.ui-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.75rem 1.5rem;
+  border-radius: 8px;
+  font-weight: var(--ui-font-weight-bold);
+  font-size: 1rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  border: 2px solid transparent;
+  cursor: pointer;
+  transition: all var(--ui-transition-fast);
+  box-shadow: var(--ui-shadow-sm);
+}
+
+.ui-button--primary {
+  background: linear-gradient(135deg, var(--ui-accent-primary), #0099CC);
+  color: #000000;
+  border-color: var(--ui-accent-primary);
+}
+
+.ui-button--primary:hover {
+  background: linear-gradient(135deg, #33DDFF, var(--ui-accent-primary));
+  box-shadow: var(--ui-shadow-glow);
+  transform: translateY(-2px);
+}
+
+.ui-button--secondary {
+  background: transparent;
+  color: var(--ui-text-primary);
+  border-color: var(--ui-border-strong);
+}
+
+.ui-button--secondary:hover {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: var(--ui-accent-primary);
+}
+
+.ui-button--danger {
+  background: linear-gradient(135deg, var(--ui-accent-danger), #CC3344);
+  color: #FFFFFF;
+  border-color: var(--ui-accent-danger);
+}
+
+.ui-button--success {
+  background: linear-gradient(135deg, var(--ui-accent-success), #00CC66);
+  color: #000000;
+  border-color: var(--ui-accent-success);
+}
+
+/* =========================================
+   PANELS & CARDS - Clear Hierarchy
+   ========================================= */
+
+.ui-panel {
+  background: var(--ui-bg-glass);
+  border: 1px solid var(--ui-border-subtle);
+  border-radius: 12px;
+  padding: 1.5rem;
+  box-shadow: var(--ui-shadow-md);
+  backdrop-filter: blur(10px);
+}
+
+.ui-panel--elevated {
+  background: var(--ui-bg-elevated);
+  border-color: var(--ui-border-strong);
+}
+
+.ui-panel__header {
+  font-size: 1.25rem;
+  font-weight: var(--ui-font-weight-bold);
+  color: var(--ui-text-primary);
+  margin-bottom: 1rem;
+  padding-bottom: 0.75rem;
+  border-bottom: 2px solid var(--ui-accent-primary);
+}
+
+.ui-card {
+  background: var(--ui-bg-elevated);
+  border: 1px solid var(--ui-border-subtle);
+  border-radius: 8px;
+  padding: 1rem;
+  transition: all var(--ui-transition-fast);
+}
+
+.ui-card:hover {
+  border-color: var(--ui-accent-primary);
+  box-shadow: var(--ui-shadow-glow);
+}
+
+/* =========================================
+   HUD ELEMENTS - Maximum Readability
+   ========================================= */
+
+.ui-hud {
+  position: fixed;
+  z-index: 1000;
+  pointer-events: none;
+}
+
+.ui-hud__score {
+  font-size: 2rem;
+  font-weight: var(--ui-font-weight-bold);
+  color: var(--ui-text-primary);
+  text-shadow: 
+    0 0 10px rgba(0, 212, 255, 0.8),
+    0 2px 4px rgba(0, 0, 0, 0.8);
+}
+
+.ui-hud__timer {
+  font-size: 1.5rem;
+  font-weight: var(--ui-font-weight-bold);
+  color: var(--ui-accent-warning);
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.8);
+}
+
+.ui-hud__timer--warning {
+  color: var(--ui-accent-danger);
+  animation: pulse-warning 0.5s ease-in-out infinite;
+}
+
+@keyframes pulse-warning {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.8; transform: scale(1.05); }
+}
+
+/* =========================================
+   LABELS & BADGES - Clear Indicators
+   ========================================= */
+
+.ui-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.25rem 0.75rem;
+  border-radius: 20px;
+  font-size: 0.75rem;
+  font-weight: var(--ui-font-weight-bold);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.ui-badge--runner {
+  background: linear-gradient(135deg, #FFD93D, #FFA500);
+  color: #000000;
+}
+
+.ui-badge--chaser {
+  background: linear-gradient(135deg, #FF4757, #CC0000);
+  color: #FFFFFF;
+}
+
+.ui-badge--rarity-common {
+  background: #B0B0B0;
+  color: #000000;
+}
+
+.ui-badge--rarity-rare {
+  background: linear-gradient(135deg, #4A90D9, #2060A0);
+  color: #FFFFFF;
+}
+
+.ui-badge--rarity-epic {
+  background: linear-gradient(135deg, #9B59B6, #6A3090);
+  color: #FFFFFF;
+}
+
+.ui-badge--rarity-legendary {
+  background: linear-gradient(135deg, #FFD700, #FFA500);
+  color: #000000;
+  box-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
+}
+
+/* =========================================
+   INPUTS - Clear Focus States
+   ========================================= */
+
+.ui-input {
+  width: 100%;
+  padding: 0.75rem 1rem;
+  background: var(--ui-bg-solid);
+  border: 2px solid var(--ui-border-subtle);
+  border-radius: 8px;
+  color: var(--ui-text-primary);
+  font-size: 1rem;
+  transition: all var(--ui-transition-fast);
+}
+
+.ui-input:focus {
+  outline: none;
+  border-color: var(--ui-accent-primary);
+  box-shadow: 0 0 0 3px rgba(0, 212, 255, 0.3);
+}
+
+.ui-input::placeholder {
+  color: var(--ui-text-muted);
+}
+
+/* =========================================
+   TOOLTIPS - High Visibility
+   ========================================= */
+
+.ui-tooltip {
+  position: absolute;
+  background: var(--ui-bg-overlay);
+  color: var(--ui-text-primary);
+  padding: 0.5rem 0.75rem;
+  border-radius: 6px;
+  font-size: 0.875rem;
+  max-width: 250px;
+  z-index: 9999;
+  box-shadow: var(--ui-shadow-md);
+  border: 1px solid var(--ui-border-strong);
+}
+
+.ui-tooltip::before {
+  content: '';
+  position: absolute;
+  border: 6px solid transparent;
+  border-bottom-color: var(--ui-bg-overlay);
+  top: -12px;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+/* =========================================
+   PROGRESS BARS - Clear Status
+   ========================================= */
+
+.ui-progress {
+  width: 100%;
+  height: 8px;
+  background: var(--ui-bg-solid);
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.ui-progress__bar {
+  height: 100%;
+  border-radius: 4px;
+  transition: width var(--ui-transition-normal);
+}
+
+.ui-progress__bar--primary {
+  background: linear-gradient(90deg, var(--ui-accent-primary), #66E0FF);
+}
+
+.ui-progress__bar--success {
+  background: linear-gradient(90deg, var(--ui-accent-success), #66FFAA);
+}
+
+.ui-progress__bar--warning {
+  background: linear-gradient(90deg, var(--ui-accent-warning), #FFE066);
+}
+
+.ui-progress__bar--danger {
+  background: linear-gradient(90deg, var(--ui-accent-danger), #FF7788);
+}
+
+/* =========================================
+   NOTIFICATIONS - Attention-Grabbing
+   ========================================= */
+
+.ui-notification {
+  position: fixed;
+  top: 1rem;
+  right: 1rem;
+  padding: 1rem 1.5rem;
+  border-radius: 8px;
+  color: var(--ui-text-primary);
+  font-weight: var(--ui-font-weight-medium);
+  box-shadow: var(--ui-shadow-lg);
+  z-index: 9999;
+  animation: slide-in 0.3s ease;
+}
+
+@keyframes slide-in {
+  from {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+.ui-notification--success {
+  background: linear-gradient(135deg, #00995533, #00774422);
+  border-left: 4px solid var(--ui-accent-success);
+}
+
+.ui-notification--warning {
+  background: linear-gradient(135deg, #CC990033, #AA770022);
+  border-left: 4px solid var(--ui-accent-warning);
+}
+
+.ui-notification--error {
+  background: linear-gradient(135deg, #CC333333, #AA222222);
+  border-left: 4px solid var(--ui-accent-danger);
+}
+
+.ui-notification--info {
+  background: linear-gradient(135deg, #0099CC33, #007AAA22);
+  border-left: 4px solid var(--ui-accent-primary);
+}
+
+/* =========================================
+   ACCESSIBILITY - Reduced Motion
+   ========================================= */
+
+@media (prefers-reduced-motion: reduce) {
+  .ui-button,
+  .ui-card,
+  .ui-input,
+  .ui-progress__bar {
+    transition: none;
+  }
+  
+  .ui-hud__timer--warning {
+    animation: none;
+  }
+}
+
+/* =========================================
+   THEME OVERRIDES - Per Theme Contrast
+   ========================================= */
+
+[data-theme="neon_night"] {
+  --ui-accent-primary: #FF00FF;
+  --ui-accent-secondary: #00FFFF;
+  --ui-shadow-glow: 0 0 20px rgba(255, 0, 255, 0.4);
+}
+
+[data-theme="cyber_arcade"] {
+  --ui-accent-primary: #00FF00;
+  --ui-accent-secondary: #FFFF00;
+  --ui-shadow-glow: 0 0 20px rgba(0, 255, 0, 0.4);
+}
+
+[data-theme="sunset_maze"] {
+  --ui-accent-primary: #FF6B35;
+  --ui-accent-secondary: #FF3366;
+  --ui-shadow-glow: 0 0 20px rgba(255, 107, 53, 0.4);
+}
+
+[data-theme="shadow_forest"] {
+  --ui-accent-primary: #66CC66;
+  --ui-accent-secondary: #9966CC;
+  --ui-shadow-glow: 0 0 20px rgba(102, 204, 102, 0.4);
+}
+
+[data-theme="crystal_cave"] {
+  --ui-accent-primary: #88CCFF;
+  --ui-accent-secondary: #CC88FF;
+  --ui-shadow-glow: 0 0 20px rgba(136, 204, 255, 0.4);
+}
+
+/* =========================================
+   NEON GLOW BUTTONS - EMMSOAI (Yuki)
+   Modern rounded rectangles with neon glow
+   ========================================= */
+
+.ui-button--neon {
+  position: relative;
+  background: linear-gradient(135deg, rgba(0, 212, 255, 0.1), rgba(139, 92, 246, 0.1));
+  color: var(--ui-text-primary);
+  border: 2px solid var(--ui-accent-primary);
+  border-radius: 16px;
+  padding: 1rem 2rem;
+  font-weight: 700;
+  font-size: 1.1rem;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  overflow: hidden;
+  transition: all 0.3s ease;
+  box-shadow: 
+    0 0 10px rgba(0, 212, 255, 0.3),
+    0 0 20px rgba(0, 212, 255, 0.2),
+    inset 0 0 20px rgba(0, 212, 255, 0.1);
+}
+
+.ui-button--neon::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+  transition: left 0.5s ease;
+}
+
+.ui-button--neon:hover {
+  transform: translateY(-3px) scale(1.02);
+  box-shadow: 
+    0 0 20px rgba(0, 212, 255, 0.5),
+    0 0 40px rgba(0, 212, 255, 0.3),
+    0 0 60px rgba(0, 212, 255, 0.2),
+    inset 0 0 30px rgba(0, 212, 255, 0.2);
+  text-shadow: 0 0 10px rgba(0, 212, 255, 0.8);
+}
+
+.ui-button--neon:hover::before {
+  left: 100%;
+}
+
+.ui-button--neon:active {
+  transform: translateY(-1px) scale(0.98);
+}
+
+.ui-button--neon-pink {
+  border-color: #FF6B9D;
+  box-shadow: 
+    0 0 10px rgba(255, 107, 157, 0.3),
+    0 0 20px rgba(255, 107, 157, 0.2),
+    inset 0 0 20px rgba(255, 107, 157, 0.1);
+}
+
+.ui-button--neon-pink:hover {
+  box-shadow: 
+    0 0 20px rgba(255, 107, 157, 0.5),
+    0 0 40px rgba(255, 107, 157, 0.3),
+    0 0 60px rgba(255, 107, 157, 0.2);
+  text-shadow: 0 0 10px rgba(255, 107, 157, 0.8);
+}
+
+.ui-button--neon-green {
+  border-color: #00FF88;
+  box-shadow: 
+    0 0 10px rgba(0, 255, 136, 0.3),
+    0 0 20px rgba(0, 255, 136, 0.2),
+    inset 0 0 20px rgba(0, 255, 136, 0.1);
+}
+
+.ui-button--neon-green:hover {
+  box-shadow: 
+    0 0 20px rgba(0, 255, 136, 0.5),
+    0 0 40px rgba(0, 255, 136, 0.3),
+    0 0 60px rgba(0, 255, 136, 0.2);
+  text-shadow: 0 0 10px rgba(0, 255, 136, 0.8);
+}
+
+.ui-button--neon-gold {
+  border-color: #FFD93D;
+  box-shadow: 
+    0 0 10px rgba(255, 217, 61, 0.3),
+    0 0 20px rgba(255, 217, 61, 0.2),
+    inset 0 0 20px rgba(255, 217, 61, 0.1);
+}
+
+.ui-button--neon-gold:hover {
+  box-shadow: 
+    0 0 20px rgba(255, 217, 61, 0.5),
+    0 0 40px rgba(255, 217, 61, 0.3),
+    0 0 60px rgba(255, 217, 61, 0.2);
+  text-shadow: 0 0 10px rgba(255, 217, 61, 0.8);
+}
+
+/* Pulsing glow animation for important buttons */
+.ui-button--neon-pulse {
+  animation: neonPulse 2s ease-in-out infinite;
+}
+
+@keyframes neonPulse {
+  0%, 100% {
+    box-shadow: 
+      0 0 10px rgba(0, 212, 255, 0.3),
+      0 0 20px rgba(0, 212, 255, 0.2);
+  }
+  50% {
+    box-shadow: 
+      0 0 20px rgba(0, 212, 255, 0.5),
+      0 0 40px rgba(0, 212, 255, 0.3),
+      0 0 60px rgba(0, 212, 255, 0.2);
+  }
+}

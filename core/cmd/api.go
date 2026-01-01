@@ -1,0 +1,171 @@
+package cmd
+
+import (
+	"fmt"
+	"io"
+	"net/http"
+	"os"
+	"strconv"
+	"strings"
+
+	"connectrpc.com/connect"
+	connectcors "connectrpc.com/cors"
+	authrpc "github.com/frank2889/mazechase/generated/auth/v1/v1connect"
+	lobbyrpc "github.com/frank2889/mazechase/generated/lobby/v1/v1connect"
+	"github.com/frank2889/mazechase/internal/config"
+	"github.com/frank2889/mazechase/internal/database"
+	"github.com/frank2889/mazechase/internal/game"
+	"github.com/frank2889/mazechase/internal/lobby"
+	"github.com/frank2889/mazechase/internal/user"
+	"github.com/rs/cors"
+	"github.com/rs/zerolog/log"
+	"golang.org/x/net/http2"
+	"golang.org/x/net/http2/h2c"
+)
+
+func StartServer(frontendPath string) {
+	baseUrl := fmt.Sprintf(":%s", strconv.Itoa(config.Opts.ServerPort))
+	if err := setupServer(baseUrl, frontendPath); err != nil {
+		log.Fatal().Err(err).Msg("Failed to start server")
+	}
+}
+
+func setupServer(baseUrl, frontendPath string) error {
+	authSrv, lobSrv := initServices()
+
+	router := http.NewServeMux()
+
+	registerHandlers(router, authSrv, lobSrv)
+
+	rootCloser := registerFrontend(router, frontendPath, authSrv)
+	defer func(rootCloser io.Closer) {
+		err := rootCloser.Close()
+		if err != nil {
+			log.Warn().Err(err).Msg("Failed to close dist dir root")
+		}
+	}(rootCloser)
+
+	cor := cors.New(cors.Options{
+		AllowOriginFunc: func(origin string) bool {
+			// Allow all origins for now - the cookie is set with same-site lax so it's safe
+			return true
+		},
+		AllowCredentials:    true,
+		AllowPrivateNetwork: true,
+		AllowedMethods:      connectcors.AllowedMethods(),
+		AllowedHeaders:      append(connectcors.AllowedHeaders(), user.AuthHeaderKey, "Cookie"),
+		ExposedHeaders:      append(connectcors.ExposedHeaders(), "Set-Cookie"),
+	})
+
+	log.Info().Str("port", baseUrl).Msg("listening on:")
+	return http.ListenAndServe(
+		baseUrl,
+		cor.Handler(h2c.NewHandler(router,
+			&http2.Server{},
+		)),
+	)
+}
+
+func initServices() (*user.Service, *lobby.Service) {
+	db := database.InitDB()
+
+	authService := user.NewService(db, config.Opts.DisableAuth)
+	lobSrv := lobby.NewLobbyService(db)
+
+	return authService, lobSrv
+}
+
+func registerHandlers(mux *http.ServeMux, as *user.Service, ls *lobby.Service) {
+	authInterceptor := connect.WithInterceptors(user.NewInterceptor(as))
+
+	services := []func() (string, http.Handler){
+		func() (string, http.Handler) {
+			return authrpc.NewAuthServiceHandler(user.NewAuthHandler(as))
+		},
+		func() (string, http.Handler) {
+			return lobbyrpc.NewLobbyServiceHandler(lobby.NewLobbyHandler(ls), authInterceptor)
+		},
+	}
+
+	for _, svc := range services {
+		path, handler := svc()
+		mux.Handle(path, handler)
+	}
+
+	game.RegisterGameWSHandler(mux, as, ls)
+}
+
+func registerFrontend(router *http.ServeMux, frontEndPath string, auth *user.Service) io.Closer {
+	if frontEndPath == "" {
+		log.Warn().Msg("Empty frontend frontend path, no UI will be served")
+		router.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
+			if _, err := w.Write([]byte("No Ui configured")); err != nil {
+				log.Warn().Err(err).Msg("Failed to write response")
+				return
+			}
+		})
+		return nil
+	}
+
+	root, err := os.OpenRoot(frontEndPath)
+	if err != nil {
+		log.Fatal().Err(err).Msg("Unable to open frontend dir")
+	}
+
+	srvFs := http.FS(root.FS())
+
+	router.Handle("/", FrontendAuthMiddleware(
+		http.FileServer(srvFs),
+		auth,
+	))
+
+	return root
+}
+
+func FrontendAuthMiddleware(next http.Handler, auth *user.Service) http.Handler {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		path := r.URL.Path
+
+		isAuthPage := strings.HasPrefix(path, "/auth")
+		isAsset := strings.HasPrefix(path, "/_astro/") ||
+			strings.HasPrefix(path, "/gassets/") ||
+			strings.HasPrefix(path, "/audio/") ||
+			strings.HasSuffix(path, ".js") ||
+			strings.HasSuffix(path, ".css") ||
+			strings.HasSuffix(path, ".webp") ||
+			strings.HasSuffix(path, ".png") ||
+			strings.HasSuffix(path, ".jpg") ||
+			strings.HasSuffix(path, ".json") ||
+			strings.HasSuffix(path, ".mp3") ||
+			strings.HasSuffix(path, ".woff2") ||
+			strings.HasSuffix(path, ".ico")
+		isHTML := strings.HasSuffix(path, ".html") || strings.HasSuffix(path, "/") || path == "/"
+
+		// Cache control: assets get long cache (1 year), HTML gets no cache
+		if isAsset {
+			w.Header().Set("Cache-Control", "public, max-age=31536000, immutable")
+		} else if isHTML {
+			w.Header().Set("Cache-Control", "no-cache, no-store, must-revalidate")
+			w.Header().Set("Pragma", "no-cache")
+			w.Header().Set("Expires", "0")
+		}
+
+		if isAuthPage || isAsset {
+			next.ServeHTTP(w, r)
+			return
+		}
+
+		_, err := auth.VerifyAuthHeader(r.Header)
+		if err != nil {
+			http.Redirect(w, r, "/auth/login", http.StatusFound)
+			return
+		}
+
+		if path == "/" {
+			http.Redirect(w, r, "/lobby", http.StatusFound)
+			return
+		}
+
+		next.ServeHTTP(w, r)
+	})
+}

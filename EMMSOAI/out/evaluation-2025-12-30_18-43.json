@@ -1,0 +1,1177 @@
+{
+  "metadata": {
+    "timestamp": "2025-12-30T17:43:01.261Z",
+    "version": "5.0",
+    "totalTesters": 14,
+    "averageScore": null
+  },
+  "workflow": {
+    "nextStep": "Implementeer prioritizedActions en maak in/implementation.json",
+    "inputFile": "tests/in/implementation.json",
+    "outputFile": "tests/out/evaluation.json",
+    "loop": "out/evaluation.json → implementatie → in/implementation.json → AI leest → repeat"
+  },
+  "summary": {
+    "totalActions": 48,
+    "highPriority": 0,
+    "mediumPriority": 2,
+    "lowPriority": 46,
+    "categories": [
+      "visual",
+      "monetization",
+      "team_suggestion"
+    ]
+  },
+  "prioritizedActions": [
+    {
+      "rank": 1,
+      "id": "sprint2_visual_overhaul",
+      "action": "Visual Art Overhaul",
+      "description": "SPRINT 2 - VISUELE UPGRADE (Complete Art Overhaul)\n\n### CHARACTER REDESIGNS:\n- **Runner:** Cirkelvormig hoofd met opvallende gele kleuren en expressieve ogen.\n- **Chasers:** Drie unieke vormen (driehoek, vierkant, organisch) met onderscheidende kleuren en bewegingen.\n- **Animatie specs:** Verbeter e",
+      "category": "visual",
+      "priority": "medium",
+      "sprint": 2,
+      "suggestedBy": [
+        "team_dialogue"
+      ]
+    },
+    {
+      "rank": 2,
+      "id": "sprint3_monetization",
+      "action": "Monetization Features",
+      "description": "SPRINT 3 - MONETIZATION (Ethisch & Family-Friendly)\n\n- **Quick monetization wins:** Rewarded ads en een premium versie zonder advertenties.\n- **Cosmetics shop design:** Exclusieve skins en thema's voor seizoensgebonden verkoop.\n- **Battle pass structuur:** Gratis en premium sporen met unieke belonin",
+      "category": "monetization",
+      "priority": "medium",
+      "sprint": 3,
+      "suggestedBy": [
+        "team_dialogue"
+      ]
+    },
+    {
+      "rank": 3,
+      "id": "mention_Emma_0",
+      "action": "@Kenji, overweeg om meer grappige en schattige elementen toe te voegen aan de ka",
+      "description": "@Kenji, overweeg om meer grappige en schattige elementen toe te voegen aan de karakters of de omgeving, zodat het spel nog aantrekkelijker wordt voor jonge spelers zoals ik!",
+      "category": "team_suggestion",
+      "priority": "low",
+      "suggestedBy": [
+        "team_dialogue"
+      ]
+    },
+    {
+      "rank": 4,
+      "id": "mention_Tim_0",
+      "action": "@Kenji, overweeg om de focus te leggen op het verbeteren van de variatie in game",
+      "description": "@Kenji, overweeg om de focus te leggen op het verbeteren van de variatie in gameplay en het toevoegen van meer strategische elementen die de speler blijven uitdagen.",
+      "category": "team_suggestion",
+      "priority": "low",
+      "suggestedBy": [
+        "team_dialogue"
+      ]
+    },
+    {
+      "rank": 5,
+      "id": "mention_Sandra_0",
+      "action": "@Kenji, overweeg om meer focus te leggen op het verbeteren van de strategische d",
+      "description": "@Kenji, overweeg om meer focus te leggen op het verbeteren van de strategische diepgang, zodat het spel ook op lange termijn interessant blijft voor oudere kinderen en volwassenen.",
+      "category": "team_suggestion",
+      "priority": "low",
+      "suggestedBy": [
+        "team_dialogue"
+      ]
+    },
+    {
+      "rank": 6,
+      "id": "mention_Peter_0",
+      "action": "@Kenji, overweeg om wat meer nadruk te leggen op het creëren van unieke gameplay",
+      "description": "@Kenji, overweeg om wat meer nadruk te leggen op het creëren van unieke gameplay-elementen die niet alleen vermakelijk zijn, maar ook een strategische uitdaging bieden. Dit kan de replay-waarde aanzienlijk verhogen voor spelers die op zoek zijn naar een diepere ervaring.",
+      "category": "team_suggestion",
+      "priority": "low",
+      "suggestedBy": [
+        "team_dialogue"
+      ]
+    },
+    {
+      "rank": 7,
+      "id": "mention_Yuki_0",
+      "action": "@Sofia over de aantrekkelijkheid van de thema's en ",
+      "description": "@Sofia over de aantrekkelijkheid van de thema's en ",
+      "category": "team_suggestion",
+      "priority": "low",
+      "suggestedBy": [
+        "team_dialogue"
+      ]
+    },
+    {
+      "rank": 8,
+      "id": "mention_Yuki_1",
+      "action": "@Sandra over de sterke kunstregie die de immersie bevordert.",
+      "description": "@Sandra over de sterke kunstregie die de immersie bevordert.",
+      "category": "team_suggestion",
+      "priority": "low",
+      "suggestedBy": [
+        "team_dialogue"
+      ]
+    },
+    {
+      "rank": 9,
+      "id": "mention_Yuki_2",
+      "action": "@Emma over de noodzaak van meer glitter; dit kan de visuele identiteit van het s",
+      "description": "@Emma over de noodzaak van meer glitter; dit kan de visuele identiteit van het spel infantiliseren.",
+      "category": "team_suggestion",
+      "priority": "low",
+      "suggestedBy": [
+        "team_dialogue"
+      ]
+    },
+    {
+      "rank": 10,
+      "id": "mention_Yuki_3",
+      "action": "@Kenji, overweeg om te focussen op meer strategische diepgang in de gameplay, en",
+      "description": "@Kenji, overweeg om te focussen op meer strategische diepgang in de gameplay, en ",
+      "category": "team_suggestion",
+      "priority": "low",
+      "suggestedBy": [
+        "team_dialogue"
+      ]
+    },
+    {
+      "rank": 11,
+      "id": "mention_Yuki_4",
+      "action": "@Tim, overweeg meer nadruk te leggen op expressiviteit in karakteranimaties.",
+      "description": "@Tim, overweeg meer nadruk te leggen op expressiviteit in karakteranimaties.",
+      "category": "team_suggestion",
+      "priority": "low",
+      "suggestedBy": [
+        "team_dialogue"
+      ]
+    },
+    {
+      "rank": 12,
+      "id": "mention_Marcus_0",
+      "action": "@Kenji, focus op het diversifiëren van het cosmetic aanbod. ",
+      "description": "@Kenji, focus op het diversifiëren van het cosmetic aanbod. ",
+      "category": "team_suggestion",
+      "priority": "low",
+      "suggestedBy": [
+        "team_dialogue"
+      ]
+    },
+    {
+      "rank": 13,
+      "id": "mention_Marcus_1",
+      "action": "@Sandra, overweeg om de familiebundel verder uit te werken met meer gezinsgerich",
+      "description": "@Sandra, overweeg om de familiebundel verder uit te werken met meer gezinsgerichte content.",
+      "category": "team_suggestion",
+      "priority": "low",
+      "suggestedBy": [
+        "team_dialogue"
+      ]
+    },
+    {
+      "rank": 14,
+      "id": "mention_Elena_0",
+      "action": "@Sofia over de unieke en aantrekkelijke thema's; deze bieden mogelijkheden voor ",
+      "description": "@Sofia over de unieke en aantrekkelijke thema's; deze bieden mogelijkheden voor performance optimalisatie door consistent gebruik van flat design.",
+      "category": "team_suggestion",
+      "priority": "low",
+      "suggestedBy": [
+        "team_dialogue"
+      ]
+    },
+    {
+      "rank": 15,
+      "id": "mention_Elena_1",
+      "action": "@Emma's suggestie voor meer glitter; dit kan de performance negatief beïnvloeden",
+      "description": "@Emma's suggestie voor meer glitter; dit kan de performance negatief beïnvloeden door onnodige visuele complexiteit toe te voegen.",
+      "category": "team_suggestion",
+      "priority": "low",
+      "suggestedBy": [
+        "team_dialogue"
+      ]
+    },
+    {
+      "rank": 16,
+      "id": "mention_Elena_2",
+      "action": "@Sandra over een vloeiende experience verder verbeteren.",
+      "description": "@Sandra over een vloeiende experience verder verbeteren.",
+      "category": "team_suggestion",
+      "priority": "low",
+      "suggestedBy": [
+        "team_dialogue"
+      ]
+    },
+    {
+      "rank": 17,
+      "id": "mention_Elena_3",
+      "action": "@Kenji, overweeg om meer te focussen op shader optimalisatie voor low-end device",
+      "description": "@Kenji, overweeg om meer te focussen op shader optimalisatie voor low-end devices. ",
+      "category": "team_suggestion",
+      "priority": "low",
+      "suggestedBy": [
+        "team_dialogue"
+      ]
+    },
+    {
+      "rank": 18,
+      "id": "mention_Elena_4",
+      "action": "@Marcus, kijk naar mogelijkheden om de cosmetic shop te integreren zonder de laa",
+      "description": "@Marcus, kijk naar mogelijkheden om de cosmetic shop te integreren zonder de laadtijden te verhogen.",
+      "category": "team_suggestion",
+      "priority": "low",
+      "suggestedBy": [
+        "team_dialogue"
+      ]
+    },
+    {
+      "rank": 19,
+      "id": "mention_David_0",
+      "action": "@Sofia, de kunstregie is sterk en visueel zeer aantrekkelijk, wat een goede basi",
+      "description": "@Sofia, de kunstregie is sterk en visueel zeer aantrekkelijk, wat een goede basis legt voor de user experience. ",
+      "category": "team_suggestion",
+      "priority": "low",
+      "suggestedBy": [
+        "team_dialogue"
+      ]
+    },
+    {
+      "rank": 20,
+      "id": "mention_David_1",
+      "action": "@Yuki, je visuele suggesties voor meer expressieve karakteranimaties kunnen de s",
+      "description": "@Yuki, je visuele suggesties voor meer expressieve karakteranimaties kunnen de spelbeleving verder versterken.",
+      "category": "team_suggestion",
+      "priority": "low",
+      "suggestedBy": [
+        "team_dialogue"
+      ]
+    }
+  ],
+  "items": {
+    "criticalFixes": [],
+    "visualUpgrades": [
+      {
+        "id": "sprint2_visual_overhaul",
+        "type": "visual",
+        "name": "Visual Art Overhaul",
+        "description": "SPRINT 2 - VISUELE UPGRADE (Complete Art Overhaul)\n\n### CHARACTER REDESIGNS:\n- **Runner:** Cirkelvormig hoofd met opvallende gele kleuren en expressieve ogen.\n- **Chasers:** Drie unieke vormen (driehoek, vierkant, organisch) met onderscheidende kleuren en bewegingen.\n- **Animatie specs:** Verbeter expressiviteit en karakter in bewegingen.\n\n### ENVIRONMENT & TILES:\n- **Muur redesign:** 3D extrusie met matte afwerking en lichte glow.\n- **Vloer en decoratie:** Hexagonaal patroon met ambient particles.\n- **Per-thema variaties:** Neon Night, Cyber Arcade, Sunset Maze, Shadow Forest.\n\n### UI OVERHAUL:\n- **Button designs:** Afgeronde rechthoeken met hover en click effecten.\n- **Score/HUD:** Duidelijke, kleurrijke displays met popup animaties.\n- **Panels en modals:** Zachte verlopen en afgeronde hoeken.\n\n### VFX & PARTICLES:\n- **Pellet collect effects:** Gouden burst met sparkles.\n- **Power-up activatie:** Dynamische aura en trail effecten.\n- **Chaser caught effects:** Poof met oplos-effect.\n\n",
+        "priority": 8,
+        "sprint": 2,
+        "source": "team_dialogue"
+      }
+    ],
+    "monetizationFeatures": [
+      {
+        "id": "sprint3_monetization",
+        "type": "monetization",
+        "name": "Monetization Features",
+        "description": "SPRINT 3 - MONETIZATION (Ethisch & Family-Friendly)\n\n- **Quick monetization wins:** Rewarded ads en een premium versie zonder advertenties.\n- **Cosmetics shop design:** Exclusieve skins en thema's voor seizoensgebonden verkoop.\n- **Battle pass structuur:** Gratis en premium sporen met unieke beloningen.\n\n",
+        "priority": 7,
+        "sprint": 3,
+        "source": "team_dialogue"
+      }
+    ],
+    "teamSuggestions": [
+      {
+        "id": "mention_Emma_0",
+        "type": "team_suggestion",
+        "name": "@Kenji, overweeg om meer grappige en schattige elementen toe te voegen aan de ka",
+        "description": "@Kenji, overweeg om meer grappige en schattige elementen toe te voegen aan de karakters of de omgeving, zodat het spel nog aantrekkelijker wordt voor jonge spelers zoals ik!",
+        "priority": 5,
+        "from": "Emma",
+        "source": "team_dialogue"
+      },
+      {
+        "id": "mention_Tim_0",
+        "type": "team_suggestion",
+        "name": "@Kenji, overweeg om de focus te leggen op het verbeteren van de variatie in game",
+        "description": "@Kenji, overweeg om de focus te leggen op het verbeteren van de variatie in gameplay en het toevoegen van meer strategische elementen die de speler blijven uitdagen.",
+        "priority": 5,
+        "from": "Tim",
+        "source": "team_dialogue"
+      },
+      {
+        "id": "mention_Sandra_0",
+        "type": "team_suggestion",
+        "name": "@Kenji, overweeg om meer focus te leggen op het verbeteren van de strategische d",
+        "description": "@Kenji, overweeg om meer focus te leggen op het verbeteren van de strategische diepgang, zodat het spel ook op lange termijn interessant blijft voor oudere kinderen en volwassenen.",
+        "priority": 5,
+        "from": "Sandra",
+        "source": "team_dialogue"
+      },
+      {
+        "id": "mention_Peter_0",
+        "type": "team_suggestion",
+        "name": "@Kenji, overweeg om wat meer nadruk te leggen op het creëren van unieke gameplay",
+        "description": "@Kenji, overweeg om wat meer nadruk te leggen op het creëren van unieke gameplay-elementen die niet alleen vermakelijk zijn, maar ook een strategische uitdaging bieden. Dit kan de replay-waarde aanzienlijk verhogen voor spelers die op zoek zijn naar een diepere ervaring.",
+        "priority": 5,
+        "from": "Peter",
+        "source": "team_dialogue"
+      },
+      {
+        "id": "mention_Yuki_0",
+        "type": "team_suggestion",
+        "name": "@Sofia over de aantrekkelijkheid van de thema's en ",
+        "description": "@Sofia over de aantrekkelijkheid van de thema's en ",
+        "priority": 5,
+        "from": "Yuki",
+        "source": "team_dialogue"
+      },
+      {
+        "id": "mention_Yuki_1",
+        "type": "team_suggestion",
+        "name": "@Sandra over de sterke kunstregie die de immersie bevordert.",
+        "description": "@Sandra over de sterke kunstregie die de immersie bevordert.",
+        "priority": 5,
+        "from": "Yuki",
+        "source": "team_dialogue"
+      },
+      {
+        "id": "mention_Yuki_2",
+        "type": "team_suggestion",
+        "name": "@Emma over de noodzaak van meer glitter; dit kan de visuele identiteit van het s",
+        "description": "@Emma over de noodzaak van meer glitter; dit kan de visuele identiteit van het spel infantiliseren.",
+        "priority": 5,
+        "from": "Yuki",
+        "source": "team_dialogue"
+      },
+      {
+        "id": "mention_Yuki_3",
+        "type": "team_suggestion",
+        "name": "@Kenji, overweeg om te focussen op meer strategische diepgang in de gameplay, en",
+        "description": "@Kenji, overweeg om te focussen op meer strategische diepgang in de gameplay, en ",
+        "priority": 5,
+        "from": "Yuki",
+        "source": "team_dialogue"
+      },
+      {
+        "id": "mention_Yuki_4",
+        "type": "team_suggestion",
+        "name": "@Tim, overweeg meer nadruk te leggen op expressiviteit in karakteranimaties.",
+        "description": "@Tim, overweeg meer nadruk te leggen op expressiviteit in karakteranimaties.",
+        "priority": 5,
+        "from": "Yuki",
+        "source": "team_dialogue"
+      },
+      {
+        "id": "mention_Marcus_0",
+        "type": "team_suggestion",
+        "name": "@Kenji, focus op het diversifiëren van het cosmetic aanbod. ",
+        "description": "@Kenji, focus op het diversifiëren van het cosmetic aanbod. ",
+        "priority": 5,
+        "from": "Marcus",
+        "source": "team_dialogue"
+      },
+      {
+        "id": "mention_Marcus_1",
+        "type": "team_suggestion",
+        "name": "@Sandra, overweeg om de familiebundel verder uit te werken met meer gezinsgerich",
+        "description": "@Sandra, overweeg om de familiebundel verder uit te werken met meer gezinsgerichte content.",
+        "priority": 5,
+        "from": "Marcus",
+        "source": "team_dialogue"
+      },
+      {
+        "id": "mention_Elena_0",
+        "type": "team_suggestion",
+        "name": "@Sofia over de unieke en aantrekkelijke thema's; deze bieden mogelijkheden voor ",
+        "description": "@Sofia over de unieke en aantrekkelijke thema's; deze bieden mogelijkheden voor performance optimalisatie door consistent gebruik van flat design.",
+        "priority": 5,
+        "from": "Elena",
+        "source": "team_dialogue"
+      },
+      {
+        "id": "mention_Elena_1",
+        "type": "team_suggestion",
+        "name": "@Emma's suggestie voor meer glitter; dit kan de performance negatief beïnvloeden",
+        "description": "@Emma's suggestie voor meer glitter; dit kan de performance negatief beïnvloeden door onnodige visuele complexiteit toe te voegen.",
+        "priority": 5,
+        "from": "Elena",
+        "source": "team_dialogue"
+      },
+      {
+        "id": "mention_Elena_2",
+        "type": "team_suggestion",
+        "name": "@Sandra over een vloeiende experience verder verbeteren.",
+        "description": "@Sandra over een vloeiende experience verder verbeteren.",
+        "priority": 5,
+        "from": "Elena",
+        "source": "team_dialogue"
+      },
+      {
+        "id": "mention_Elena_3",
+        "type": "team_suggestion",
+        "name": "@Kenji, overweeg om meer te focussen op shader optimalisatie voor low-end device",
+        "description": "@Kenji, overweeg om meer te focussen op shader optimalisatie voor low-end devices. ",
+        "priority": 5,
+        "from": "Elena",
+        "source": "team_dialogue"
+      },
+      {
+        "id": "mention_Elena_4",
+        "type": "team_suggestion",
+        "name": "@Marcus, kijk naar mogelijkheden om de cosmetic shop te integreren zonder de laa",
+        "description": "@Marcus, kijk naar mogelijkheden om de cosmetic shop te integreren zonder de laadtijden te verhogen.",
+        "priority": 5,
+        "from": "Elena",
+        "source": "team_dialogue"
+      },
+      {
+        "id": "mention_David_0",
+        "type": "team_suggestion",
+        "name": "@Sofia, de kunstregie is sterk en visueel zeer aantrekkelijk, wat een goede basi",
+        "description": "@Sofia, de kunstregie is sterk en visueel zeer aantrekkelijk, wat een goede basis legt voor de user experience. ",
+        "priority": 5,
+        "from": "David",
+        "source": "team_dialogue"
+      },
+      {
+        "id": "mention_David_1",
+        "type": "team_suggestion",
+        "name": "@Yuki, je visuele suggesties voor meer expressieve karakteranimaties kunnen de s",
+        "description": "@Yuki, je visuele suggesties voor meer expressieve karakteranimaties kunnen de spelbeleving verder versterken.",
+        "priority": 5,
+        "from": "David",
+        "source": "team_dialogue"
+      },
+      {
+        "id": "mention_David_2",
+        "type": "team_suggestion",
+        "name": "@Emma's idee om meer glitter en regenboogkleuren toe te voegen, zou de volwassen",
+        "description": "@Emma's idee om meer glitter en regenboogkleuren toe te voegen, zou de volwassen aantrekkingskracht van het spel kunnen verminderen. ",
+        "priority": 5,
+        "from": "David",
+        "source": "team_dialogue"
+      },
+      {
+        "id": "mention_David_3",
+        "type": "team_suggestion",
+        "name": "@Tim heeft terecht gewezen op de noodzaak van meer variatie in gameplay, maar de",
+        "description": "@Tim heeft terecht gewezen op de noodzaak van meer variatie in gameplay, maar de visuele flair moet ook behouden blijven.",
+        "priority": 5,
+        "from": "David",
+        "source": "team_dialogue"
+      },
+      {
+        "id": "mention_David_4",
+        "type": "team_suggestion",
+        "name": "@Sandra's suggesties voor strategische diepgang te combineren met mijn retentie-",
+        "description": "@Sandra's suggesties voor strategische diepgang te combineren met mijn retentie-adviezen, kunnen we een spelervaring creëren die aantrekkelijk is voor zowel nieuwe als terugkerende spelers.",
+        "priority": 5,
+        "from": "David",
+        "source": "team_dialogue"
+      },
+      {
+        "id": "mention_David_5",
+        "type": "team_suggestion",
+        "name": "@Kenji, overweeg om meer focus te leggen op een gedetailleerd achievement systee",
+        "description": "@Kenji, overweeg om meer focus te leggen op een gedetailleerd achievement systeem. ",
+        "priority": 5,
+        "from": "David",
+        "source": "team_dialogue"
+      },
+      {
+        "id": "mention_David_6",
+        "type": "team_suggestion",
+        "name": "@Marcus, het integreren van meer exclusieve items en seizoensgebonden content ka",
+        "description": "@Marcus, het integreren van meer exclusieve items en seizoensgebonden content kan de betrokkenheid verder verhogen.",
+        "priority": 5,
+        "from": "David",
+        "source": "team_dialogue"
+      },
+      {
+        "id": "mention_Ava_0",
+        "type": "team_suggestion",
+        "name": "@Sofia over de sterke art direction en ",
+        "description": "@Sofia over de sterke art direction en ",
+        "priority": 5,
+        "from": "Ava",
+        "source": "team_dialogue"
+      },
+      {
+        "id": "mention_Ava_1",
+        "type": "team_suggestion",
+        "name": "@Sandra over het belang van strategische diepgang.",
+        "description": "@Sandra over het belang van strategische diepgang.",
+        "priority": 5,
+        "from": "Ava",
+        "source": "team_dialogue"
+      },
+      {
+        "id": "mention_Ava_2",
+        "type": "team_suggestion",
+        "name": "@Emma's idee voor meer glitter en regenboogkleuren kan de visuele consistentie v",
+        "description": "@Emma's idee voor meer glitter en regenboogkleuren kan de visuele consistentie voor oudere doelgroepen verstoren.",
+        "priority": 5,
+        "from": "Ava",
+        "source": "team_dialogue"
+      },
+      {
+        "id": "mention_Ava_3",
+        "type": "team_suggestion",
+        "name": "@David te versterken kan MazeChase een diepere en langdurigere betrokkenheid bij",
+        "description": "@David te versterken kan MazeChase een diepere en langdurigere betrokkenheid bij de speler creëren.",
+        "priority": 5,
+        "from": "Ava",
+        "source": "team_dialogue"
+      },
+      {
+        "id": "mention_Ava_4",
+        "type": "team_suggestion",
+        "name": "@Kenji, overweeg om meer gebruik te maken van de unieke visuele stijl voor cross",
+        "description": "@Kenji, overweeg om meer gebruik te maken van de unieke visuele stijl voor cross-promotional partnerships. ",
+        "priority": 5,
+        "from": "Ava",
+        "source": "team_dialogue"
+      },
+      {
+        "id": "mention_Ava_5",
+        "type": "team_suggestion",
+        "name": "@Marcus, richt je op het uitbreiden van de cosmetic shop met seizoensgebonden it",
+        "description": "@Marcus, richt je op het uitbreiden van de cosmetic shop met seizoensgebonden items voor verhoogde ARPU.",
+        "priority": 5,
+        "from": "Ava",
+        "source": "team_dialogue"
+      },
+      {
+        "id": "mention_Grandma Mei_0",
+        "type": "team_suggestion",
+        "name": "@Kenji:** Overweeg grotere tekstopties en minder intense visuele effecten voor b",
+        "description": "@Kenji:** Overweeg grotere tekstopties en minder intense visuele effecten voor betere toegankelijkheid.",
+        "priority": 5,
+        "from": "Grandma Mei",
+        "source": "team_dialogue"
+      },
+      {
+        "id": "mention_Grandma Mei_1",
+        "type": "team_suggestion",
+        "name": "@Marcus:** Denk na over het ontwikkelen van een speciale seniorenbundel die oude",
+        "description": "@Marcus:** Denk na over het ontwikkelen van een speciale seniorenbundel die oudere spelers motiveert met minder snelheid en duidelijkere instructies.",
+        "priority": 5,
+        "from": "Grandma Mei",
+        "source": "team_dialogue"
+      },
+      {
+        "id": "mention_Alex_0",
+        "type": "team_suggestion",
+        "name": "@Elena's suggesties voor performance optimalisaties door mesh instancing en mate",
+        "description": "@Elena's suggesties voor performance optimalisaties door mesh instancing en material freezing.",
+        "priority": 5,
+        "from": "Alex",
+        "source": "team_dialogue"
+      },
+      {
+        "id": "mention_Alex_1",
+        "type": "team_suggestion",
+        "name": "@Emma's suggestie voor meer glitter, zoals velen aangegeven hebben, kan dit onno",
+        "description": "@Emma's suggestie voor meer glitter, zoals velen aangegeven hebben, kan dit onnodige visuele ruis creëren en de performance schaden.",
+        "priority": 5,
+        "from": "Alex",
+        "source": "team_dialogue"
+      },
+      {
+        "id": "mention_Alex_2",
+        "type": "team_suggestion",
+        "name": "@Sandra's aanbevelingen voor strategische diepgang beter ondersteunt.",
+        "description": "@Sandra's aanbevelingen voor strategische diepgang beter ondersteunt.",
+        "priority": 5,
+        "from": "Alex",
+        "source": "team_dialogue"
+      },
+      {
+        "id": "mention_Alex_3",
+        "type": "team_suggestion",
+        "name": "@Kenji, overweeg het integreren van verbeterde rendering herstelmethodes. ",
+        "description": "@Kenji, overweeg het integreren van verbeterde rendering herstelmethodes. ",
+        "priority": 5,
+        "from": "Alex",
+        "source": "team_dialogue"
+      },
+      {
+        "id": "mention_Alex_4",
+        "type": "team_suggestion",
+        "name": "@Marcus, misschien kunnen bepaalde visuele effecten als premium features worden ",
+        "description": "@Marcus, misschien kunnen bepaalde visuele effecten als premium features worden aangeboden om de aantrekkelijkheid te verhogen zonder de game te overbelasten.",
+        "priority": 5,
+        "from": "Alex",
+        "source": "team_dialogue"
+      },
+      {
+        "id": "mention_Kenji_0",
+        "type": "team_suggestion",
+        "name": "@Sofia dat de thema's visueel sterk zijn en dit moet worden weerspiegeld in de a",
+        "description": "@Sofia dat de thema's visueel sterk zijn en dit moet worden weerspiegeld in de audio. ",
+        "priority": 5,
+        "from": "Kenji",
+        "source": "team_dialogue"
+      },
+      {
+        "id": "mention_Kenji_1",
+        "type": "team_suggestion",
+        "name": "@Elena's focus op performance optimalisatie kan helpen bij het beter implementer",
+        "description": "@Elena's focus op performance optimalisatie kan helpen bij het beter implementeren van spatial audio.",
+        "priority": 5,
+        "from": "Kenji",
+        "source": "team_dialogue"
+      },
+      {
+        "id": "mention_Kenji_2",
+        "type": "team_suggestion",
+        "name": "@Emma's suggestie voor meer glitter in audio, wat kan afleiden van de kern gamep",
+        "description": "@Emma's suggestie voor meer glitter in audio, wat kan afleiden van de kern gameplay.",
+        "priority": 5,
+        "from": "Kenji",
+        "source": "team_dialogue"
+      },
+      {
+        "id": "mention_Kenji_3",
+        "type": "team_suggestion",
+        "name": "@David's retentie-advies te combineren met verbeterde audio feedback loops, kan ",
+        "description": "@David's retentie-advies te combineren met verbeterde audio feedback loops, kan MazeChase meer verslavend worden.",
+        "priority": 5,
+        "from": "Kenji",
+        "source": "team_dialogue"
+      },
+      {
+        "id": "mention_Kenji_4",
+        "type": "team_suggestion",
+        "name": "@Marcus, overweeg om audio als een premium element te integreren in cosmetische ",
+        "description": "@Marcus, overweeg om audio als een premium element te integreren in cosmetische veranderingen. ",
+        "priority": 5,
+        "from": "Kenji",
+        "source": "team_dialogue"
+      },
+      {
+        "id": "mention_Kenji_5",
+        "type": "team_suggestion",
+        "name": "@Alex, werk aan verbeterde foutafhandeling in audio synchronisatie.",
+        "description": "@Alex, werk aan verbeterde foutafhandeling in audio synchronisatie.",
+        "priority": 5,
+        "from": "Kenji",
+        "source": "team_dialogue"
+      },
+      {
+        "id": "mention_Marcus_0",
+        "type": "team_suggestion",
+        "name": "@Elena over de noodzaak om de performance te optimaliseren, en ",
+        "description": "@Elena over de noodzaak om de performance te optimaliseren, en ",
+        "priority": 5,
+        "from": "Marcus",
+        "source": "team_dialogue"
+      },
+      {
+        "id": "mention_Marcus_1",
+        "type": "team_suggestion",
+        "name": "@Ava over het potentieel in de marktpositie.",
+        "description": "@Ava over het potentieel in de marktpositie.",
+        "priority": 5,
+        "from": "Marcus",
+        "source": "team_dialogue"
+      },
+      {
+        "id": "mention_Marcus_2",
+        "type": "team_suggestion",
+        "name": "@Emma's suggestie voor meer glitter, dit kan de performance en doelgroep schaden",
+        "description": "@Emma's suggestie voor meer glitter, dit kan de performance en doelgroep schaden.",
+        "priority": 5,
+        "from": "Marcus",
+        "source": "team_dialogue"
+      },
+      {
+        "id": "mention_Marcus_3",
+        "type": "team_suggestion",
+        "name": "@Marcus voor monetization beter tot hun recht komen.",
+        "description": "@Marcus voor monetization beter tot hun recht komen.",
+        "priority": 5,
+        "from": "Marcus",
+        "source": "team_dialogue"
+      },
+      {
+        "id": "mention_Marcus_4",
+        "type": "team_suggestion",
+        "name": "@Kenji, overweeg om je audiodesign aan te passen voor een betere integratie met ",
+        "description": "@Kenji, overweeg om je audiodesign aan te passen voor een betere integratie met de visuele thema's. ",
+        "priority": 5,
+        "from": "Marcus",
+        "source": "team_dialogue"
+      },
+      {
+        "id": "mention_Marcus_5",
+        "type": "team_suggestion",
+        "name": "@Alex, je focus op verbeterde error handling is cruciaal.",
+        "description": "@Alex, je focus op verbeterde error handling is cruciaal.",
+        "priority": 5,
+        "from": "Marcus",
+        "source": "team_dialogue"
+      }
+    ]
+  },
+  "perTester": [
+    {
+      "name": "Sofia",
+      "role": "player",
+      "score": 7,
+      "topPriorities": null,
+      "suggestionsCount": 0
+    },
+    {
+      "name": "Emma",
+      "role": "player",
+      "score": 7,
+      "topPriorities": null,
+      "suggestionsCount": 1
+    },
+    {
+      "name": "Tim",
+      "role": "player",
+      "score": 6,
+      "topPriorities": null,
+      "suggestionsCount": 1
+    },
+    {
+      "name": "Sandra",
+      "role": "player",
+      "score": 8,
+      "topPriorities": null,
+      "suggestionsCount": 1
+    },
+    {
+      "name": "Peter",
+      "role": "player",
+      "score": 8,
+      "topPriorities": null,
+      "suggestionsCount": 1
+    },
+    {
+      "name": "Yuki",
+      "role": "player",
+      "score": 8,
+      "topPriorities": "TOP 3 PRIORITEITEN:**\n  1. Verbetering van karakteranimaties voor meer expressiviteit.\n  2. Herziening van power-up effecten voor herkenbaarheid en variatie.\n  3. Consistentie in thematische kleuren en stijlen vergroten.\n\n- **QUICK WINS:**\n  1. Verfijn de UI knoppen met meer dynamische effecten.\n  2. Voeg meer variatie toe aan particle effects bij power-up activaties.\n  3. Pas kleurverschuivingen toe bij kwetsbare staten van karakters.\n\n- **LONG TERM:**\n  1. Ontwikkel een progressiesysteem om de",
+      "suggestionsCount": 6
+    },
+    {
+      "name": "Marcus",
+      "role": "player",
+      "score": 8,
+      "topPriorities": "TOP 3 PRIORITEITEN:**\n  1. Verbeteren van de cosmetic shop met meer variatie en exclusiviteit.\n  2. Implementeren van een aantrekkelijke Battle Pass structuur.\n  3. Ontwikkelen van een gezinsvriendelijke bundel.\n- **QUICK WINS:**\n  1. Integreren van rewarded ads voor extra engagement.\n  2. Starten met een premium versie met directe voordelen.\n  3. Uitbreiden van thema's en cosmetische items.\n- **LONG TERM:**\n  1. Ontwikkelen van diepere seizoensgebonden content.\n  2. Verfijnen van de Battle Pass",
+      "suggestionsCount": 3
+    },
+    {
+      "name": "Elena",
+      "role": "player",
+      "score": 7,
+      "topPriorities": "TOP 3 PRIORITEITEN:**\n  1. Reduceer draw calls via mesh instancing en material freezing.\n  2. Optimaliseer mobile performance met adaptive quality settings.\n  3. Reduceer laadtijd door tree-shaking en lazy loading.\n\n- **QUICK WINS:**\n  1. Pas `material.freeze()` toe op statische objecten.\n  2. Implementeer mesh instancing voor herhaalde objecten.\n  3. Verminder glow blur kernel voor betere prestaties.\n\n- **LONG TERM:**\n  1. Ontwikkel een meer geavanceerd asset loading strategie.\n  2. Implementee",
+      "suggestionsCount": 7
+    },
+    {
+      "name": "David",
+      "role": "player",
+      "score": 8,
+      "topPriorities": "TOP 3 PRIORITEITEN:**\n  1. Herzien van de onboarding flow met focus op snelle successen.\n  2. Implementeren van daily challenges en streak rewards.\n  3. Versterken van de sociale aspecten via leaderboards en friend challenges.\n\n- **QUICK WINS:**\n  1. Verbeterde visuele en auditieve feedback bij belangrijke momenten.\n  2. Eenvoudige push notificaties voor dagelijkse uitdagingen.\n  3. Directe rematch optie na een sessie.\n\n- **LONG TERM:**\n  1. Uitgebreidere tutorial die spelers sneller het \"aha\" m",
+      "suggestionsCount": 8
+    },
+    {
+      "name": "Ava",
+      "role": "player",
+      "score": 7,
+      "topPriorities": "TOP 3 PRIORITEITEN:**\n  1. Verbeteren van het virale potentieel door deelbare in-game momenten te creëren.\n  2. Uitbouwen van community engagement met sociale uitdagingen en leaderboards.\n  3. Optimaliseren van de streamability door variatie en verrassende gameplay momenten te verhogen.\n\n- **QUICK WINS:**\n  1. Voeg meer visuele flair toe aan power-ups en speciale momenten.\n  2. Start een gerichte campagne op sociale media.\n  3. Implementeer een eenvoudig achievements systeem voor initiële betrok",
+      "suggestionsCount": 7
+    },
+    {
+      "name": "Grandma Mei",
+      "role": "player",
+      "score": 7,
+      "topPriorities": null,
+      "suggestionsCount": 2
+    },
+    {
+      "name": "Alex",
+      "role": "player",
+      "score": 5,
+      "topPriorities": "TOP 3 PRIORITEITEN:**\n  1. Verbeter netwerk reconnect en state recovery.\n  2. Herzie foutafhandeling en gebruikersfeedback.\n  3. Optimaliseer rendering bij focusherstel.\n\n- **QUICK WINS:**\n  1. Typo correcties.\n  2. Unicode-validatie in gebruikersnamen.\n  3. Basis reconnect mechanisme.\n\n- **LONG TERM:**\n  1. Implementatie van een robuust message sequencing systeem.\n  2. Uitgebreide netwerkfout testen.\n  3. Verbeterde gebruikerservaring bij reconnect en state sync.\n\n",
+      "suggestionsCount": 6
+    },
+    {
+      "name": "Kenji",
+      "role": "player",
+      "score": 5,
+      "topPriorities": "TOP 3 AUDIO PRIORITEITEN:**\n  1. Verbeter directionele audio cues voor Chasers.\n  2. Herwerk pellet en power-up geluiden voor meer satisfactie.\n  3. Creëer onderscheidende muziek voor elk thema.\n\n",
+      "suggestionsCount": 7
+    },
+    {
+      "name": "Marcus",
+      "role": "player",
+      "score": 6,
+      "topPriorities": "TOP 3 PRIORITEITEN:** Verbeteren van game loop structuur, WebSocket beveiliging, en documentatie.\n- **QUICK WINS:** Verbeterde commentaren, basis CI/CD implementatie, en ESlint configuratie.\n- **LONG TERM:** Migratie naar ECS pattern, gedetailleerde documentatie, en optimalisatie van WebSocket communicatie.\n\n",
+      "suggestionsCount": 8
+    }
+  ],
+  "improvementPlan": "## 📊 SCORE SAMENVATTING\nHier is een tabel met de beoordelingen van alle 14 testers:\n\n| Tester       | Gameplay | Difficulty | Controls | Addictive | Graphics | Art Direction | Particle Effects | Animation | UI/UX | Sound | Atmosphere | Family-Friendly | Clarity | Overall |\n|--------------|----------|------------|----------|-----------|----------|---------------|------------------|-----------|-------|-------|------------|-----------------|---------|---------|\n| Emma (8)     | 7        | 8          | 9        | 7         | 8        | 9             | 8                | 8         | 9     | 8     | 9          | 9               | 9       | 8       |\n| Tim (16)     | 6        | 8          | 9        | 5         | 7        | 8             | 7                | 7         | 9     | 7     | 8          | 9               | 9       | 7       |\n| Sandra (38)  | 8        | 9          | 9        | 7         | 8        | 9             | 8                | 8         | 9     | 8     | 9          | 9               | 9       | 8       |\n| Peter (45)   | 8        | 9          | 9        | 7         | 8        | 9             | 8                | 8         | 9     | 8     | 9          | 9               | 9       | 8       |\n| Grandma Mei (72) | 7    | 6          | 7        | 6         | 8        | 9             | 7                | 8         | 8     | 8     | 8          | 9               | 8       | 7       |\n| Sofia (Expert)| 7       | 8          | 9        | 7         | 8        | 9             | 8                | 8         | 9     | 8     | 9          | 9               | 9       | 8       |\n| Yuki (Expert)| 7        | -          | -        | -         | 8        | 8             | 7                | -         | 9     | -     | -          | -               | -       | 8       |\n| Marcus (Expert)| -      | -          | -        | -         | -        | -             | -                | -         | -     | -     | -          | -               | -       | 8       |\n| Elena (Expert) | -      | -          | -        | -         | -        | -             | -                | -         | -     | -     | -          | -               | -       | 7       |\n| David (Expert)| 8       | 7          | -        | 7         | -        | -             | -                | -         | -     | -     | -          | -               | -       | 7       |\n| Ava (Expert) | -        | -          | -        | -         | -        | -             | -                | -         | -     | -     | -          | -               | -       | 7       |\n| Alex (Expert)| -        | -          | -        | -         | -        | -             | -                | -         | -     | -     | -          | -               | -       | 6       |\n| Kenji (Expert)| -       | -          | -        | -         | -        | -             | -                | -         | -     | 5     | -          | -               | -       | 5       |\n| Marcus (QA)  | -        | -          | -        | -         | -        | -             | -                | -         | -     | -     | -          | -               | -       | 6       |\n\n## 🎯 EXECUTIVE SUMMARY\n\n- **Wat vinden ALLE testers goed?**\n  - De art direction en thema's worden unaniem gewaardeerd als aantrekkelijk en goed uitgewerkt.\n  - De interface en besturing worden geprezen om hun gebruiksvriendelijkheid en responsiviteit.\n\n- **Wat vinden ALLE testers slecht?**\n  - De gameplay mist variatie en heeft behoefte aan meer diepgang en strategische elementen.\n  - De animaties worden als soepel beoordeeld, maar missen karakter en flair.\n\n- **Waar zijn testers het ONEENS?**\n  - De noodzaak van meer glitter en regenboogkleuren: jongere testers zoals Emma vinden dit aantrekkelijk, terwijl oudere testers zoals Peter en Tim het als overbodig beschouwen en vrezen dat het de volwassen aantrekkingskracht vermindert.\n\n## 🐛 QA BUG RAPPORT\n\n- **Critical bugs (blokkerend):**\n  - Netwerkonderbrekingen leiden tot een niet-herstelbare client state na reconnect.\n  \n- **High priority fixes:**\n  - Visuele corruptie bij snel wisselen van tabbladen.\n  - UI glitches bij het invoeren van lange Unicode-gebruikersnamen.\n\n- **Edge cases die aandacht nodig hebben:**\n  - Onvoldoende herstel bij netwerkuitval.\n  - Problemen met rendering bij focusherstel.\n\n## 🚨 SPRINT 1 - KRITIEKE FIXES (Deze week)\n\n1. **Netwerk reconnect probleem** (gerapporteerd door Alex): Implementeer een betrouwbaardere state synchronisatie na reconnect.\n2. **Visuele corruptie bij tab wisselen** (gerapporteerd door Alex): Herinitialiseer de rendering context bij focusherstel.\n3. **UI glitches met lange gebruikersnamen** (gerapporteerd door Alex): Voeg tekenlimieten en validatie toe.\n4. **Onvoldoende error handling** (gerapporteerd door Marcus): Verbeter foutafhandeling met contextuele informatie.\n5. **Race conditions in architectuur** (gerapporteerd door Alex): Introduceer lockmechanismen of sequentiële verwerkingsstrategieën.\n\n## 🎨 SPRINT 2 - VISUELE UPGRADE (Complete Art Overhaul)\n\n### CHARACTER REDESIGNS:\n- **Runner:** Cirkelvormig hoofd met opvallende gele kleuren en expressieve ogen.\n- **Chasers:** Drie unieke vormen (driehoek, vierkant, organisch) met onderscheidende kleuren en bewegingen.\n- **Animatie specs:** Verbeter expressiviteit en karakter in bewegingen.\n\n### ENVIRONMENT & TILES:\n- **Muur redesign:** 3D extrusie met matte afwerking en lichte glow.\n- **Vloer en decoratie:** Hexagonaal patroon met ambient particles.\n- **Per-thema variaties:** Neon Night, Cyber Arcade, Sunset Maze, Shadow Forest.\n\n### UI OVERHAUL:\n- **Button designs:** Afgeronde rechthoeken met hover en click effecten.\n- **Score/HUD:** Duidelijke, kleurrijke displays met popup animaties.\n- **Panels en modals:** Zachte verlopen en afgeronde hoeken.\n\n### VFX & PARTICLES:\n- **Pellet collect effects:** Gouden burst met sparkles.\n- **Power-up activatie:** Dynamische aura en trail effecten.\n- **Chaser caught effects:** Poof met oplos-effect.\n\n### ELEMENTEN TE VERWIJDEREN:\n- Verwijder outdated textures en stijve animaties.\n\n### PRIORITEIT VOLGORDE VOOR ART:\n1. Character redesigns\n2. UI overhaul\n3. VFX & particles\n\n## 💰 SPRINT 3 - MONETIZATION (Ethisch & Family-Friendly)\n\n- **Quick monetization wins:** Rewarded ads en een premium versie zonder advertenties.\n- **Cosmetics shop design:** Exclusieve skins en thema's voor seizoensgebonden verkoop.\n- **Battle pass structuur:** Gratis en premium sporen met unieke beloningen.\n\n## ⚡ SPRINT 4 - PERFORMANCE & TECHNIEK\n\n- **WebGL/Babylon.js optimalisaties:** Gebruik van mesh instancing en material freezing.\n- **Mobile performance fixes:** Adaptive quality settings en memory budget voor iOS/Android.\n- **Asset optimalisatie:** Reduceer laadtijd en geheugenverbruik door texture atlasing.\n\n## 🧠 SPRINT 5 - RETENTIE & GROEI\n\n- **Onboarding verbeteringen:** Snelle en interactieve tutorial.\n- **Retentie features:** Daily challenges en sociale leaderboards.\n- **Virale groei strategie:** Meme-able momenten en content creator outreach.\n- **Launch plan:** Stapsgewijze platformuitbreiding en marketingcampagnes.\n\n## 📋 COMPLETE PRIORITEITENLIJST\n\n| #  | Taak                                      | Impact | Effort | Expert | Sprint |\n|----|-------------------------------------------|--------|--------|--------|--------|\n| 1  | Verbeter netwerk reconnect en state sync  | High   | High   | Alex   | 1      |\n| 2  | Visuele corruptie bij tab wisselen        | High   | Medium | Alex   | 1      |\n| 3  | UI glitches met lange gebruikersnamen     | Medium | Low    | Alex   | 1      |\n| 4  | Verbetering van game loop structuur       | High   | High   | Marcus | 4      |\n| 5  | Character redesigns                       | High   | High   | Yuki   | 2      |\n| 6  | UI overhaul                               | High   | Medium | Yuki   | 2      |\n| 7  | Daily challenges en retentie features     | High   | Medium | David  | 5      |\n| 8  | Monetization structuur                    | Medium | High   | Marcus | 3      |\n| 9  | WebGL/Babylon.js optimalisaties           | Medium | Medium | Elena  | 4      |\n| 10 | Launch plan en virale strategie           | Medium | High   | Ava    | 5      |\n\n## 💡 BONUS: AI IMAGE GENERATION PROMPTS (10 prompts)\n\n1. **RUNNER CHARACTER SPRITE SHEET:** \"Create a cute spherical yellow character with a happy expression, big round eyes with white highlights, Kurzgesagt animation style, flat design, no outlines, bold yellow #FFD93D, simple geometric shape, vector art.\"\n2. **CHASER CHARACTERS SET (3 variants):** \"Design a set of three contrasting chaser characters: one triangular and aggressive, one square and stealthy, one fluid and unpredictable, each with unique vibrant colors and expressions, Kurzgesagt style.\"\n3. **POWER-UP ICONS (6 types):** \"Create a set of six distinct power-up icons each representing a unique ability, with flat design, bold colors, and simple geometric shapes, fitting for a game interface.\"\n4. **PELLET DESIGNS (normal + power):** \"Design small circular collectibles with a soft glow, in Kurzgesagt style, bold gold #FFE66D color, vector art, transparent background.\"\n5. **MAZE WALL TILES (4 themes):** \"Create simple flat colored wall segments with a matte finish, rounded edges, designed in Kurzgesagt style, suitable for tiling in a game environment.\"\n6. **UI BUTTON SET:** \"Design a collection of modern, rounded rectangular buttons with a soft glow effect, various states including hover and pressed, Kurzgesagt style.\"\n7. **PARTICLE EFFECT SPRITES:** \"Produce a series of small, dynamic particle effect sprites in bold colors, designed in Kurzgesagt style, suitable for game effects like bursts and trails.\"\n8. **THEME MOOD BOARDS (4 themes):** \"Develop an energetic cyberpunk-themed mood board featuring bold neon colors, structured geometric shapes, and a dark backdrop, Kurzgesagt style.\"\n9. **VICTORY/GAME OVER SCREENS:** \"Illustrate celebratory victory and motivational game over screens, with expressive character poses and bold typography, in Kurzgesagt style.\"\n10. **COMPLETE GAME SCREENSHOT MOCKUP:** \"Create a full game screenshot mockup, showing a vibrant maze environment, contrasting characters, and dynamic UI elements, in Kurzgesagt style.\"\n\n## 🔄 AI ZELFVERBETERING - META-ANALYSE\n\n- **PROMPT VERBETERINGEN:**\n  - Veel AI's gaven aan dat gedetailleerdere voorbeelden van vergelijkbare games nuttig zouden zijn.\n  - Toekomstige prompts kunnen baat hebben bij specifieke richtlijnen voor technische implementaties en user feedback.\n\n- **ONTBREKENDE MIDDELEN:**\n  - Diepere marktdata en gebruikersmetrics zijn essentieel om betere analyses te maken.\n  - Tools zoals heatmaps en sessie-opnames om gebruikersinteracties te begrijpen zijn gewenst.\n\n- **SYSTEEM UPGRADES:**\n  - Het toevoegen van feedback loops en empirische testen kan de nauwkeurigheid van analyses verbeteren.\n  - Meer focus op hands-on testen en profiler ervaring kan nuttig zijn voor verdere optimalisatie.\n\n## 🏆 CONCLUSIE\n\n- **Belangrijkste actie voor commercieel succes:** Het integreren van meer variatie en strategische diepgang in de gameplay terwijl de visuele en auditieve aspecten worden verbeterd.\n- **Geschatte tijd tot markt-klaar product:** 3 tot 6 maanden na implementatie van de gestructureerde sprints en revisies.\n- **Vergelijking met succesvolle referentie games:** MazeChase kan zich onderscheiden door zijn unieke combinatie van strategische diepte en visuele flair, vergelijkbaar met Fall Guys en Among Us, maar met een eigen twist in gameplay en thematiek.",
+  "consensus": {
+    "highPriority": [
+      {
+        "category": "UI/UX",
+        "expertCount": 13,
+        "mentionedBy": [
+          "Sofia",
+          "Emma",
+          "Tim",
+          "Sandra",
+          "Peter",
+          "Yuki",
+          "Marcus",
+          "Elena",
+          "David",
+          "Ava",
+          "Grandma Mei",
+          "Alex",
+          "Kenji"
+        ],
+        "totalMentions": 247,
+        "severity": 34
+      },
+      {
+        "category": "Visuals",
+        "expertCount": 11,
+        "mentionedBy": [
+          "Sofia",
+          "Emma",
+          "Tim",
+          "Sandra",
+          "Peter",
+          "Yuki",
+          "Marcus",
+          "David",
+          "Ava",
+          "Grandma Mei",
+          "Kenji"
+        ],
+        "totalMentions": 78,
+        "severity": 72
+      },
+      {
+        "category": "Audio",
+        "expertCount": 10,
+        "mentionedBy": [
+          "Sofia",
+          "Emma",
+          "Tim",
+          "Sandra",
+          "Peter",
+          "Yuki",
+          "David",
+          "Grandma Mei",
+          "Kenji",
+          "Marcus"
+        ],
+        "totalMentions": 85,
+        "severity": 48
+      },
+      {
+        "category": "Animation",
+        "expertCount": 9,
+        "mentionedBy": [
+          "Sofia",
+          "Emma",
+          "Tim",
+          "Sandra",
+          "Peter",
+          "Yuki",
+          "Elena",
+          "David",
+          "Grandma Mei"
+        ],
+        "totalMentions": 47,
+        "severity": 45
+      },
+      {
+        "category": "Multiplayer",
+        "expertCount": 8,
+        "mentionedBy": [
+          "Sofia",
+          "Peter",
+          "Yuki",
+          "Elena",
+          "Ava",
+          "Alex",
+          "Kenji",
+          "Marcus"
+        ],
+        "totalMentions": 34,
+        "severity": 26
+      },
+      {
+        "category": "Onboarding",
+        "expertCount": 8,
+        "mentionedBy": [
+          "Sofia",
+          "Tim",
+          "Sandra",
+          "Peter",
+          "David",
+          "Grandma Mei",
+          "Alex",
+          "Marcus"
+        ],
+        "totalMentions": 13,
+        "severity": 11
+      },
+      {
+        "category": "Performance",
+        "expertCount": 6,
+        "mentionedBy": [
+          "Sofia",
+          "Peter",
+          "Elena",
+          "Alex",
+          "Kenji",
+          "Marcus"
+        ],
+        "totalMentions": 27,
+        "severity": 11
+      },
+      {
+        "category": "Monetization",
+        "expertCount": 5,
+        "mentionedBy": [
+          "Marcus",
+          "Elena",
+          "Ava",
+          "Alex",
+          "Kenji"
+        ],
+        "totalMentions": 17,
+        "severity": 14
+      },
+      {
+        "category": "Mobile",
+        "expertCount": 4,
+        "mentionedBy": [
+          "Sofia",
+          "Sandra",
+          "Elena",
+          "Ava"
+        ],
+        "totalMentions": 11,
+        "severity": 5
+      },
+      {
+        "category": "Bugs",
+        "expertCount": 3,
+        "mentionedBy": [
+          "Alex",
+          "Kenji",
+          "Marcus"
+        ],
+        "totalMentions": 33,
+        "severity": 20
+      }
+    ],
+    "mediumPriority": [],
+    "mentioned": [
+      {
+        "category": "UI/UX",
+        "expertCount": 13,
+        "mentionedBy": [
+          "Sofia",
+          "Emma",
+          "Tim",
+          "Sandra",
+          "Peter",
+          "Yuki",
+          "Marcus",
+          "Elena",
+          "David",
+          "Ava",
+          "Grandma Mei",
+          "Alex",
+          "Kenji"
+        ],
+        "totalMentions": 247,
+        "severity": 34
+      },
+      {
+        "category": "Visuals",
+        "expertCount": 11,
+        "mentionedBy": [
+          "Sofia",
+          "Emma",
+          "Tim",
+          "Sandra",
+          "Peter",
+          "Yuki",
+          "Marcus",
+          "David",
+          "Ava",
+          "Grandma Mei",
+          "Kenji"
+        ],
+        "totalMentions": 78,
+        "severity": 72
+      },
+      {
+        "category": "Audio",
+        "expertCount": 10,
+        "mentionedBy": [
+          "Sofia",
+          "Emma",
+          "Tim",
+          "Sandra",
+          "Peter",
+          "Yuki",
+          "David",
+          "Grandma Mei",
+          "Kenji",
+          "Marcus"
+        ],
+        "totalMentions": 85,
+        "severity": 48
+      },
+      {
+        "category": "Animation",
+        "expertCount": 9,
+        "mentionedBy": [
+          "Sofia",
+          "Emma",
+          "Tim",
+          "Sandra",
+          "Peter",
+          "Yuki",
+          "Elena",
+          "David",
+          "Grandma Mei"
+        ],
+        "totalMentions": 47,
+        "severity": 45
+      },
+      {
+        "category": "Multiplayer",
+        "expertCount": 8,
+        "mentionedBy": [
+          "Sofia",
+          "Peter",
+          "Yuki",
+          "Elena",
+          "Ava",
+          "Alex",
+          "Kenji",
+          "Marcus"
+        ],
+        "totalMentions": 34,
+        "severity": 26
+      },
+      {
+        "category": "Onboarding",
+        "expertCount": 8,
+        "mentionedBy": [
+          "Sofia",
+          "Tim",
+          "Sandra",
+          "Peter",
+          "David",
+          "Grandma Mei",
+          "Alex",
+          "Marcus"
+        ],
+        "totalMentions": 13,
+        "severity": 11
+      },
+      {
+        "category": "Performance",
+        "expertCount": 6,
+        "mentionedBy": [
+          "Sofia",
+          "Peter",
+          "Elena",
+          "Alex",
+          "Kenji",
+          "Marcus"
+        ],
+        "totalMentions": 27,
+        "severity": 11
+      },
+      {
+        "category": "Monetization",
+        "expertCount": 5,
+        "mentionedBy": [
+          "Marcus",
+          "Elena",
+          "Ava",
+          "Alex",
+          "Kenji"
+        ],
+        "totalMentions": 17,
+        "severity": 14
+      },
+      {
+        "category": "Mobile",
+        "expertCount": 4,
+        "mentionedBy": [
+          "Sofia",
+          "Sandra",
+          "Elena",
+          "Ava"
+        ],
+        "totalMentions": 11,
+        "severity": 5
+      },
+      {
+        "category": "Bugs",
+        "expertCount": 3,
+        "mentionedBy": [
+          "Alex",
+          "Kenji",
+          "Marcus"
+        ],
+        "totalMentions": 33,
+        "severity": 20
+      }
+    ]
+  },
+  "contraRound": [
+    {
+      "matchup": {
+        "challenger": "Kenji",
+        "target": "Yuki",
+        "topic": "Audio vs Visual - wat is BELANGRIJKER voor de speler?"
+      },
+      "debate": "**🥊 KENJI:** Yuki, je negeert compleet het feit dat geluid een directe emotionele impact kan hebben die visuals soms missen. Neem de sublieme soundtracks van games als Celeste en Undertale; ze blijven bij je lang nadat je de game hebt afgesloten. Je hebt sterke visuals, ja, maar je verwaarloost het potentieel van geluid om de speler op een dieper niveau te binden. Een game met middelmatige geluiden en muziek voelt levenloos, en het gevoel van immersie kan niet volledig worden bereikt. MazeChase mist die auditieve diepte waardoor spelers echt betrokken raken.\n\n**🛡️ YUKI:** Kenji, ik begrijp het belang van goede geluidseffecten en muziek, maar visuals zijn het eerste dat een speler opvalt en beïnvloedt hun eerste indruk van een game. Zonder aantrekkelijke visuele elementen valt een game al snel uit de gratie. Dat gezegd hebbende, erken ik dat onze huidige muziek niet bijzonder memorabel is en dat we daar verbetering kunnen aanbrengen. Toch blijft visueel ontwerp een cruciale factor om spelers aan te trekken en vast te houden. We moeten onze krachten bundelen om beide elementen te versterken.\n\n**🥊 KENJI:** Je hebt een punt, Yuki, visuals trekken zeker de eerste aandacht, maar uiteindelijk is het de samensmelting van beeld en geluid die een onvergetelijke spelervaring creëert. Echter, zonder krachtige audio om dat visuele spektakel te ondersteunen, verliezen we de kans om de speler in een emotionele achtbaan van verwondering en spanning te brengen. MazeChase heeft juist behoefte aan die auditieve kracht. Laten we prioriteit geven aan het verbeteren van onze geluidskwaliteit zodat de game niet alleen visueel aantrekkelijk is, maar ook auditief meeslepend en gedenkwaardig.\n\n**🏆 WINNAAR:** Kenji - Hoewel Yuki sterke punten heeft over het belang van visuals, heeft Kenji met succes aangetoond dat audio een cruciale rol speelt in de emotionele impact en betrokkenheid van de speler, iets waar MazeChase momenteel in tekortschiet.\n\n**📋 BESLUIT:** We zullen de geluidskwaliteit significant verbeteren door nieuwe muziek te componeren die gedenkwaardig en thematisch aansluitend is. We zullen ook investeren in gedetailleerdere en impactvollere geluidseffecten om de spelervaring te versterken.\n\n**🎯 DEADLINE:** De nieuwe en verbeterde audio-elementen moeten klaar zijn voor integratie binnen 6 weken.",
+      "timestamp": "2025-12-30T17:40:16.243Z"
+    },
+    {
+      "matchup": {
+        "challenger": "Yuki",
+        "target": "Elena",
+        "topic": "Visual flair vs 60 FPS - wat kiezen we?"
+      },
+      "debate": "🥊 YUKI: Elena, je legt veel nadruk op optimalisatie voor performance, maar vergeet daarbij dat onze game visueel aantrekkelijk moet blijven. Je zegt dat er ruimte is voor optimalisatie met draw calls en batching, maar wat je niet adresseert, is dat jouw optimalisaties de visuele kwaliteit van de game kunnen beperken. Als we de visuele effecten en details verminderen om 60 FPS te halen, zal dat onze spelervaring saai maken. Je kunt niet verwachten dat spelers betrokken blijven als ze geen visueel indrukwekkende wereld kunnen ervaren.\n\n🛡️ ELENA: Yuki, ik begrijp je zorgen over visuele aantrekkelijkheid, maar als we kiezen voor hoogwaardige grafische effecten ten koste van fps, kan dat leiden tot een onspeelbare game-ervaring. Niemand wil te maken hebben met stotterende beelden of vertraging, wat de immersie nog meer verbreekt. Dat gezegd hebbende, erken ik dat mijn benadering minder rekening houdt met visuele expressiviteit. We zouden kunnen kijken naar gerichte optimalisatie die het visuele behoudt in de belangrijkste gameplay-momenten terwijl we onnodige belasting elders verminderen. Dit is mogelijk door technieken als LOD (Levels of Detail) en efficiënter memory management.\n\n🥊 YUKI: Toch blijf ik erbij dat zonder een sterk visueel element, spelers zich niet volledig ondergedompeld voelen. Maar ik moet toegeven, je punt over gerichte optimalisatie is iets dat we niet kunnen negeren. Als we slim gebruik maken van LOD en andere technieken, kunnen we een balans vinden tussen visuele flair en performance. Het is cruciaal om te focussen op de momenten waar de visuals het meest impactvol zijn en elders te besparen. \n\n🏆 WINNAAR: Elena - Omdat ze een oplossing biedt die zowel performance als visuele kwaliteit in acht neemt zonder het één ten koste van het ander volledig op te offeren.\n\n📋 BESLUIT: Implementeren van gerichte optimalisatie technieken zoals Levels of Detail (LOD) en memory management om 60 FPS te behalen zonder de visuele flair te compromitteren.\n\n🎯 DEADLINE: Deze optimalisaties moeten binnen 4 weken worden geïmplementeerd zodat we voldoende tijd hebben om te testen voor de volgende ontwikkelfase.",
+      "timestamp": "2025-12-30T17:40:31.600Z"
+    },
+    {
+      "matchup": {
+        "challenger": "Elena",
+        "target": "Marcus",
+        "topic": "Performance vs Ads - mogen ads de FPS verlagen?"
+      },
+      "debate": "🥊 **ELENA:** Marcus, het invoegen van advertenties in MazeChase waarmee de FPS wordt verlaagd is absoluut onacceptabel. Onze spelers verwachten een vloeiende ervaring, en als hun gameplay begint te stotteren doordat wij ervoor kiezen om advertenties op te voeren, kan dat een desastreus effect hebben op ons gebruikersbestand. We riskeren spelers te verliezen aan concurrenten die wel een optimale prestatie bieden. Jouw focus op advertentie-inkomsten negeert het cruciale feit dat een lagere FPS onze spelerservaring en daarmee onze langetermijnretentie ondermijnt.\n\n🛡️ **MARCUS:** Ik begrijp je zorgen, Elena. Een goede spelervaring is belangrijk, maar zonder voldoende inkomsten kan het spel op de lange termijn niet overleven. Advertenties zijn een noodzakelijke bron van inkomsten, en als we die goed implementeren, kunnen ze zonder grote prestatieverminderingen worden opgenomen. We kunnen bijvoorbeeld kiezen voor minder opdringerige advertentieformaten of alternatieven zoals gesponsorde content die geen grote belasting vormt op de rendering. Toch geef ik toe dat we de huidige impact op FPS moeten onderzoeken en manieren moeten vinden om dit te minimaliseren.\n\n🥊 **ELENA:** Hoewel ik waardeer dat je erkent dat de prestatie niet mag lijden, moeten we prioriteit geven aan onze gebruikerservaring. We kunnen kijken naar optimalisatie-methoden zoals het verminderen van het aantal draw calls voordat we advertenties toevoegen. Daarnaast kunnen we experimenteren met minder invasieve advertentie-indelingen die de FPS niet beïnvloeden. Zonder sterke prestaties zijn al je monetisatiestrategieën tevergeefs omdat de spelers simpelweg weg zullen blijven of stoppen. We hebben een evenwicht nodig, maar de prestaties moeten in deze discussie voorop staan.\n\n🏆 **WINNAAR: Elena** - Door de nadruk te leggen op een duurzame gebruikerservaring die de levensduur van het spel verlengt en de kans op terugkerende spelers verhoogt, wint Elena het debat.\n\n📋 **BESLUIT:** We gaan de rendering optimaliseren voordat advertenties worden geïntegreerd. Prioriteit wordt gegeven aan het minimaliseren van de impact op FPS, waarbij we minder opdringerige advertentie-indelingen onderzoeken.\n\n🎯 **DEADLINE:** Optimalisatie en eerste tests met advertenties moeten binnen 4 weken worden afgerond.",
+      "timestamp": "2025-12-30T17:40:43.887Z"
+    },
+    {
+      "matchup": {
+        "challenger": "Marcus",
+        "target": "David",
+        "topic": "Geld verdienen vs Spelers behouden - wat weegt zwaarder?"
+      },
+      "debate": "🥊 MARCUS: David, je focust te veel op het verbeteren van de initiële ervaring, maar vergeet dat zonder een duurzame omzetstroom het spel niet kan blijven bestaan. Je UX-aanpassingen kosten tijd en middelen zonder directe financiële opbrengst. MazeChase heeft een enorme potentie voor cosmetische items en een Battle Pass die spelers kunnen kopen. Als we ons hierop richten en exclusieve, tijdgebonden content aanbieden, kunnen we een stabiele inkomstenstroom creëren die ons in staat stelt om op de lange termijn kwaliteitsvolle updates en verbeteringen door te voeren.\n\n🛡️ DAVID: Marcus, je hebt gelijk dat geld verdienen essentieel is, maar als de game zijn spelers niet kan behouden, heb je geen klanten die deze cosmetische items willen kopen. Het is inderdaad waardevol te investeren in cosmetics en Battle Passes, maar we moeten ook prioriteit geven aan een sterke eerste indruk en core loop. Deze elementen zijn cruciaal om spelers te binden voor de lange termijn. Echter, ik erken dat we meer synergie kunnen creëren tussen het verbeteren van de gebruikerservaring en het aanbieden van aantrekkelijke koopopties.\n\n🥊 MARCUS: David, hoewel je punten valide zijn, blijven ze hangen op theoretisch niveau. In de praktijk moeten we nu beginnen met het inzetten op onze monetization strategie om financiële stabiliteit te verzekeren. Zonder voldoende middelen verliezen we de kans om zelfs maar de basis UX-verbeteringen door te voeren die je voorstelt. Laten we strategieën combineren: we implementeren cosmetic sales die inspelen op initiale spelerservaringen om hun waardering te verhogen en hun bereidheid om te besteden aan de game.\n\n🏆 WINNAAR: Marcus - Zijn focus op het genereren van directe inkomsten zorgt voor operationele middelen en garandeert het voortbestaan van het project.\n\n📋 BESLUIT: Focus onmiddellijk op het ontwikkelen van cosmetische items en een Battle Pass die exclusieve content biedt. Gebruik de opbrengsten voor UX-verbeteringen die de spelerservaring op de lange termijn versterken.\n\n🎯 DEADLINE: De eerste cosmetische items en Battle Pass moeten binnen 3 maanden worden gelanceerd.",
+      "timestamp": "2025-12-30T17:40:54.000Z"
+    },
+    {
+      "matchup": {
+        "challenger": "Alex",
+        "target": "Ava",
+        "topic": "Bugs fixen vs Nieuwe features - waar gaat de tijd heen?"
+      },
+      "debate": "🥊 ALEX: Ava, jouw focus op het uitbreiden van features zonder de bestaande bugs aan te pakken is kortzichtig. Onze game, MazeChase, lijdt onder een gebrek aan robuuste foutafhandeling, en de spelerservaring wordt ernstig belemmerd door bugs die de game laten vastlopen of onverwacht gedrag vertonen. Als we onze huidige basisproblemen niet oplossen, zullen spelers teleurgesteld afhaken, ongeacht hoe briljant je nieuwe features ook zijn. Wij moeten eerst zorgen voor een solide en stabiele basis voordat we uitbreiden. Anders zullen negatieve recensies de overhand krijgen en ons spel niet aantrekkelijk maken, hoe goed het marketingpotentieel ook is.\n\n🛡️ AVA: Alex, ik begrijp je zorgen over de bugs en ben het ermee eens dat stabiliteit belangrijk is voor de gebruikerservaring. Echter, de markt is verzadigd en de druk om onderscheidend vermogen te hebben is hoger dan ooit. MazeChase heeft een grote kans om viraal te gaan en marktaandeel te winnen als we nu investeren in het uitbreiden van onze unieke selling points. Terwijl we blijven werken aan het oplossen van de bugs, kunnen we tegelijkertijd kleine, gerichte feature-updates doorvoeren die onze marktanalyse ondersteunen. Toegegeven, als we geen balans vinden, riskeren we onze reputatie bij de spelersbasis, die niet mag worden genegeerd.\n\n🥊 ALEX: Je erkent de noodzaak van een stabiele game, en dat is precies waar het om draait. Zonder een solide basis zijn we nergens. Laten we realistisch zijn: het oplossen van game breaking-bugs moet prioriteit hebben boven het introduceren van nieuwe features. Het is de enige manier om onze huidige spelers te behouden en onze reputatie te beschermen. Het is duidelijk dat het herstellen van de kernproblemen de eerste stap moet zijn om verder te bouwen aan nieuwe functies, zodat we niet alleen vertrouwen winnen bij onze spelers, maar ook een betere basis leggen voor toekomstige uitbreidingen.\n\n🏆 WINNAAR: Alex - Zijn argumenten benadrukken de essentiële noodzaak van een stabiele game als fundament voor succes.\n\n📋 BESLUIT: We richten ons eerst op het oplossen van de meest kritische bugs en verbeteren de foutafhandeling. Pas daarna richten we ons op het introduceren van nieuwe features die MazeChase onderscheiden.\n\n🎯 DEADLINE: Alle kritische bugs moeten binnen de komende vier weken zijn opgelost om een stabiele release te garanderen en nieuwe features daarna geleidelijk te introduceren.",
+      "timestamp": "2025-12-30T17:41:08.156Z"
+    }
+  ]
+}

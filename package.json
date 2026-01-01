@@ -1,0 +1,8 @@
+{
+  "dependencies": {
+    "@stripe/stripe-js": "^8.6.0",
+    "mediasoup": "^3.19.14",
+    "puppeteer": "^24.34.0",
+    "ws": "^8.18.3"
+  }
+}

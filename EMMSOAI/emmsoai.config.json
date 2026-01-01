@@ -1,0 +1,219 @@
+{
+  "name": "EMMSOAI",
+  "fullName": "Platform for Intelligent Review, Evaluation, Testing & Self-improvement",
+  "version": "1.0.0",
+  "description": "A self-improving AI testing and implementation system that can be applied to any software project",
+  
+  "currentProject": {
+    "name": "MazeChase",
+    "path": "..",
+    "type": "game",
+    "stack": {
+      "frontend": "TypeScript/Babylon.js/Astro",
+      "backend": "Go",
+      "realtime": "WebSocket"
+    },
+    "structure": {
+      "frontend": "ui-web/src",
+      "backend": "core/internal",
+      "game3d": "ui-web/src/lib/game3d",
+      "assets": "ui-web/src/lib/assets",
+      "models": "ui-web/public/models",
+      "components": "ui-web/src/components",
+      "docs": "docs",
+      "gameConfig": "core/internal/game/game_config.go"
+    },
+    "serverPort": 8080,
+    "frontendPort": 4321,
+    
+    "gameDimensions": {
+      "description": "Core game dimensions - edit game_config.go to change",
+      "configFile": "core/internal/game/game_config.go",
+      "current": {
+        "mazeWidth": 50,
+        "mazeHeight": 50,
+        "tileSize": 50,
+        "tileSizeFloat": 50.0,
+        "playerSpeed": 200.0,
+        "tickRateMs": 16,
+        "collisionRadius": 20
+      },
+      "spawnPositions": {
+        "runner": { "x": 13, "y": 13, "quadrant": "NW" },
+        "chaser1": { "x": 37, "y": 13, "quadrant": "NE" },
+        "chaser2": { "x": 13, "y": 37, "quadrant": "SW" },
+        "chaser3": { "x": 37, "y": 37, "quadrant": "SE" }
+      },
+      "powerUpPositions": [
+        { "x": 8, "y": 8, "quadrant": "NW" },
+        { "x": 42, "y": 8, "quadrant": "NE" },
+        { "x": 8, "y": 42, "quadrant": "SW" },
+        { "x": 42, "y": 42, "quadrant": "SE" }
+      ],
+      "notes": [
+        "Reduced from 100x100 to 50x50 for faster games (AI recommendation Dec 2025)",
+        "Center is at 25,25 - spawn offset is 12 tiles from center",
+        "All quadrants use unified Neon Arena theme"
+      ]
+    },
+    
+    "assets3D": {
+      "description": "3D model library using OBJ format, all CC0 licensed",
+      "modelLoader": "ui-web/src/lib/assets/modelLoader.ts",
+      "characterLoader": "ui-web/src/lib/assets/characterModelLoader.ts",
+      "sources": {
+        "dungeonSet": {
+          "path": "/models/dungeon/Dungeon Set 2/",
+          "author": "Keith at Fertile Soil Productions",
+          "license": "CC0",
+          "includes": ["walls", "floors", "pillars", "props", "traps", "doors"]
+        },
+        "skydome": {
+          "path": "/models/environment/",
+          "author": "GGBotNet",
+          "license": "CC0"
+        },
+        "decorations": {
+          "path": "/models/decorations/",
+          "author": "Yughues",
+          "license": "CC0",
+          "includes": ["weeds", "rocks", "ivy"]
+        }
+      },
+      "loadedAssets": {
+        "walls": {
+          "models": ["straight", "curved", "joint", "tapered", "sewer", "cracked (5 variants)"],
+          "pieces": ["base", "main", "top", "topper"],
+          "total": 25
+        },
+        "floors": {
+          "models": ["normal", "curved", "tapered", "grate_round", "grate_square", "cracked (4 variants)"],
+          "total": 9
+        },
+        "props": {
+          "floor": ["barrel", "crate", "brazier", "lever", "switch"],
+          "wall": ["torch", "chains", "door_cell", "big_door_wood", "big_door_iron"],
+          "total": 10
+        },
+        "pillars": {
+          "types": ["corner", "angled", "mid_wall"],
+          "pieces": ["base", "main", "top", "topper"],
+          "total": 12
+        },
+        "traps": {
+          "models": ["spikes", "saw", "saw_slot_end", "saw_slot_mid", "pipes", "crusher_arm", "crusher_base", "pillar_pipe"],
+          "total": 8
+        },
+        "largeStructures": {
+          "models": ["curved_wall", "straight_wall", "steps", "ramp"],
+          "total": 15
+        },
+        "decorations": {
+          "weeds": ["tiny_weed_03_01", "tiny_weed_03_02", "tiny_weed_03_03"],
+          "rocks": ["rock_01", "rock_02", "rock_03", "rock_04", "rock_05"],
+          "ivy": ["ivy_bend_left", "ivy_bend_right", "ivy_corner_horizontal", "ivy_default", "ivy_straight"],
+          "total": 13
+        }
+      },
+      "assetCount": {
+        "dungeonModels": 89,
+        "decorationModels": 13,
+        "environmentModels": 1,
+        "totalOBJ": 103
+      },
+      "characterStyle": {
+        "runner": "Yellow sphere with eyes, NO mouth (Kurzgesagt style)",
+        "chasers": "Colored capsules with smaller eyes",
+        "note": "Characters are procedurally generated, not Pac-Man style"
+      }
+    }
+  },
+  
+  "folders": {
+    "in": "in/",
+    "out": "out/",
+    "research": "research/",
+    "backups": "backups/"
+  },
+  
+  "aiConfig": {
+    "model": "gpt-4o",
+    "expertReviewEnabled": true,
+    "knowledgeExtractionEnabled": true,
+    "selfImprovementEnabled": true,
+    "maxTokensPerPrompt": 4000
+  },
+  
+  "personas": {
+    "players": ["Jake", "Maria", "Tyler", "Priya", "Leo"],
+    "experts": ["Marcus", "Elena", "Kenji", "David", "Ava", "Ravi", "Yuki", "Chen"],
+    "director": "Sofia"
+  },
+  
+  "researchCategories": [
+    "competitor-analysis",
+    "market-data", 
+    "technical-guidelines",
+    "animation-principles",
+    "monetization-patterns",
+    "ux-patterns",
+    "audio-design",
+    "visual-style"
+  ],
+  
+  "features": {
+    "knowledgeExtraction": {
+      "enabled": true,
+      "minMentionsToExtract": 2,
+      "minConfidence": 0.7
+    },
+    "promptOptimization": {
+      "enabled": true,
+      "trackTokenUsage": true,
+      "suggestCaching": true
+    },
+    "selfImprovement": {
+      "enabled": true,
+      "updateResearchFiles": true,
+      "updatePrompts": false
+    }
+  },
+  
+  "integrations": {
+    "openai": {
+      "required": true,
+      "envVar": "OPENAI_API_KEY",
+      "perExpertKeys": {
+        "enabled": true,
+        "description": "Each expert gets unique API context to ensure diverse perspectives",
+        "envVars": {
+          "Sofia": "OPENAI_API_KEY_SOFIA",
+          "Yuki": "OPENAI_API_KEY_YUKI",
+          "Elena": "OPENAI_API_KEY_ELENA",
+          "Marcus": "OPENAI_API_KEY_MARCUS",
+          "Kenji": "OPENAI_API_KEY_KENJI",
+          "David": "OPENAI_API_KEY_DAVID",
+          "Alex": "OPENAI_API_KEY_ALEX",
+          "Ava": "OPENAI_API_KEY_AVA"
+        },
+        "fallback": "OPENAI_API_KEY"
+      }
+    },
+    "websocket": {
+      "required": false,
+      "purpose": "Live game testing"
+    },
+    "puppeteer": {
+      "required": false,
+      "purpose": "Visual testing"
+    },
+    "expertTools": {
+      "Elena": ["performance-report", "lighthouse", "bundle-analyzer"],
+      "Yuki": ["sprite-generator", "palette-creator", "style-validator"],
+      "Kenji": ["audio-analyzer", "waveform-generator", "sfx-library"],
+      "Alex": ["screenshot-diff", "ui-validator", "accessibility-checker"],
+      "Marcus": ["market-data", "pricing-analyzer", "competitor-research"],
+      "David": ["heatmap-analyzer", "session-replay", "funnel-metrics"]
+    }
+  }
+}

@@ -1,0 +1,25 @@
+{
+  "name": "emmsoai",
+  "version": "1.0.0",
+  "description": "EMMSOAI - Platform for Intelligent Review, Evaluation, Testing & Self-improvement",
+  "main": "ai-game-testers.js",
+  "scripts": {
+    "test": "node ai-game-testers.js",
+    "implement": "node ai-auto-implementer.js",
+    "implement:auto": "node ai-auto-implementer.js --auto",
+    "implement:list": "node ai-auto-implementer.js --list",
+    "extract-knowledge": "node ai-auto-implementer.js --extract-knowledge",
+    "optimize-prompts": "node ai-auto-implementer.js --optimize-prompts"
+  },
+  "keywords": ["ai", "testing", "self-improvement", "game-development", "emmsoai"],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "dependencies": {
+    "@dotenvx/dotenvx": "^1.51.2",
+    "dotenv": "^17.2.3",
+    "openai": "^6.15.0",
+    "puppeteer": "^24.34.0",
+    "ws": "^8.18.3"
+  }
+}

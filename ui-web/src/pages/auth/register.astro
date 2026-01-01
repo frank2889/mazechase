@@ -1,0 +1,199 @@
+---
+import AuthLayout from "../../layouts/AuthLayout.astro";
+---
+
+<AuthLayout title="Create Account - MazeChase">
+    <div class="min-h-screen flex items-center justify-center p-4">
+        <div class="flex flex-col items-center w-full max-w-md">
+            <!-- Logo and title -->
+            <div class="text-center mb-8">
+                <h1 class="text-5xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-purple-400 via-pink-500 to-cyan-400 mb-2">
+                    MazeChase
+                </h1>
+                <p class="text-slate-400 text-lg">Create your account</p>
+            </div>
+
+            <!-- Registration box -->
+            <div class="bg-slate-800/50 backdrop-blur-md border border-slate-700/50 rounded-xl p-8 w-full shadow-2xl">
+                <form id="register-form" class="space-y-5">
+                    <div class="space-y-2">
+                        <label class="block text-slate-300 text-lg font-semibold" for="username">
+                            Username
+                        </label>
+                        <input
+                                class="w-full px-4 py-3 text-lg bg-slate-900 border border-slate-600 rounded-lg text-white placeholder-slate-400 focus:outline-none focus:border-purple-500 focus:ring-2 focus:ring-purple-500/50 transition-all"
+                                type="text"
+                                id="username"
+                                name="username"
+                                placeholder="Choose a name..."
+                                maxlength="50"
+                                required
+                        >
+                    </div>
+
+                    <div class="space-y-2">
+                        <label class="block text-slate-300 text-lg font-semibold" for="password">
+                            Password
+                        </label>
+                        <input
+                                class="w-full px-4 py-3 text-lg bg-slate-900 border border-slate-600 rounded-lg text-white placeholder-slate-400 focus:outline-none focus:border-purple-500 focus:ring-2 focus:ring-purple-500/50 transition-all"
+                                type="password"
+                                id="password"
+                                name="password"
+                                placeholder="At least 4 characters"
+                                maxlength="50"
+                                required
+                        >
+                    </div>
+
+                    <div class="space-y-2">
+                        <label class="block text-slate-300 text-lg font-semibold" for="password-verify">
+                            Confirm Password
+                        </label>
+                        <input
+                                class="w-full px-4 py-3 text-lg bg-slate-900 border border-slate-600 rounded-lg text-white placeholder-slate-400 focus:outline-none focus:border-purple-500 focus:ring-2 focus:ring-purple-500/50 transition-all"
+                                type="password"
+                                id="password-verify"
+                                name="password-verify"
+                                placeholder="Repeat password"
+                                maxlength="50"
+                                required
+                        >
+                    </div>
+
+                    <div class="pt-2">
+                        <button
+                                type="submit"
+                                id="register-btn"
+                                class="w-full bg-gradient-to-r from-purple-600 to-purple-500 hover:from-purple-500 hover:to-purple-400 text-white text-xl font-bold py-4 px-8 rounded-xl transition-all duration-300 hover:scale-[1.02] hover:shadow-lg hover:shadow-purple-500/25 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100 flex items-center justify-center"
+                        >
+                            <span id="register-text">CREATE ACCOUNT</span>
+                            <div id="register-spinner" class="hidden flex items-center justify-center">
+                                <svg class="animate-spin h-6 w-6 text-white"
+                                     xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                                    <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor"
+                                            stroke-width="4"></circle>
+                                    <path class="opacity-75" fill="currentColor"
+                                          d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                                </svg>
+                                <span class="ml-2">Loading...</span>
+                            </div>
+                        </button>
+                    </div>
+                </form>
+
+                <div class="mt-6 pt-6 border-t border-slate-700">
+                    <p class="text-center text-slate-400 mb-4">Already have an account?</p>
+                    <a href="/auth/login" class="block">
+                        <button
+                                type="button"
+                                class="w-full bg-gradient-to-r from-cyan-600 to-cyan-500 hover:from-cyan-500 hover:to-cyan-400 text-white text-lg font-bold py-3 px-6 rounded-xl transition-all duration-300 hover:scale-[1.02] hover:shadow-lg hover:shadow-cyan-500/25"
+                        >
+                            LOG IN
+                        </button>
+                    </a>
+                </div>
+            </div>
+            
+            <a href="/" class="mt-6 text-slate-500 hover:text-purple-400 transition-colors">
+                ← Back to home
+            </a>
+        </div>
+    </div>
+</AuthLayout>
+
+<script>
+    import {register} from "../../lib/auth";
+
+    let isRegisterLoading = false;
+
+    const setRegisterLoading = (loading: boolean) => {
+        isRegisterLoading = loading;
+        const btn = document.getElementById('register-btn') as HTMLButtonElement;
+        const text = document.getElementById('register-text');
+        const spinner = document.getElementById('register-spinner');
+        const usernameInput = document.getElementById('username') as HTMLInputElement;
+        const passwordInput = document.getElementById('password') as HTMLInputElement;
+        const passwordVerifyInput = document.getElementById('password-verify') as HTMLInputElement;
+
+        if (btn && text && spinner && usernameInput && passwordInput && passwordVerifyInput) {
+            btn.disabled = loading;
+            usernameInput.disabled = loading;
+            passwordInput.disabled = loading;
+            passwordVerifyInput.disabled = loading;
+
+            if (loading) {
+                text.classList.add('hidden');
+                spinner.classList.remove('hidden');
+            } else {
+                text.classList.remove('hidden');
+                spinner.classList.add('hidden');
+            }
+        }
+    };
+
+    const onRegister = async (e: Event) => {
+        e.preventDefault();
+
+        if (isRegisterLoading) return;
+        setRegisterLoading(true);
+
+        const usernameInput = document.getElementById('username') as HTMLInputElement;
+        const passwordInput = document.getElementById('password') as HTMLInputElement;
+        const passwordVerifyInput = document.getElementById('password-verify') as HTMLInputElement;
+
+        if (!usernameInput || !passwordInput || !passwordVerifyInput) {
+            alert('Form not found');
+            setRegisterLoading(false);
+            return;
+        }
+
+        const username = usernameInput.value.trim();
+        const password = passwordInput.value.trim();
+        const passwordVerify = passwordVerifyInput.value.trim();
+
+        if (!username || !password || !passwordVerify) {
+            alert('Please fill in all fields');
+            setRegisterLoading(false);
+            return;
+        }
+
+        if (username.length < 2) {
+            alert('Username must be at least 2 characters');
+            setRegisterLoading(false);
+            return;
+        }
+
+        if (password.length < 4) {
+            alert('Password must be at least 4 characters');
+            setRegisterLoading(false);
+            return;
+        }
+
+        if (password !== passwordVerify) {
+            alert('Passwords do not match');
+            setRegisterLoading(false);
+            return;
+        }
+
+        const {err} = await register(username, password, passwordVerify);
+        if (err) {
+            if (err.includes('in gebruik') || err.includes('exists') || err.includes('taken')) {
+                alert('This username is already taken');
+            } else {
+                alert('Registration failed: ' + err);
+            }
+            setRegisterLoading(false);
+        } else {
+            // Auto-login success - go directly to lobby
+            window.location.assign("/lobby");
+        }
+    };
+
+    document.addEventListener('DOMContentLoaded', () => {
+        const form = document.getElementById('register-form');
+        if (form) {
+            form.addEventListener('submit', onRegister);
+        }
+    });
+</script>

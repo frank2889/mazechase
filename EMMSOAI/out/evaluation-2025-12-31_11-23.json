@@ -1,0 +1,1107 @@
+{
+  "metadata": {
+    "timestamp": "2025-12-31T10:23:04.032Z",
+    "version": "5.1",
+    "totalTesters": 14,
+    "averageScore": null
+  },
+  "workflow": {
+    "nextStep": "Implementeer concreteCodeChanges en maak in/implementation-TIMESTAMP.json",
+    "inputFile": "tests/in/implementation-TIMESTAMP.json",
+    "outputFile": "tests/out/evaluation-TIMESTAMP.json",
+    "loop": "out/evaluation → implementatie → in/implementation → AI leest beide → repeat"
+  },
+  "summary": {
+    "totalActions": 34,
+    "concreteCodeChanges": 18,
+    "highPriority": 7,
+    "mediumPriority": 13,
+    "lowPriority": 14,
+    "categories": [
+      "Sound Designer & Audio Engineer",
+      "Technical QA Engineer",
+      "Indie Game Market Analyst",
+      "UX Researcher & Retention Specialist",
+      "Performance Engineer",
+      "Monetization & Business Strategy",
+      "visual",
+      "monetization",
+      "team_suggestion"
+    ]
+  },
+  "concreteCodeChanges": [
+    {
+      "rank": 1,
+      "file": "ui-web/src/lib/game/CosmeticsShop.ts",
+      "function": "displayCosmeticOptions",
+      "type": "modify",
+      "change": "Voeg nieuwe skins en trail effects toe",
+      "reason": "Om de diversiteit in cosmetics te vergroten en spelers meer keuzes te geven.",
+      "priority": "high",
+      "suggestedBy": "Marcus",
+      "expertise": "Monetization & Business Strategy"
+    },
+    {
+      "rank": 2,
+      "file": "ui-web/src/lib/game/BattlePass.ts",
+      "function": "initiateSeasonalBattlePass",
+      "type": "create",
+      "change": "Implementeer een seizoensgebonden battle pass met unieke beloningen.",
+      "reason": "Om de spelerbetrokkenheid te verhogen en duurzame inkomsten te genereren.",
+      "priority": "medium",
+      "suggestedBy": "Marcus",
+      "expertise": "Monetization & Business Strategy"
+    },
+    {
+      "rank": 3,
+      "file": "ui-web/src/lib/game/RewardedAds.ts",
+      "function": "integrateRewardedAds",
+      "type": "modify",
+      "change": "Positioneer advertenties strategisch na level voltooiingen.",
+      "reason": "Om advertentie-inkomsten te genereren zonder de spelervaring te verstoren.",
+      "priority": "medium",
+      "suggestedBy": "Marcus",
+      "expertise": "Monetization & Business Strategy"
+    },
+    {
+      "rank": 4,
+      "file": "ui-web/src/lib/game/scene.ts",
+      "function": "initGame",
+      "type": "modify",
+      "change": "Implement adaptive quality based on device performance",
+      "reason": "To ensure the game runs smoothly on a wide range of devices",
+      "priority": "high",
+      "suggestedBy": "Elena",
+      "expertise": "Performance Engineer"
+    },
+    {
+      "rank": 5,
+      "file": "ui-web/src/lib/game/assets.ts",
+      "function": "loadAssets",
+      "type": "modify",
+      "change": "Prioritize critical assets and implement lazy loading",
+      "reason": "To reduce initial load times and optimize bandwidth use",
+      "priority": "medium",
+      "suggestedBy": "Elena",
+      "expertise": "Performance Engineer"
+    },
+    {
+      "rank": 6,
+      "file": "ui-web/src/lib/graphics/meshOptimizations.ts",
+      "function": "optimizeStaticMeshes",
+      "type": "modify",
+      "change": "Merge all static meshes and freeze their world matrices",
+      "reason": "To reduce draw calls and improve rendering efficiency",
+      "priority": "high",
+      "suggestedBy": "Elena",
+      "expertise": "Performance Engineer"
+    },
+    {
+      "rank": 7,
+      "file": "ui-web/src/lib/tutorial/IntroScene.ts",
+      "function": "initTutorialSequence",
+      "type": "modify",
+      "change": "Voeg animatie sequentie toe die het gebruik van power-ups demonstreert",
+      "reason": "Versnellen van het AHA moment voor nieuwe spelers",
+      "priority": "high",
+      "suggestedBy": "David",
+      "expertise": "UX Researcher & Retention Specialist"
+    },
+    {
+      "rank": 8,
+      "file": "ui-web/src/lib/game/SessionManager.ts",
+      "function": "handleSessionEnd",
+      "type": "modify",
+      "change": "Voeg een optie toe voor een langere sessiemodus",
+      "reason": "Cateren aan spelers die langere spelsessies prefereren",
+      "priority": "medium",
+      "suggestedBy": "David",
+      "expertise": "UX Researcher & Retention Specialist"
+    },
+    {
+      "rank": 9,
+      "file": "ui-web/src/lib/ui/Notifications.ts",
+      "function": "sendDailyChallengeNotification",
+      "type": "modify",
+      "change": "Verfijn notificaties om seizoensgebonden evenementen te promoten",
+      "reason": "Verhoog de betrokkenheid door het gebruik van tijdelijke evenementen",
+      "priority": "medium",
+      "suggestedBy": "David",
+      "expertise": "UX Researcher & Retention Specialist"
+    },
+    {
+      "rank": 10,
+      "file": "ui-web/src/lib/game/animationEngine.ts",
+      "function": "enhanceRoleSwapAnimation",
+      "type": "modify",
+      "change": "Add visual and audio cues when roles switch between Runner and Chasers",
+      "reason": "To highlight the unique mechanic and increase player engagement",
+      "priority": "high",
+      "suggestedBy": "Ava",
+      "expertise": "Indie Game Market Analyst"
+    },
+    {
+      "rank": 11,
+      "file": "ui-web/src/lib/social/socialMedia.ts",
+      "function": "initiateMemeCampaign",
+      "type": "create",
+      "change": "Develop a campaign focused on capturing and sharing unexpected game outcomes",
+      "reason": "To boost social media visibility and virality",
+      "priority": "medium",
+      "suggestedBy": "Ava",
+      "expertise": "Indie Game Market Analyst"
+    },
+    {
+      "rank": 12,
+      "file": "ui-web/src/lib/ui/leaderboard.ts",
+      "function": "enhanceLeaderboardFeatures",
+      "type": "modify",
+      "change": "Integrate social sharing and friend comparison features",
+      "reason": "To build community engagement and encourage competition",
+      "priority": "medium",
+      "suggestedBy": "Ava",
+      "expertise": "Indie Game Market Analyst"
+    },
+    {
+      "rank": 13,
+      "file": "ui-web/src/lib/game/inputManager.ts",
+      "function": "handleRapidInput",
+      "type": "modify",
+      "change": "Implement input debouncing and throttling to prevent overflow",
+      "reason": "To ensure consistent game state updates",
+      "priority": "high",
+      "suggestedBy": "Alex",
+      "expertise": "Technical QA Engineer"
+    },
+    {
+      "rank": 14,
+      "file": "ui-web/src/lib/ui/themeManager.ts",
+      "function": "transitionThemes",
+      "type": "modify",
+      "change": "Add preloading and animation to theme transitions",
+      "reason": "To eliminate visual glitches",
+      "priority": "medium",
+      "suggestedBy": "Alex",
+      "expertise": "Technical QA Engineer"
+    },
+    {
+      "rank": 15,
+      "file": "ui-web/src/lib/network/socketHandler.ts",
+      "function": "syncAfterReconnect",
+      "type": "modify",
+      "change": "Enhance resynchronization logic post-reconnect",
+      "reason": "To maintain consistent game state",
+      "priority": "medium",
+      "suggestedBy": "Alex",
+      "expertise": "Technical QA Engineer"
+    },
+    {
+      "rank": 16,
+      "file": "ui-web/src/lib/audio/chaserSounds.ts",
+      "function": "addDirectionalCues",
+      "type": "modify",
+      "change": "Implement panning and pitch variation for Chaser audio.",
+      "reason": "To enhance player awareness of Chaser proximity and direction.",
+      "priority": "high",
+      "suggestedBy": "Kenji",
+      "expertise": "Sound Designer & Audio Engineer"
+    },
+    {
+      "rank": 17,
+      "file": "ui-web/src/lib/audio/pelletCollectSound.ts",
+      "function": "enhanceCollectSound",
+      "type": "modify",
+      "change": "Add layers and pitch variation to the pellet collect sound.",
+      "reason": "To increase player satisfaction and engagement.",
+      "priority": "medium",
+      "suggestedBy": "Kenji",
+      "expertise": "Sound Designer & Audio Engineer"
+    },
+    {
+      "rank": 18,
+      "file": "ui-web/src/lib/audio/themeMusic.ts",
+      "function": "diversifyThemeMusic",
+      "type": "modify",
+      "change": "Develop distinct audio themes for each game environment.",
+      "reason": "To create a unique auditory experience for each level.",
+      "priority": "medium",
+      "suggestedBy": "Kenji",
+      "expertise": "Sound Designer & Audio Engineer"
+    }
+  ],
+  "prioritizedActions": [
+    {
+      "rank": 1,
+      "id": "concrete_ui_web_src_lib_audio_themeMusic_ts_17",
+      "action": "Develop distinct audio themes for each game environment.",
+      "file": "ui-web/src/lib/audio/themeMusic.ts",
+      "function": "diversifyThemeMusic",
+      "type": "modify",
+      "reason": "To create a unique auditory experience for each level.",
+      "category": "Sound Designer & Audio Engineer",
+      "priority": "medium",
+      "suggestedBy": [
+        "Kenji"
+      ],
+      "isConcreteAction": true
+    },
+    {
+      "rank": 2,
+      "id": "concrete_ui_web_src_lib_audio_pelletCollectSound_ts_16",
+      "action": "Add layers and pitch variation to the pellet collect sound.",
+      "file": "ui-web/src/lib/audio/pelletCollectSound.ts",
+      "function": "enhanceCollectSound",
+      "type": "modify",
+      "reason": "To increase player satisfaction and engagement.",
+      "category": "Sound Designer & Audio Engineer",
+      "priority": "medium",
+      "suggestedBy": [
+        "Kenji"
+      ],
+      "isConcreteAction": true
+    },
+    {
+      "rank": 3,
+      "id": "concrete_ui_web_src_lib_audio_chaserSounds_ts_15",
+      "action": "Implement panning and pitch variation for Chaser audio.",
+      "file": "ui-web/src/lib/audio/chaserSounds.ts",
+      "function": "addDirectionalCues",
+      "type": "modify",
+      "reason": "To enhance player awareness of Chaser proximity and direction.",
+      "category": "Sound Designer & Audio Engineer",
+      "priority": "high",
+      "suggestedBy": [
+        "Kenji"
+      ],
+      "isConcreteAction": true
+    },
+    {
+      "rank": 4,
+      "id": "concrete_ui_web_src_lib_network_socketHandler_ts_14",
+      "action": "Enhance resynchronization logic post-reconnect",
+      "file": "ui-web/src/lib/network/socketHandler.ts",
+      "function": "syncAfterReconnect",
+      "type": "modify",
+      "reason": "To maintain consistent game state",
+      "category": "Technical QA Engineer",
+      "priority": "medium",
+      "suggestedBy": [
+        "Alex"
+      ],
+      "isConcreteAction": true
+    },
+    {
+      "rank": 5,
+      "id": "concrete_ui_web_src_lib_ui_themeManager_ts_13",
+      "action": "Add preloading and animation to theme transitions",
+      "file": "ui-web/src/lib/ui/themeManager.ts",
+      "function": "transitionThemes",
+      "type": "modify",
+      "reason": "To eliminate visual glitches",
+      "category": "Technical QA Engineer",
+      "priority": "medium",
+      "suggestedBy": [
+        "Alex"
+      ],
+      "isConcreteAction": true
+    },
+    {
+      "rank": 6,
+      "id": "concrete_ui_web_src_lib_game_inputManager_ts_12",
+      "action": "Implement input debouncing and throttling to prevent overflow",
+      "file": "ui-web/src/lib/game/inputManager.ts",
+      "function": "handleRapidInput",
+      "type": "modify",
+      "reason": "To ensure consistent game state updates",
+      "category": "Technical QA Engineer",
+      "priority": "high",
+      "suggestedBy": [
+        "Alex"
+      ],
+      "isConcreteAction": true
+    },
+    {
+      "rank": 7,
+      "id": "concrete_ui_web_src_lib_ui_leaderboard_ts_11",
+      "action": "Integrate social sharing and friend comparison features",
+      "file": "ui-web/src/lib/ui/leaderboard.ts",
+      "function": "enhanceLeaderboardFeatures",
+      "type": "modify",
+      "reason": "To build community engagement and encourage competition",
+      "category": "Indie Game Market Analyst",
+      "priority": "medium",
+      "suggestedBy": [
+        "Ava"
+      ],
+      "isConcreteAction": true
+    },
+    {
+      "rank": 8,
+      "id": "concrete_ui_web_src_lib_social_socialMedia_ts_10",
+      "action": "Develop a campaign focused on capturing and sharing unexpected game outcomes",
+      "file": "ui-web/src/lib/social/socialMedia.ts",
+      "function": "initiateMemeCampaign",
+      "type": "create",
+      "reason": "To boost social media visibility and virality",
+      "category": "Indie Game Market Analyst",
+      "priority": "medium",
+      "suggestedBy": [
+        "Ava"
+      ],
+      "isConcreteAction": true
+    },
+    {
+      "rank": 9,
+      "id": "concrete_ui_web_src_lib_game_animationEngine_ts_9",
+      "action": "Add visual and audio cues when roles switch between Runner and Chasers",
+      "file": "ui-web/src/lib/game/animationEngine.ts",
+      "function": "enhanceRoleSwapAnimation",
+      "type": "modify",
+      "reason": "To highlight the unique mechanic and increase player engagement",
+      "category": "Indie Game Market Analyst",
+      "priority": "high",
+      "suggestedBy": [
+        "Ava"
+      ],
+      "isConcreteAction": true
+    },
+    {
+      "rank": 10,
+      "id": "concrete_ui_web_src_lib_ui_Notifications_ts_8",
+      "action": "Verfijn notificaties om seizoensgebonden evenementen te promoten",
+      "file": "ui-web/src/lib/ui/Notifications.ts",
+      "function": "sendDailyChallengeNotification",
+      "type": "modify",
+      "reason": "Verhoog de betrokkenheid door het gebruik van tijdelijke evenementen",
+      "category": "UX Researcher & Retention Specialist",
+      "priority": "medium",
+      "suggestedBy": [
+        "David"
+      ],
+      "isConcreteAction": true
+    },
+    {
+      "rank": 11,
+      "id": "concrete_ui_web_src_lib_game_SessionManager_ts_7",
+      "action": "Voeg een optie toe voor een langere sessiemodus",
+      "file": "ui-web/src/lib/game/SessionManager.ts",
+      "function": "handleSessionEnd",
+      "type": "modify",
+      "reason": "Cateren aan spelers die langere spelsessies prefereren",
+      "category": "UX Researcher & Retention Specialist",
+      "priority": "medium",
+      "suggestedBy": [
+        "David"
+      ],
+      "isConcreteAction": true
+    },
+    {
+      "rank": 12,
+      "id": "concrete_ui_web_src_lib_tutorial_IntroScene_ts_6",
+      "action": "Voeg animatie sequentie toe die het gebruik van power-ups demonstreert",
+      "file": "ui-web/src/lib/tutorial/IntroScene.ts",
+      "function": "initTutorialSequence",
+      "type": "modify",
+      "reason": "Versnellen van het AHA moment voor nieuwe spelers",
+      "category": "UX Researcher & Retention Specialist",
+      "priority": "high",
+      "suggestedBy": [
+        "David"
+      ],
+      "isConcreteAction": true
+    },
+    {
+      "rank": 13,
+      "id": "concrete_ui_web_src_lib_graphics_meshOptimizations_ts_5",
+      "action": "Merge all static meshes and freeze their world matrices",
+      "file": "ui-web/src/lib/graphics/meshOptimizations.ts",
+      "function": "optimizeStaticMeshes",
+      "type": "modify",
+      "reason": "To reduce draw calls and improve rendering efficiency",
+      "category": "Performance Engineer",
+      "priority": "high",
+      "suggestedBy": [
+        "Elena"
+      ],
+      "isConcreteAction": true
+    },
+    {
+      "rank": 14,
+      "id": "concrete_ui_web_src_lib_game_assets_ts_4",
+      "action": "Prioritize critical assets and implement lazy loading",
+      "file": "ui-web/src/lib/game/assets.ts",
+      "function": "loadAssets",
+      "type": "modify",
+      "reason": "To reduce initial load times and optimize bandwidth use",
+      "category": "Performance Engineer",
+      "priority": "medium",
+      "suggestedBy": [
+        "Elena"
+      ],
+      "isConcreteAction": true
+    },
+    {
+      "rank": 15,
+      "id": "concrete_ui_web_src_lib_game_scene_ts_3",
+      "action": "Implement adaptive quality based on device performance",
+      "file": "ui-web/src/lib/game/scene.ts",
+      "function": "initGame",
+      "type": "modify",
+      "reason": "To ensure the game runs smoothly on a wide range of devices",
+      "category": "Performance Engineer",
+      "priority": "high",
+      "suggestedBy": [
+        "Elena"
+      ],
+      "isConcreteAction": true
+    },
+    {
+      "rank": 16,
+      "id": "concrete_ui_web_src_lib_game_RewardedAds_ts_2",
+      "action": "Positioneer advertenties strategisch na level voltooiingen.",
+      "file": "ui-web/src/lib/game/RewardedAds.ts",
+      "function": "integrateRewardedAds",
+      "type": "modify",
+      "reason": "Om advertentie-inkomsten te genereren zonder de spelervaring te verstoren.",
+      "category": "Monetization & Business Strategy",
+      "priority": "medium",
+      "suggestedBy": [
+        "Marcus"
+      ],
+      "isConcreteAction": true
+    },
+    {
+      "rank": 17,
+      "id": "concrete_ui_web_src_lib_game_BattlePass_ts_1",
+      "action": "Implementeer een seizoensgebonden battle pass met unieke beloningen.",
+      "file": "ui-web/src/lib/game/BattlePass.ts",
+      "function": "initiateSeasonalBattlePass",
+      "type": "create",
+      "reason": "Om de spelerbetrokkenheid te verhogen en duurzame inkomsten te genereren.",
+      "category": "Monetization & Business Strategy",
+      "priority": "medium",
+      "suggestedBy": [
+        "Marcus"
+      ],
+      "isConcreteAction": true
+    },
+    {
+      "rank": 18,
+      "id": "concrete_ui_web_src_lib_game_CosmeticsShop_ts_0",
+      "action": "Voeg nieuwe skins en trail effects toe",
+      "file": "ui-web/src/lib/game/CosmeticsShop.ts",
+      "function": "displayCosmeticOptions",
+      "type": "modify",
+      "reason": "Om de diversiteit in cosmetics te vergroten en spelers meer keuzes te geven.",
+      "category": "Monetization & Business Strategy",
+      "priority": "high",
+      "suggestedBy": [
+        "Marcus"
+      ],
+      "isConcreteAction": true
+    },
+    {
+      "rank": 19,
+      "id": "p1_visual_overhaul",
+      "action": "Visual Art Overhaul",
+      "description": "P1 - VISUELE UPGRADE (Complete Art Overhaul)\n### CHARACTER REDESIGNS:\n- **Runner:** Verbeterde details en animaties voor meer expressiviteit.\n- **Chasers:** Variaties in design en animaties voor elke jager.\n\n### ENVIRONMENT & TILES:\n- **Muur redesign:** Meer details en thema-specifieke variaties.\n- ",
+      "category": "visual",
+      "priority": "medium",
+      "suggestedBy": [
+        "team_dialogue"
+      ]
+    },
+    {
+      "rank": 20,
+      "id": "p1_monetization",
+      "action": "Monetization Features",
+      "description": "P1 - VISUELE UPGRADE (Complete Art Overhaul)\n### CHARACTER REDESIGNS:\n- **Runner:** Verbeterde details en animaties voor meer expressiviteit.\n- **Chasers:** Variaties in design en animaties voor elke jager.\n\n### ENVIRONMENT & TILES:\n- **Muur redesign:** Meer details en thema-specifieke variaties.\n- ",
+      "category": "monetization",
+      "priority": "medium",
+      "suggestedBy": [
+        "team_dialogue"
+      ]
+    }
+  ],
+  "items": {
+    "criticalFixes": [],
+    "visualUpgrades": [
+      {
+        "id": "p1_visual_overhaul",
+        "type": "visual",
+        "name": "Visual Art Overhaul",
+        "description": "P1 - VISUELE UPGRADE (Complete Art Overhaul)\n### CHARACTER REDESIGNS:\n- **Runner:** Verbeterde details en animaties voor meer expressiviteit.\n- **Chasers:** Variaties in design en animaties voor elke jager.\n\n### ENVIRONMENT & TILES:\n- **Muur redesign:** Meer details en thema-specifieke variaties.\n- **Vloer en decoratie:** Uniforme stijl per thema.\n\n### UI OVERHAUL:\n- **Button designs:** Nieuwe stijlen voor verbeterde zichtbaarheid.\n- **Score/HUD:** Strakkere layout en verbeterde leesbaarheid.\n\n### VFX & PARTICLES:\n- **Pellet collect effects:** Meer sprankeling en variatie.\n- **Power-up activatie:** Unieke effecten per power-up type.\n\n### ELEMENTEN TE VERWIJDEREN:\n- Oude assets die niet meer in lijn zijn met het nieuwe design.\n\n### PRIORITEIT VOLGORDE VOOR ART:\n1. Character designs\n2. Environment redesign\n3. UI overhaul\n\n",
+        "priority": 8,
+        "priorityLevel": "P1",
+        "source": "team_dialogue"
+      }
+    ],
+    "monetizationFeatures": [
+      {
+        "id": "p1_monetization",
+        "type": "monetization",
+        "name": "Monetization Features",
+        "description": "P1 - VISUELE UPGRADE (Complete Art Overhaul)\n### CHARACTER REDESIGNS:\n- **Runner:** Verbeterde details en animaties voor meer expressiviteit.\n- **Chasers:** Variaties in design en animaties voor elke jager.\n\n### ENVIRONMENT & TILES:\n- **Muur redesign:** Meer details en thema-specifieke variaties.\n- **Vloer en decoratie:** Uniforme stijl per thema.\n\n### UI OVERHAUL:\n- **Button designs:** Nieuwe stijlen voor verbeterde zichtbaarheid.\n- **Score/HUD:** Strakkere layout en verbeterde leesbaarheid.\n\n### VFX & PARTICLES:\n- **Pellet collect effects:** Meer sprankeling en variatie.\n- **Power-up activatie:** Unieke effecten per power-up type.\n\n### ELEMENTEN TE VERWIJDEREN:\n- Oude assets die niet meer in lijn zijn met het nieuwe design.\n\n### PRIORITEIT VOLGORDE VOOR ART:\n1. Character designs\n2. Environment redesign\n3. UI overhaul\n\n## 💰 P1 - MONETIZATION (Ethisch & Family-Friendly)\n### Quick Monetization Wins\n- **Cosmetics Shop Design:** Introductie van skins en trail effects.\n- **Battle Pass Str",
+        "priority": 7,
+        "priorityLevel": "P1",
+        "source": "team_dialogue"
+      }
+    ],
+    "teamSuggestions": [
+      {
+        "id": "mention_Tim_0",
+        "type": "team_suggestion",
+        "name": "@Kenji, overweeg om de particle effects verder te ontwikkelen om de visuele impa",
+        "description": "@Kenji, overweeg om de particle effects verder te ontwikkelen om de visuele impact te vergroten.",
+        "priority": 5,
+        "from": "Tim",
+        "source": "team_dialogue"
+      },
+      {
+        "id": "mention_Peter_0",
+        "type": "team_suggestion",
+        "name": "@Kenji, overweeg om shaders en lighting effects verder te verfijnen om meer diep",
+        "description": "@Kenji, overweeg om shaders en lighting effects verder te verfijnen om meer diepte en sfeer toe te voegen aan de spelervaring.",
+        "priority": 5,
+        "from": "Peter",
+        "source": "team_dialogue"
+      },
+      {
+        "id": "mention_Marcus_0",
+        "type": "team_suggestion",
+        "name": "@Kenji, overweeg het verbeteren van de audiocomponenten om de spelervaring verde",
+        "description": "@Kenji, overweeg het verbeteren van de audiocomponenten om de spelervaring verder te verrijken. ",
+        "priority": 5,
+        "from": "Marcus",
+        "source": "team_dialogue"
+      },
+      {
+        "id": "mention_Marcus_1",
+        "type": "team_suggestion",
+        "name": "@Yuki, werk aan meer diverse en dynamische art assets die passen bij toekomstige",
+        "description": "@Yuki, werk aan meer diverse en dynamische art assets die passen bij toekomstige seizoensgebonden content.",
+        "priority": 5,
+        "from": "Marcus",
+        "source": "team_dialogue"
+      },
+      {
+        "id": "mention_Elena_0",
+        "type": "team_suggestion",
+        "name": "@Kenji, overweeg om extra audiocomponenten te integreren die synchroniseren met ",
+        "description": "@Kenji, overweeg om extra audiocomponenten te integreren die synchroniseren met visuele prestatieverbeteringen voor een meer meeslepende ervaring.",
+        "priority": 5,
+        "from": "Elena",
+        "source": "team_dialogue"
+      },
+      {
+        "id": "mention_David_0",
+        "type": "team_suggestion",
+        "name": "@Yuki, overweeg om meer dynamische en thematische art assets te ontwikkelen om d",
+        "description": "@Yuki, overweeg om meer dynamische en thematische art assets te ontwikkelen om de unieke sferen van elk gevisualiseerd thema verder te versterken. ",
+        "priority": 5,
+        "from": "David",
+        "source": "team_dialogue"
+      },
+      {
+        "id": "mention_David_1",
+        "type": "team_suggestion",
+        "name": "@Elena, de prestatieverbeteringen die je suggereerde kunnen essentieel zijn voor",
+        "description": "@Elena, de prestatieverbeteringen die je suggereerde kunnen essentieel zijn voor het toevoegen van features zonder de spelervaring te vertragen.",
+        "priority": 5,
+        "from": "David",
+        "source": "team_dialogue"
+      },
+      {
+        "id": "mention_Ava_0",
+        "type": "team_suggestion",
+        "name": "@Kenji, consider enhancing audio components for role swaps. ",
+        "description": "@Kenji, consider enhancing audio components for role swaps. ",
+        "priority": 5,
+        "from": "Ava",
+        "source": "team_dialogue"
+      },
+      {
+        "id": "mention_Ava_1",
+        "type": "team_suggestion",
+        "name": "@Yuki, focus on developing diverse and dynamic art assets that align with the ga",
+        "description": "@Yuki, focus on developing diverse and dynamic art assets that align with the game's unique style.",
+        "priority": 5,
+        "from": "Ava",
+        "source": "team_dialogue"
+      },
+      {
+        "id": "mention_Alex_0",
+        "type": "team_suggestion",
+        "name": "@Mentions**: ",
+        "description": "@Mentions**: ",
+        "priority": 5,
+        "from": "Alex",
+        "source": "team_dialogue"
+      }
+    ]
+  },
+  "perTester": [
+    {
+      "name": "Sofia",
+      "role": "player",
+      "score": 7,
+      "topPriorities": null,
+      "suggestionsCount": 0
+    },
+    {
+      "name": "Emma",
+      "role": "player",
+      "score": 8,
+      "topPriorities": null,
+      "suggestionsCount": 0
+    },
+    {
+      "name": "Tim",
+      "role": "player",
+      "score": 7,
+      "topPriorities": null,
+      "suggestionsCount": 1
+    },
+    {
+      "name": "Sandra",
+      "role": "player",
+      "score": 7,
+      "topPriorities": null,
+      "suggestionsCount": 0
+    },
+    {
+      "name": "Peter",
+      "role": "player",
+      "score": 7,
+      "topPriorities": null,
+      "suggestionsCount": 1
+    },
+    {
+      "name": "Yuki",
+      "role": "player",
+      "score": null,
+      "topPriorities": null,
+      "suggestionsCount": 0
+    },
+    {
+      "name": "Marcus",
+      "role": "player",
+      "score": 8,
+      "topPriorities": "TOP 3 PRIORITEITEN:**\n  1. Update de CosmeticsShop met nieuwe skins (ui-web/src/lib/game/CosmeticsShop.ts).\n  2. Implementeer de battle pass structuur (ui-web/src/lib/game/BattlePass.ts).\n  3. Integreer rewarded video ads (ui-web/src/lib/game/RewardedAds.ts).\n\n- **QUICK WINS:**\n  1. Voeg een \"nieuwe items\" badge toe aan de shop interface.\n  2. Verbeter de advertentie-interacties door aansprekende animaties toe te voegen.\n  3. Creëer een aanpasbare interface voor themaweergave.\n\n- **LONG TERM:**\n",
+      "suggestionsCount": 3
+    },
+    {
+      "name": "Elena",
+      "role": "player",
+      "score": 7,
+      "topPriorities": "TOP 3 PRIORITEITEN:**\n  1. Adaptive quality implementation (ui-web/src/lib/game/scene.ts)\n  2. Asset load optimization with lazy loading (ui-web/src/lib/game/assets.ts)\n  3. Comprehensive static mesh optimization (ui-web/src/lib/graphics/meshOptimizations.ts)\n\n- **QUICK WINS:**\n  1. Implement a function to compress textures before use.\n  2. Add a setting to enable/disable glow effects based on device performance.\n  3. Use simplified shaders for non-critical visual effects.\n\n- **LONG TERM:**\n  1.",
+      "suggestionsCount": 2
+    },
+    {
+      "name": "David",
+      "role": "player",
+      "score": 7,
+      "topPriorities": "TOP 3 PRIORITEITEN:**\n  1. Voeg power-up demo toe in de tutorial (ui-web/src/lib/tutorial/IntroScene.ts)\n  2. Voeg lange sessiemodus toe (ui-web/src/lib/game/SessionManager.ts)\n  3. Verfijn notificaties voor evenementen (ui-web/src/lib/ui/Notifications.ts)\n\n- **QUICK WINS:**\n  1. Verhoog de visuele impact van power-up effecten met extra animatie lagen.\n  2. Voeg een dagelijkse beloningsmeter toe aan het hoofdscherm om voortgang te tonen.\n  3. Implementeer direct feedback op verzamelacties door e",
+      "suggestionsCount": 3
+    },
+    {
+      "name": "Ava",
+      "role": "player",
+      "score": 8,
+      "topPriorities": "TOP 3 PRIORITEITEN:**\n  1. Enhance role swap animations (ui-web/src/lib/game/animationEngine.ts)\n  2. Initiate meme campaign (ui-web/src/lib/social/socialMedia.ts)\n  3. Enhance leaderboard features (ui-web/src/lib/ui/leaderboard.ts)\n\n- **QUICK WINS:**\n  1. Implement additional sound effects for role swaps to increase immersion.\n  2. Add a \"share your score\" button to the game over screen.\n  3. Improve UI responsiveness for smoother user experience.\n\n- **LONG TERM:**\n  1. Develop a comprehensive ",
+      "suggestionsCount": 3
+    },
+    {
+      "name": "Grandma Mei",
+      "role": "player",
+      "score": 6,
+      "topPriorities": null,
+      "suggestionsCount": 0
+    },
+    {
+      "name": "Alex",
+      "role": "player",
+      "score": 5,
+      "topPriorities": "Top 3 Priorities**:\n  1. Input debouncing (ui-web/src/lib/game/inputManager.ts)\n  2. Theme transition improvements (ui-web/src/lib/ui/themeManager.ts)\n  3. Network resynchronization (ui-web/src/lib/network/socketHandler.ts)\n\n- **Quick Wins**:\n  1. Implement immediate visual feedback for all inputs.\n  2. Improve notification UI for clearer player directions.\n  3. Simplify network error messages for users.\n\n- **Long Term**:\n  1. Develop comprehensive mobile performance benchmarks.\n  2. Implement c",
+      "suggestionsCount": 3
+    },
+    {
+      "name": "Kenji",
+      "role": "player",
+      "score": 6,
+      "topPriorities": "TOP 3 AUDIO PRIORITEITEN:**\n1. Directionele audiocues voor Chaser proximity - MOET NU\n2. Verbeter de \"juice\" van de pellet collect sounds - MOET SNEL\n3. Meer variatie en onderscheiding in thema muziek - NICE TO HAVE\n\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n🔄 ZELFREFLECTIE - MAAK JEZELF BETER\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n1. **PROMPT KRITIEK:** Meer specifieke voorbeelden van vergelijkbare games in de briefing hadden nuttig kunnen z",
+      "suggestionsCount": 3
+    },
+    {
+      "name": "Marcus",
+      "role": "player",
+      "score": 6,
+      "topPriorities": "TOP 3 PRIORITEITEN:** WebSocket message validation, render loop optimalisatie, consistente error handling.\n- **QUICK WINS:** \n  1. Voer een snelle audit uit van alle client-side input validation.\n  2. Implementeer ESLint met strikte regels voor onmiddellijke verbeteringen.\n  3. Introduceer een eenvoudige logging module voor debugging.\n\n- **LONG TERM:** \n  1. Herzie de architectuur voor een meer flexibele ECS-structuur.\n  2. Breid de testsuite uit met gedetailleerde integratie- en prestatiescenar",
+      "suggestionsCount": 4
+    }
+  ],
+  "consensus": {
+    "highPriority": [
+      {
+        "category": "Audio",
+        "expertCount": 12,
+        "mentionedBy": [
+          "Sofia",
+          "Emma",
+          "Tim",
+          "Sandra",
+          "Peter",
+          "Marcus",
+          "Elena",
+          "David",
+          "Ava",
+          "Grandma Mei",
+          "Alex",
+          "Kenji"
+        ],
+        "totalMentions": 144,
+        "severity": 101
+      },
+      {
+        "category": "Visuals",
+        "expertCount": 12,
+        "mentionedBy": [
+          "Sofia",
+          "Emma",
+          "Tim",
+          "Sandra",
+          "Peter",
+          "Marcus",
+          "Elena",
+          "David",
+          "Ava",
+          "Grandma Mei",
+          "Alex",
+          "Kenji"
+        ],
+        "totalMentions": 68,
+        "severity": 55
+      },
+      {
+        "category": "UI/UX",
+        "expertCount": 12,
+        "mentionedBy": [
+          "Sofia",
+          "Emma",
+          "Tim",
+          "Sandra",
+          "Peter",
+          "Marcus",
+          "Elena",
+          "David",
+          "Ava",
+          "Grandma Mei",
+          "Alex",
+          "Kenji"
+        ],
+        "totalMentions": 272,
+        "severity": 30
+      },
+      {
+        "category": "Animation",
+        "expertCount": 11,
+        "mentionedBy": [
+          "Sofia",
+          "Emma",
+          "Tim",
+          "Sandra",
+          "Peter",
+          "Marcus",
+          "Elena",
+          "David",
+          "Ava",
+          "Grandma Mei",
+          "Alex"
+        ],
+        "totalMentions": 42,
+        "severity": 34
+      },
+      {
+        "category": "Mobile",
+        "expertCount": 9,
+        "mentionedBy": [
+          "Sofia",
+          "Tim",
+          "Sandra",
+          "Peter",
+          "Elena",
+          "Ava",
+          "Grandma Mei",
+          "Alex",
+          "Marcus"
+        ],
+        "totalMentions": 31,
+        "severity": 21
+      },
+      {
+        "category": "Multiplayer",
+        "expertCount": 8,
+        "mentionedBy": [
+          "Sofia",
+          "Tim",
+          "Elena",
+          "David",
+          "Ava",
+          "Alex",
+          "Kenji",
+          "Marcus"
+        ],
+        "totalMentions": 33,
+        "severity": 28
+      },
+      {
+        "category": "Onboarding",
+        "expertCount": 7,
+        "mentionedBy": [
+          "Sofia",
+          "Emma",
+          "Tim",
+          "Peter",
+          "David",
+          "Alex",
+          "Marcus"
+        ],
+        "totalMentions": 13,
+        "severity": 12
+      },
+      {
+        "category": "Performance",
+        "expertCount": 5,
+        "mentionedBy": [
+          "Tim",
+          "Elena",
+          "David",
+          "Alex",
+          "Marcus"
+        ],
+        "totalMentions": 32,
+        "severity": 17
+      },
+      {
+        "category": "Monetization",
+        "expertCount": 4,
+        "mentionedBy": [
+          "Marcus",
+          "Elena",
+          "Ava",
+          "Alex"
+        ],
+        "totalMentions": 20,
+        "severity": 15
+      },
+      {
+        "category": "Bugs",
+        "expertCount": 3,
+        "mentionedBy": [
+          "Alex",
+          "Kenji",
+          "Marcus"
+        ],
+        "totalMentions": 30,
+        "severity": 19
+      }
+    ],
+    "mediumPriority": [],
+    "mentioned": [
+      {
+        "category": "Audio",
+        "expertCount": 12,
+        "mentionedBy": [
+          "Sofia",
+          "Emma",
+          "Tim",
+          "Sandra",
+          "Peter",
+          "Marcus",
+          "Elena",
+          "David",
+          "Ava",
+          "Grandma Mei",
+          "Alex",
+          "Kenji"
+        ],
+        "totalMentions": 144,
+        "severity": 101
+      },
+      {
+        "category": "Visuals",
+        "expertCount": 12,
+        "mentionedBy": [
+          "Sofia",
+          "Emma",
+          "Tim",
+          "Sandra",
+          "Peter",
+          "Marcus",
+          "Elena",
+          "David",
+          "Ava",
+          "Grandma Mei",
+          "Alex",
+          "Kenji"
+        ],
+        "totalMentions": 68,
+        "severity": 55
+      },
+      {
+        "category": "UI/UX",
+        "expertCount": 12,
+        "mentionedBy": [
+          "Sofia",
+          "Emma",
+          "Tim",
+          "Sandra",
+          "Peter",
+          "Marcus",
+          "Elena",
+          "David",
+          "Ava",
+          "Grandma Mei",
+          "Alex",
+          "Kenji"
+        ],
+        "totalMentions": 272,
+        "severity": 30
+      },
+      {
+        "category": "Animation",
+        "expertCount": 11,
+        "mentionedBy": [
+          "Sofia",
+          "Emma",
+          "Tim",
+          "Sandra",
+          "Peter",
+          "Marcus",
+          "Elena",
+          "David",
+          "Ava",
+          "Grandma Mei",
+          "Alex"
+        ],
+        "totalMentions": 42,
+        "severity": 34
+      },
+      {
+        "category": "Mobile",
+        "expertCount": 9,
+        "mentionedBy": [
+          "Sofia",
+          "Tim",
+          "Sandra",
+          "Peter",
+          "Elena",
+          "Ava",
+          "Grandma Mei",
+          "Alex",
+          "Marcus"
+        ],
+        "totalMentions": 31,
+        "severity": 21
+      },
+      {
+        "category": "Multiplayer",
+        "expertCount": 8,
+        "mentionedBy": [
+          "Sofia",
+          "Tim",
+          "Elena",
+          "David",
+          "Ava",
+          "Alex",
+          "Kenji",
+          "Marcus"
+        ],
+        "totalMentions": 33,
+        "severity": 28
+      },
+      {
+        "category": "Onboarding",
+        "expertCount": 7,
+        "mentionedBy": [
+          "Sofia",
+          "Emma",
+          "Tim",
+          "Peter",
+          "David",
+          "Alex",
+          "Marcus"
+        ],
+        "totalMentions": 13,
+        "severity": 12
+      },
+      {
+        "category": "Performance",
+        "expertCount": 5,
+        "mentionedBy": [
+          "Tim",
+          "Elena",
+          "David",
+          "Alex",
+          "Marcus"
+        ],
+        "totalMentions": 32,
+        "severity": 17
+      },
+      {
+        "category": "Monetization",
+        "expertCount": 4,
+        "mentionedBy": [
+          "Marcus",
+          "Elena",
+          "Ava",
+          "Alex"
+        ],
+        "totalMentions": 20,
+        "severity": 15
+      },
+      {
+        "category": "Bugs",
+        "expertCount": 3,
+        "mentionedBy": [
+          "Alex",
+          "Kenji",
+          "Marcus"
+        ],
+        "totalMentions": 30,
+        "severity": 19
+      }
+    ]
+  },
+  "contraDecisions": [
+    {
+      "topic": "Audio vs Visual - wat is BELANGRIJKER voor de speler?",
+      "decision": "** We gaan werken aan het verbeteren van de sound effects door het toevoegen van gelaagdheid en resonantie om de spelerinteractie met visuals te verdiepen."
+    },
+    {
+      "topic": "Visual flair vs 60 FPS - wat kiezen we?",
+      "winner": "Yuki",
+      "decision": "We gaan werken aan technieken zoals LOD en dynamische schaling om zowel visuele flair als 60 FPS te handhaven. Performance optimalisaties moeten de visuele aantrekkingskracht niet beperken."
+    },
+    {
+      "topic": "Performance vs Ads - mogen ads de FPS verlagen?",
+      "winner": "Elena",
+      "decision": "** We gaan eerst de performance van het spel optimaliseren voordat we ons richten op het toevoegen van nieuwe advertentieformaten. Dit omvat het verbeteren van de rendering efficiency en het reduceren van de memory footprint."
+    },
+    {
+      "topic": "Geld verdienen vs Spelers behouden - wat weegt zwaarder?",
+      "winner": "Marcus",
+      "decision": "We gaan prioriteit geven aan het ontwikkelen van nieuwe cosmetische items en een seizoensgebonden Battle Pass om de inkomsten te maximaliseren. Tegelijkertijd zullen we David's suggesties voor UX verbeteringen integreren, maar als secundaire prioriteit."
+    },
+    {
+      "topic": "Bugs fixen vs Nieuwe features - waar gaat de tijd heen?",
+      "winner": "Alex",
+      "decision": "Eerst prioriteit geven aan het oplossen van kritieke bugs om de basis van het spel te stabiliseren, voordat we nieuwe features implementeren."
+    },
+    {
+      "topic": "Hardcore uitdaging vs Casual fun - wie is de doelgroep?",
+      "winner": "Tim",
+      "decision": "** We integreren dynamische moeilijkheidsgraden die zich aanpassen aan de vaardigheden van de speler. We voegen ook meer variatie toe in de gameplay om repetitie te verminderen."
+    }
+  ]
+}

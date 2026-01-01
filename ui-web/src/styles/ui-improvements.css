@@ -1,0 +1,305 @@
+/* 
+ * UI Improvements - Sprint 1 Critical Fixes
+ * Based on AI Tester Feedback (Grandma Mei, Sandra, Emma)
+ * 
+ * Key Issues:
+ * - Buttons too small for older fingers
+ * - Text hard to read without glasses
+ * - Low contrast on some elements
+ * - Responsive issues on smaller screens
+ */
+
+/* ============================================
+   LARGER BUTTONS - Touch-friendly sizes
+   ============================================ */
+
+/* All clickable buttons get minimum size */
+button,
+.btn,
+[role="button"],
+input[type="button"],
+input[type="submit"] {
+  /* Minimum 48x48px touch target (WCAG 2.1 AAA) */
+  min-height: 48px;
+  min-width: 48px;
+  padding: 12px 24px;
+  
+  /* Larger font */
+  font-size: 18px;
+  font-weight: 600;
+  
+  /* Better contrast */
+  border: 2px solid transparent;
+  
+  /* Smooth interactions */
+  transition: all 0.2s ease;
+  
+  /* Prevent text wrapping */
+  white-space: nowrap;
+}
+
+/* Primary buttons - extra visibility */
+.btn-primary,
+button[type="submit"],
+.start-button,
+.play-button {
+  min-height: 56px;
+  font-size: 20px;
+  padding: 14px 32px;
+  
+  /* High contrast yellow on dark */
+  background: linear-gradient(180deg, #FFE135 0%, #F5C800 100%);
+  color: #000000;
+  border: 3px solid #FFE135;
+  border-radius: 12px;
+  
+  /* Glow effect for visibility */
+  box-shadow: 0 0 15px rgba(255, 225, 53, 0.4);
+}
+
+.btn-primary:hover,
+button[type="submit"]:hover,
+.start-button:hover,
+.play-button:hover {
+  transform: scale(1.05);
+  box-shadow: 0 0 25px rgba(255, 225, 53, 0.6);
+}
+
+/* Secondary buttons */
+.btn-secondary {
+  background: rgba(255, 255, 255, 0.1);
+  color: #FFFFFF;
+  border: 2px solid #FFFFFF;
+  border-radius: 10px;
+}
+
+.btn-secondary:hover {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+/* ============================================
+   HIGH CONTRAST TEXT
+   ============================================ */
+
+/* Ensure all text has good contrast */
+body,
+.game-text,
+.menu-text,
+.score-text {
+  /* Minimum 4.5:1 contrast ratio */
+  color: #FFFFFF;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.5);
+}
+
+/* Score display - extra large and bold */
+.score,
+.score-value,
+.points,
+[class*="score"] {
+  font-size: 24px !important;
+  font-weight: 700 !important;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
+}
+
+/* Timer display */
+.timer,
+.countdown,
+.time-remaining {
+  font-size: 28px !important;
+  font-weight: 700;
+  letter-spacing: 2px;
+}
+
+/* ============================================
+   FORM INPUTS - Easier to use
+   ============================================ */
+
+input[type="text"],
+input[type="email"],
+input[type="password"],
+input[type="number"],
+select,
+textarea {
+  /* Larger input areas */
+  min-height: 48px;
+  padding: 12px 16px;
+  font-size: 18px;
+  
+  /* Clear borders */
+  border: 2px solid #666666;
+  border-radius: 8px;
+  background: rgba(0, 0, 0, 0.6);
+  color: #FFFFFF;
+}
+
+input:focus,
+select:focus,
+textarea:focus {
+  border-color: #FFE135;
+  outline: none;
+  box-shadow: 0 0 10px rgba(255, 225, 53, 0.3);
+}
+
+/* Placeholder text - more visible */
+::placeholder {
+  color: #999999;
+  opacity: 1;
+}
+
+/* ============================================
+   MOBILE RESPONSIVE - Larger touch areas
+   ============================================ */
+
+@media (max-width: 768px) {
+  /* Even larger buttons on mobile */
+  button,
+  .btn,
+  [role="button"] {
+    min-height: 56px;
+    font-size: 18px;
+    width: 100%;
+    margin: 8px 0;
+  }
+  
+  /* Stack buttons vertically */
+  .button-group,
+  .btn-group {
+    flex-direction: column;
+    gap: 12px;
+  }
+  
+  /* Larger fonts on mobile */
+  body {
+    font-size: 18px;
+  }
+  
+  h1 { font-size: 32px; }
+  h2 { font-size: 26px; }
+  h3 { font-size: 22px; }
+  
+  /* More padding around elements */
+  .container,
+  .panel,
+  .modal,
+  .card {
+    padding: 20px;
+    margin: 10px;
+  }
+}
+
+/* ============================================
+   MENU AND MODAL IMPROVEMENTS
+   ============================================ */
+
+/* Game menus */
+.game-menu,
+.modal-content,
+.panel {
+  /* High contrast background */
+  background: rgba(20, 20, 35, 0.95);
+  border: 2px solid #444444;
+  border-radius: 16px;
+  padding: 24px;
+  
+  /* Ensure text is readable */
+  color: #FFFFFF;
+}
+
+/* Menu items - larger click areas */
+.menu-item,
+.nav-item,
+.list-item {
+  min-height: 48px;
+  padding: 16px 20px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  
+  border-radius: 8px;
+  transition: background 0.2s;
+}
+
+.menu-item:hover,
+.nav-item:hover {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+/* ============================================
+   ICONS - Larger and clearer
+   ============================================ */
+
+.icon,
+[class*="icon"],
+svg {
+  /* Minimum size for visibility */
+  min-width: 24px;
+  min-height: 24px;
+}
+
+/* Clickable icons need larger targets */
+button .icon,
+a .icon,
+.icon-button {
+  min-width: 44px;
+  min-height: 44px;
+  padding: 10px;
+}
+
+/* ============================================
+   FOCUS INDICATORS - For keyboard users
+   ============================================ */
+
+:focus-visible {
+  outline: 3px solid #FFE135;
+  outline-offset: 2px;
+}
+
+/* Skip to content link */
+.skip-link {
+  position: absolute;
+  top: -100px;
+  left: 50%;
+  transform: translateX(-50%);
+  padding: 12px 24px;
+  background: #000000;
+  color: #FFFFFF;
+  z-index: 9999;
+  transition: top 0.3s;
+}
+
+.skip-link:focus {
+  top: 10px;
+}
+
+/* ============================================
+   LOADING AND FEEDBACK STATES
+   ============================================ */
+
+/* Loading spinner - larger */
+.spinner,
+.loading {
+  min-width: 48px;
+  min-height: 48px;
+}
+
+/* Error messages - clear visibility */
+.error,
+.error-message {
+  background: rgba(255, 0, 0, 0.2);
+  border: 2px solid #FF4444;
+  border-radius: 8px;
+  padding: 16px;
+  color: #FFAAAA;
+  font-size: 16px;
+}
+
+/* Success messages */
+.success,
+.success-message {
+  background: rgba(0, 255, 0, 0.2);
+  border: 2px solid #44FF44;
+  border-radius: 8px;
+  padding: 16px;
+  color: #AAFFAA;
+  font-size: 16px;
+}

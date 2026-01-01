@@ -1,0 +1,507 @@
+/* 💰 Monetization Styles */
+
+.urgency-timer {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: linear-gradient(135deg, #ff6b35, #ff4444);
+  padding: 8px 16px;
+  border-radius: 8px;
+  color: white;
+  font-weight: bold;
+  animation: pulse 1s infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.02); }
+}
+
+.first-purchase-bonus {
+  background: linear-gradient(135deg, #ffd700, #ff8c00);
+  border-radius: 16px;
+  padding: 24px;
+  text-align: center;
+  color: #000;
+}
+
+.bonus-badge {
+  background: #000;
+  color: #ffd700;
+  padding: 4px 12px;
+  border-radius: 20px;
+  display: inline-block;
+  margin-bottom: 12px;
+}
+
+.purchase-popup-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.8);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.purchase-popup {
+  background: linear-gradient(180deg, #1a1a2e, #16213e);
+  border-radius: 20px;
+  padding: 32px;
+  max-width: 400px;
+  text-align: center;
+  position: relative;
+}
+
+.close-btn {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  background: none;
+  border: none;
+  color: #888;
+  font-size: 24px;
+  cursor: pointer;
+}
+
+.buy-btn {
+  background: linear-gradient(135deg, #00d9ff, #00ff88);
+  border: none;
+  padding: 16px 32px;
+  border-radius: 12px;
+  font-size: 18px;
+  font-weight: bold;
+  cursor: pointer;
+  width: 100%;
+  margin-top: 16px;
+}
+
+.skip-btn {
+  background: none;
+  border: none;
+  color: #666;
+  margin-top: 12px;
+  cursor: pointer;
+}
+
+.streak-display {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 16px;
+}
+
+.streak-display.at-risk {
+  animation: shake 0.5s infinite;
+}
+
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  25% { transform: translateX(-2px); }
+  75% { transform: translateX(2px); }
+}
+
+.streak-fire {
+  font-size: 48px;
+}
+
+.streak-count {
+  font-size: 36px;
+  font-weight: bold;
+  color: #ff6b35;
+}
+
+.streak-warning {
+  background: #ff4444;
+  color: white;
+  padding: 8px 16px;
+  border-radius: 8px;
+  margin-top: 8px;
+}
+
+.vip-teaser {
+  background: linear-gradient(135deg, #667eea, #764ba2);
+  border-radius: 12px;
+  padding: 24px;
+  text-align: center;
+}
+
+.vip-lock {
+  font-size: 32px;
+}
+
+.vip-unlock-btn {
+  background: #ffd700;
+  color: #000;
+  border: none;
+  padding: 12px 24px;
+  border-radius: 8px;
+  font-weight: bold;
+  cursor: pointer;
+  margin-top: 12px;
+}
+
+/* ============================================
+   SPRINT 3 - Enhanced Shop & Battle Pass UI
+   Based on Marcus' Monetization Recommendations
+   ============================================ */
+
+/* Rarity card borders */
+.rarity-common { border-color: #9CA3AF; }
+.rarity-rare { border-color: #3B82F6; }
+.rarity-epic { border-color: #8B5CF6; }
+.rarity-legendary { 
+  border-color: #F59E0B;
+  box-shadow: 0 0 20px rgba(245, 158, 11, 0.3);
+}
+
+/* Rarity glow effects */
+.rarity-glow-legendary {
+  animation: legendary-glow 2s ease-in-out infinite;
+}
+
+@keyframes legendary-glow {
+  0%, 100% { box-shadow: 0 0 20px rgba(245, 158, 11, 0.3); }
+  50% { box-shadow: 0 0 40px rgba(245, 158, 11, 0.6); }
+}
+
+/* Shop item cards */
+.shop-item-card {
+  background: rgba(0, 0, 0, 0.6);
+  border: 2px solid rgba(255, 255, 255, 0.1);
+  border-radius: 16px;
+  overflow: hidden;
+  transition: transform 0.3s var(--ease-out-expo), 
+              box-shadow 0.3s var(--ease-out-expo);
+}
+
+.shop-item-card:hover {
+  transform: translateY(-8px) scale(1.02);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+}
+
+.shop-item-preview {
+  aspect-ratio: 1;
+  background: linear-gradient(135deg, rgba(139, 92, 246, 0.1), rgba(34, 211, 238, 0.1));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 64px;
+}
+
+.shop-item-info {
+  padding: 16px;
+}
+
+.shop-item-name {
+  font-weight: 700;
+  color: white;
+  font-size: 16px;
+  margin-bottom: 4px;
+}
+
+.shop-item-price {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.price-coins {
+  color: #FFD700;
+  font-weight: 600;
+}
+
+.price-real {
+  color: #22C55E;
+  font-weight: 700;
+}
+
+/* Featured badge */
+.featured-badge {
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  background: linear-gradient(135deg, #F59E0B, #EF4444);
+  color: white;
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.new-badge {
+  background: linear-gradient(135deg, #22C55E, #10B981);
+}
+
+.limited-badge {
+  background: linear-gradient(135deg, #EF4444, #DC2626);
+  animation: pulse 1.5s infinite;
+}
+
+/* Bundle cards */
+.bundle-card {
+  background: linear-gradient(135deg, rgba(30, 30, 50, 0.9), rgba(15, 15, 26, 0.9));
+  border: 2px solid rgba(139, 92, 246, 0.3);
+  border-radius: 20px;
+  padding: 24px;
+  position: relative;
+  overflow: hidden;
+}
+
+.bundle-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: linear-gradient(90deg, #8B5CF6, #EC4899, #22D3EE);
+}
+
+.bundle-card.featured {
+  border-color: #F59E0B;
+  box-shadow: 0 0 30px rgba(245, 158, 11, 0.2);
+}
+
+.bundle-badge {
+  display: inline-block;
+  background: linear-gradient(135deg, #8B5CF6, #EC4899);
+  color: white;
+  padding: 6px 16px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 700;
+  margin-bottom: 16px;
+}
+
+.bundle-items {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin: 16px 0;
+}
+
+.bundle-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(255, 255, 255, 0.05);
+  padding: 8px 12px;
+  border-radius: 8px;
+  font-size: 14px;
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.bundle-item-icon {
+  font-size: 20px;
+}
+
+.bundle-pricing {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-top: 16px;
+}
+
+.bundle-original-price {
+  color: rgba(255, 255, 255, 0.4);
+  text-decoration: line-through;
+  font-size: 18px;
+}
+
+.bundle-price {
+  color: #22C55E;
+  font-size: 28px;
+  font-weight: 700;
+}
+
+.bundle-discount {
+  background: #EF4444;
+  color: white;
+  padding: 4px 10px;
+  border-radius: 6px;
+  font-size: 14px;
+  font-weight: 700;
+}
+
+/* Battle Pass UI */
+.battle-pass-header {
+  text-align: center;
+  padding: 32px;
+  background: linear-gradient(135deg, rgba(139, 92, 246, 0.2), rgba(236, 72, 153, 0.2));
+  border-radius: 20px;
+  margin-bottom: 24px;
+}
+
+.battle-pass-season {
+  font-size: 14px;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  color: rgba(255, 255, 255, 0.6);
+  margin-bottom: 8px;
+}
+
+.battle-pass-title {
+  font-size: 36px;
+  font-weight: 700;
+  background: linear-gradient(90deg, #22D3EE, #EC4899);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  margin-bottom: 16px;
+}
+
+.battle-pass-timer {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(0, 0, 0, 0.4);
+  padding: 8px 16px;
+  border-radius: 20px;
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.battle-pass-level {
+  display: flex;
+  align-items: center;
+  background: rgba(0, 0, 0, 0.4);
+  border-radius: 16px;
+  padding: 16px;
+  margin-bottom: 8px;
+  gap: 16px;
+}
+
+.level-number {
+  width: 48px;
+  height: 48px;
+  background: linear-gradient(135deg, #8B5CF6, #EC4899);
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 18px;
+  color: white;
+}
+
+.level-rewards {
+  flex: 1;
+  display: flex;
+  gap: 16px;
+}
+
+.level-reward {
+  flex: 1;
+  padding: 12px;
+  border-radius: 12px;
+  text-align: center;
+}
+
+.level-reward.free {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px dashed rgba(255, 255, 255, 0.2);
+}
+
+.level-reward.premium {
+  background: linear-gradient(135deg, rgba(139, 92, 246, 0.2), rgba(236, 72, 153, 0.2));
+  border: 1px solid rgba(139, 92, 246, 0.3);
+}
+
+.level-reward.locked {
+  opacity: 0.5;
+  filter: grayscale(0.5);
+}
+
+.level-reward-icon {
+  font-size: 32px;
+  margin-bottom: 8px;
+}
+
+.level-reward-name {
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.8);
+}
+
+/* Premium upgrade banner */
+.premium-upgrade-banner {
+  background: linear-gradient(135deg, #8B5CF6, #EC4899);
+  border-radius: 16px;
+  padding: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  margin: 24px 0;
+}
+
+.premium-perks {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.premium-perk {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(255, 255, 255, 0.15);
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-size: 13px;
+  color: white;
+}
+
+.premium-buy-btn {
+  background: white;
+  color: #8B5CF6;
+  border: none;
+  padding: 14px 32px;
+  border-radius: 12px;
+  font-weight: 700;
+  font-size: 16px;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: transform 0.2s var(--ease-out-back);
+}
+
+.premium-buy-btn:hover {
+  transform: scale(1.05);
+}
+
+/* Rewarded ad button */
+.rewarded-ad-btn {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: linear-gradient(135deg, rgba(34, 197, 94, 0.2), rgba(16, 185, 129, 0.2));
+  border: 1px solid rgba(34, 197, 94, 0.3);
+  border-radius: 12px;
+  padding: 12px 16px;
+  color: white;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.rewarded-ad-btn:hover {
+  background: linear-gradient(135deg, rgba(34, 197, 94, 0.3), rgba(16, 185, 129, 0.3));
+  transform: translateY(-2px);
+}
+
+.rewarded-ad-icon {
+  font-size: 24px;
+}
+
+.rewarded-ad-text {
+  text-align: left;
+}
+
+.rewarded-ad-title {
+  font-weight: 600;
+  font-size: 14px;
+}
+
+.rewarded-ad-reward {
+  font-size: 12px;
+  color: #22C55E;
+}

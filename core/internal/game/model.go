@@ -1,0 +1,90 @@
+package game
+
+import (
+	"encoding/json"
+	"github.com/frank2889/mazechase/internal/user"
+	"strconv"
+)
+
+type SpriteType string
+
+// Character types - MazeChase naming
+const (
+	Chaser1 SpriteType = "ch0"
+	Chaser2 SpriteType = "ch1"
+	Chaser3 SpriteType = "ch2"
+	Runner  SpriteType = "runner"
+)
+
+func NewPlayerEntity(userId uint, username string) *PlayerEntity {
+	// Sanitize username to prevent UI corruption from special Unicode characters
+	validator := NewInputValidator()
+	sanitizedUsername, err := validator.ValidateUsername(username)
+	if err != nil {
+		// Fallback to basic sanitization if validation fails
+		sanitizedUsername = "Player"
+	}
+	
+	return &PlayerEntity{
+		Type:        "active",
+		PlayerId:    strconv.Itoa(int(userId)),
+		Username:    sanitizedUsername,
+		SpriteType:  "",
+		X:           0,
+		Y:           0,
+		secretToken: user.CreateAuthToken(5),
+		IsReady:     false,
+		IsHost:      false,
+		IsSpectator: false,
+	}
+}
+
+// PlayerEntity represents a player in the game
+type PlayerEntity struct {
+	Type            string     `json:"type"`
+	PlayerId        string     `json:"playerid"`
+	Username        string     `json:"user"`
+	SpriteType      SpriteType `json:"spriteType"`
+	X               float64    `json:"x"`
+	Y               float64    `json:"y"`
+	Dir             string     `json:"dir"`
+	IsReady         bool       `json:"isReady"`
+	IsHost          bool       `json:"isHost"`
+	IsSpectator     bool       `json:"isSpectator"`
+	secretToken     string
+	IsBot           bool    `json:"-"` // Not sent to client
+	Loot            int     `json:"loot"`           // Carried resources (Item #37)
+	SurvivalStreak  float64 `json:"survivalStreak"` // Seconds in danger zone (Item #44)
+	RespawnTime     int64   `json:"respawnTime"`    // Unix ms when respawn allowed (Item #43)
+	IsStunned       bool    `json:"isStunned"`      // Stunned from collision (Item #41)
+	StunEndTime     int64   `json:"stunEndTime"`    // Unix ms when stun ends
+}
+
+// ToJSON converts the PlayerEntity to a JSON string
+func (p *PlayerEntity) ToJSON() ([]byte, error) {
+	bytes, err := json.Marshal(p)
+	if err != nil {
+		return []byte{}, err
+	}
+	return bytes, nil
+}
+
+func (p *PlayerEntity) ToMap() map[string]interface{} {
+	playerMap := map[string]interface{}{}
+	playerMap["type"] = p.Type
+	playerMap["playerid"] = p.PlayerId
+	playerMap["user"] = p.Username
+	playerMap["spriteType"] = p.SpriteType
+	playerMap["x"] = p.X
+	playerMap["y"] = p.Y
+	playerMap["dir"] = p.Dir
+	playerMap["isReady"] = p.IsReady
+	playerMap["isHost"] = p.IsHost
+	playerMap["isSpectator"] = p.IsSpectator
+	return playerMap
+}
+
+// FromJSON populates the PlayerEntity from a JSON string
+func (p *PlayerEntity) FromJSON(jsonStr string) error {
+	return json.Unmarshal([]byte(jsonStr), p)
+}

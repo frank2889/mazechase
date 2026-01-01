@@ -1,0 +1,12 @@
+{
+	"version": "2.0.0",
+	"tasks": [
+		{
+			"label": "AI Testers",
+			"type": "shell",
+			"command": "cd /Users/Frank/MazeChase/EMMSOAI && node ai-game-testers.js",
+			"isBackground": true,
+			"problemMatcher": []
+		}
+	]
+}

@@ -1,0 +1,1141 @@
+{
+  "metadata": {
+    "timestamp": "2026-01-01T12:39:43.938Z",
+    "version": "5.1",
+    "totalTesters": 14,
+    "averageScore": null
+  },
+  "workflow": {
+    "nextStep": "Implementeer concreteCodeChanges en maak in/implementation-TIMESTAMP.json",
+    "inputFile": "tests/in/implementation-TIMESTAMP.json",
+    "outputFile": "tests/out/evaluation-TIMESTAMP.json",
+    "loop": "out/evaluation → implementatie → in/implementation → AI leest beide → repeat"
+  },
+  "summary": {
+    "totalActions": 44,
+    "concreteCodeChanges": 21,
+    "highPriority": 12,
+    "mediumPriority": 14,
+    "lowPriority": 18,
+    "categories": [
+      "Sound Designer & Audio Engineer",
+      "Technical QA Engineer",
+      "Indie Game Market Analyst",
+      "UX Researcher & Retention Specialist",
+      "Performance Engineer",
+      "Monetization & Business Strategy",
+      "Visual Artist & Sprite Designer",
+      "general",
+      "critical_fix",
+      "visual",
+      "monetization",
+      "team_suggestion"
+    ]
+  },
+  "concreteCodeChanges": [
+    {
+      "rank": 1,
+      "file": "ui-web/src/lib/ui/buttonStyles.ts",
+      "function": "updateButtonStyles",
+      "type": "modify",
+      "change": "Pas de knoppen aan met ronde hoeken en hover-effecten",
+      "reason": "Om de UI consistent te maken met de nieuwe visuele stijl",
+      "priority": "high",
+      "suggestedBy": "Yuki",
+      "expertise": "Visual Artist & Sprite Designer"
+    },
+    {
+      "rank": 2,
+      "file": "ui-web/src/assets/particleEffects.ts",
+      "function": "createNewParticleEffects",
+      "type": "create",
+      "change": "Voeg meer variatie en intensiteit toe aan de bestaande particle effecten",
+      "reason": "Om de visuele impact van effecten te vergroten",
+      "priority": "medium",
+      "suggestedBy": "Yuki",
+      "expertise": "Visual Artist & Sprite Designer"
+    },
+    {
+      "rank": 3,
+      "file": "ui-web/src/lib/game/characterAnimations.ts",
+      "function": "enhanceCharacterAnimations",
+      "type": "modify",
+      "change": "Voeg meer anticipatie en follow-through toe aan character animaties",
+      "reason": "Om animaties dynamischer te maken",
+      "priority": "medium",
+      "suggestedBy": "Yuki",
+      "expertise": "Visual Artist & Sprite Designer"
+    },
+    {
+      "rank": 4,
+      "file": "ui-web/src/lib/ui/shopInterface.ts",
+      "function": "updateShopLayout",
+      "type": "modify",
+      "change": "Voeg een nieuwe sectie toe voor dagelijkse aanbiedingen met countdown timers",
+      "reason": "Om FOMO en conversie te verhogen",
+      "priority": "high",
+      "suggestedBy": "Marcus",
+      "expertise": "Monetization & Business Strategy"
+    },
+    {
+      "rank": 5,
+      "file": "ui-web/src/lib/game/battlePassManager.ts",
+      "function": "implementBattlePassRewards",
+      "type": "create",
+      "change": "Introduceer een beloningssysteem met unieke skins en power-ups",
+      "reason": "Om spelers aan te moedigen de battle pass te kopen",
+      "priority": "medium",
+      "suggestedBy": "Marcus",
+      "expertise": "Monetization & Business Strategy"
+    },
+    {
+      "rank": 6,
+      "file": "ui-web/src/lib/ad/adPlacement.ts",
+      "function": "optimizeAdPlacements",
+      "type": "modify",
+      "change": "Verplaats en optimaliseer advertenties om de gebruiker minder te storen",
+      "reason": "Om de spelerervaring te verbeteren en toch inkomsten te genereren",
+      "priority": "medium",
+      "suggestedBy": "Marcus",
+      "expertise": "Monetization & Business Strategy"
+    },
+    {
+      "rank": 7,
+      "file": "ui-web/src/lib/game/meshManager.ts",
+      "function": "optimizeMeshInstances",
+      "type": "modify",
+      "change": "Gebruik mesh.createInstance voor herhaalde objecten",
+      "reason": "Verminder draw calls en verbeter rendering efficiëntie",
+      "priority": "high",
+      "suggestedBy": "Elena",
+      "expertise": "Performance Engineer"
+    },
+    {
+      "rank": 8,
+      "file": "ui-web/src/lib/game/materialManager.ts",
+      "function": "freezeMaterialsAfterSetup",
+      "type": "modify",
+      "change": "Roep material.freeze() aan na configuratie",
+      "reason": "Minimaliseer rendering overhead",
+      "priority": "medium",
+      "suggestedBy": "Elena",
+      "expertise": "Performance Engineer"
+    },
+    {
+      "rank": 9,
+      "file": "ui-web/src/lib/game/assetLoader.ts",
+      "function": "implementLazyLoading",
+      "type": "modify",
+      "change": "Prioriteer het laden van kritieke assets en gebruik placeholders",
+      "reason": "Verbeter initiële laadtijd",
+      "priority": "medium",
+      "suggestedBy": "Elena",
+      "expertise": "Performance Engineer"
+    },
+    {
+      "rank": 10,
+      "file": "ui-web/src/lib/ui/onboarding.ts",
+      "function": "simplifyOnboarding",
+      "type": "modify",
+      "change": "Voeg een kortere, meer gefocuste tutorial toe",
+      "reason": "Verklein de leerbarrière voor nieuwe spelers",
+      "priority": "high",
+      "suggestedBy": "David",
+      "expertise": "UX Researcher & Retention Specialist"
+    },
+    {
+      "rank": 11,
+      "file": "ui-web/src/lib/game/dailyChallenges.ts",
+      "function": "addDailyChallenges",
+      "type": "create",
+      "change": "Implementeer dagelijks variërende uitdagingen",
+      "reason": "Verhoog dagelijkse betrokkenheid",
+      "priority": "medium",
+      "suggestedBy": "David",
+      "expertise": "UX Researcher & Retention Specialist"
+    },
+    {
+      "rank": 12,
+      "file": "ui-web/src/lib/game/achievementSystem.ts",
+      "function": "initiateAchievementTracking",
+      "type": "create",
+      "change": "Creëer een basis achievement systeem",
+      "reason": "Motiveren van spelers door doelen te stellen",
+      "priority": "medium",
+      "suggestedBy": "David",
+      "expertise": "UX Researcher & Retention Specialist"
+    },
+    {
+      "rank": 13,
+      "file": "ui-web/src/lib/game/onboarding.ts",
+      "function": "enhanceOnboardingExperience",
+      "type": "modify",
+      "change": "Introduceer kortere, meer gerichte tutorials met visuele hints",
+      "reason": "Om de leercurve te verkleinen en nieuwe spelers sneller betrokken te maken",
+      "priority": "medium",
+      "suggestedBy": "Ava",
+      "expertise": "Indie Game Market Analyst"
+    },
+    {
+      "rank": 14,
+      "file": "ui-web/src/lib/ui/socialMediaIntegration.ts",
+      "function": "enableSocialSharing",
+      "type": "create",
+      "change": "Implementeer knoppen voor het delen van hoogtepunten op sociale media",
+      "reason": "Vergroot de viral potential door spelers te stimuleren om momenten te delen",
+      "priority": "high",
+      "suggestedBy": "Ava",
+      "expertise": "Indie Game Market Analyst"
+    },
+    {
+      "rank": 15,
+      "file": "ui-web/src/lib/ui/communityFeatures.ts",
+      "function": "addCommunityHub",
+      "type": "create",
+      "change": "Integreer een community hub voor spelersinteractie en evenementen",
+      "reason": "Vergroot de betrokkenheid en help een fanbase opbouwen",
+      "priority": "high",
+      "suggestedBy": "Ava",
+      "expertise": "Indie Game Market Analyst"
+    },
+    {
+      "rank": 16,
+      "file": "ui-web/src/lib/game/connectionManager.ts",
+      "function": "handleReconnection",
+      "type": "modify",
+      "change": "Implementeer automatische reconnect-logica na netwerkuitval",
+      "reason": "Verbeter netwerkherstel en spelervaring",
+      "priority": "high",
+      "suggestedBy": "Alex",
+      "expertise": "Technical QA Engineer"
+    },
+    {
+      "rank": 17,
+      "file": "ui-web/src/lib/ui/cameraHandler.ts",
+      "function": "adjustCameraSync",
+      "type": "modify",
+      "change": "Pas camera-instellingen aan voor betere synchronisatie bij hoge snelheden",
+      "reason": "Voorkom desoriëntatie van spelers",
+      "priority": "medium",
+      "suggestedBy": "Alex",
+      "expertise": "Technical QA Engineer"
+    },
+    {
+      "rank": 18,
+      "file": "ui-web/src/lib/ui/validation.ts",
+      "function": "validateUserInput",
+      "type": "create",
+      "change": "Voeg validatie toe voor gebruikersinput om UI-overlapping te voorkomen",
+      "reason": "Zorg voor een consistente gebruikerservaring",
+      "priority": "medium",
+      "suggestedBy": "Alex",
+      "expertise": "Technical QA Engineer"
+    },
+    {
+      "rank": 19,
+      "file": "ui-web/src/lib/audio/pelletCollectSound.ts",
+      "function": "enhanceCollectSound",
+      "type": "modify",
+      "change": "Voeg pitch variatie en meer resonantie toe aan pellet collect sounds",
+      "reason": "Om de bevrediging van het verzamelen te verhogen",
+      "priority": "high",
+      "suggestedBy": "Kenji",
+      "expertise": "Sound Designer & Audio Engineer"
+    },
+    {
+      "rank": 20,
+      "file": "ui-web/src/lib/audio/spatialAudio.ts",
+      "function": "improveChaserAudioCues",
+      "type": "modify",
+      "change": "Implementeer betere directionele audio cues voor Chasers",
+      "reason": "Om de 3D-ervaring te verbeteren",
+      "priority": "medium",
+      "suggestedBy": "Kenji",
+      "expertise": "Sound Designer & Audio Engineer"
+    },
+    {
+      "rank": 21,
+      "file": "ui-web/src/lib/audio/musicThemeManager.ts",
+      "function": "diversifyThemeMusic",
+      "type": "modify",
+      "change": "Versterk de unieke soundscapes van elk thema",
+      "reason": "Om de spelervaring te verrijken en memorabeler te maken",
+      "priority": "low",
+      "suggestedBy": "Kenji",
+      "expertise": "Sound Designer & Audio Engineer"
+    }
+  ],
+  "prioritizedActions": [
+    {
+      "rank": 1,
+      "id": "concrete_ui_web_src_lib_audio_spatialAudio_ts_22",
+      "action": "Implementeer betere directionele audio cues voor Chasers",
+      "file": "ui-web/src/lib/audio/spatialAudio.ts",
+      "function": "improveChaserAudioCues",
+      "type": "modify",
+      "reason": "Om de 3D-ervaring te verbeteren",
+      "category": "Sound Designer & Audio Engineer",
+      "priority": "medium",
+      "suggestedBy": [
+        "Kenji"
+      ],
+      "isConcreteAction": true
+    },
+    {
+      "rank": 2,
+      "id": "concrete_ui_web_src_lib_audio_pelletCollectSound_ts_21",
+      "action": "Voeg pitch variatie en meer resonantie toe aan pellet collect sounds",
+      "file": "ui-web/src/lib/audio/pelletCollectSound.ts",
+      "function": "enhanceCollectSound",
+      "type": "modify",
+      "reason": "Om de bevrediging van het verzamelen te verhogen",
+      "category": "Sound Designer & Audio Engineer",
+      "priority": "high",
+      "suggestedBy": [
+        "Kenji"
+      ],
+      "isConcreteAction": true
+    },
+    {
+      "rank": 3,
+      "id": "concrete_ui_web_src_lib_ui_validation_ts_20",
+      "action": "Voeg validatie toe voor gebruikersinput om UI-overlapping te voorkomen",
+      "file": "ui-web/src/lib/ui/validation.ts",
+      "function": "validateUserInput",
+      "type": "create",
+      "reason": "Zorg voor een consistente gebruikerservaring",
+      "category": "Technical QA Engineer",
+      "priority": "medium",
+      "suggestedBy": [
+        "Alex"
+      ],
+      "isConcreteAction": true
+    },
+    {
+      "rank": 4,
+      "id": "concrete_ui_web_src_lib_ui_cameraHandler_ts_19",
+      "action": "Pas camera-instellingen aan voor betere synchronisatie bij hoge snelheden",
+      "file": "ui-web/src/lib/ui/cameraHandler.ts",
+      "function": "adjustCameraSync",
+      "type": "modify",
+      "reason": "Voorkom desoriëntatie van spelers",
+      "category": "Technical QA Engineer",
+      "priority": "medium",
+      "suggestedBy": [
+        "Alex"
+      ],
+      "isConcreteAction": true
+    },
+    {
+      "rank": 5,
+      "id": "concrete_ui_web_src_lib_game_connectionManager_ts_18",
+      "action": "Implementeer automatische reconnect-logica na netwerkuitval",
+      "file": "ui-web/src/lib/game/connectionManager.ts",
+      "function": "handleReconnection",
+      "type": "modify",
+      "reason": "Verbeter netwerkherstel en spelervaring",
+      "category": "Technical QA Engineer",
+      "priority": "high",
+      "suggestedBy": [
+        "Alex"
+      ],
+      "isConcreteAction": true
+    },
+    {
+      "rank": 6,
+      "id": "concrete_ui_web_src_lib_ui_communityFeatures_ts_17",
+      "action": "Integreer een community hub voor spelersinteractie en evenementen",
+      "file": "ui-web/src/lib/ui/communityFeatures.ts",
+      "function": "addCommunityHub",
+      "type": "create",
+      "reason": "Vergroot de betrokkenheid en help een fanbase opbouwen",
+      "category": "Indie Game Market Analyst",
+      "priority": "high",
+      "suggestedBy": [
+        "Ava"
+      ],
+      "isConcreteAction": true
+    },
+    {
+      "rank": 7,
+      "id": "concrete_ui_web_src_lib_ui_socialMediaIntegration_ts_16",
+      "action": "Implementeer knoppen voor het delen van hoogtepunten op sociale media",
+      "file": "ui-web/src/lib/ui/socialMediaIntegration.ts",
+      "function": "enableSocialSharing",
+      "type": "create",
+      "reason": "Vergroot de viral potential door spelers te stimuleren om momenten te delen",
+      "category": "Indie Game Market Analyst",
+      "priority": "high",
+      "suggestedBy": [
+        "Ava"
+      ],
+      "isConcreteAction": true
+    },
+    {
+      "rank": 8,
+      "id": "concrete_ui_web_src_lib_game_onboarding_ts_15",
+      "action": "Introduceer kortere, meer gerichte tutorials met visuele hints",
+      "file": "ui-web/src/lib/game/onboarding.ts",
+      "function": "enhanceOnboardingExperience",
+      "type": "modify",
+      "reason": "Om de leercurve te verkleinen en nieuwe spelers sneller betrokken te maken",
+      "category": "Indie Game Market Analyst",
+      "priority": "medium",
+      "suggestedBy": [
+        "Ava"
+      ],
+      "isConcreteAction": true
+    },
+    {
+      "rank": 9,
+      "id": "concrete_ui_web_src_lib_game_achievementSystem_ts_14",
+      "action": "Creëer een basis achievement systeem",
+      "file": "ui-web/src/lib/game/achievementSystem.ts",
+      "function": "initiateAchievementTracking",
+      "type": "create",
+      "reason": "Motiveren van spelers door doelen te stellen",
+      "category": "UX Researcher & Retention Specialist",
+      "priority": "medium",
+      "suggestedBy": [
+        "David"
+      ],
+      "isConcreteAction": true
+    },
+    {
+      "rank": 10,
+      "id": "concrete_ui_web_src_lib_game_dailyChallenges_ts_13",
+      "action": "Implementeer dagelijks variërende uitdagingen",
+      "file": "ui-web/src/lib/game/dailyChallenges.ts",
+      "function": "addDailyChallenges",
+      "type": "create",
+      "reason": "Verhoog dagelijkse betrokkenheid",
+      "category": "UX Researcher & Retention Specialist",
+      "priority": "medium",
+      "suggestedBy": [
+        "David"
+      ],
+      "isConcreteAction": true
+    },
+    {
+      "rank": 11,
+      "id": "concrete_ui_web_src_lib_ui_onboarding_ts_12",
+      "action": "Voeg een kortere, meer gefocuste tutorial toe",
+      "file": "ui-web/src/lib/ui/onboarding.ts",
+      "function": "simplifyOnboarding",
+      "type": "modify",
+      "reason": "Verklein de leerbarrière voor nieuwe spelers",
+      "category": "UX Researcher & Retention Specialist",
+      "priority": "high",
+      "suggestedBy": [
+        "David"
+      ],
+      "isConcreteAction": true
+    },
+    {
+      "rank": 12,
+      "id": "concrete_ui_web_src_lib_game_assetLoader_ts_11",
+      "action": "Prioriteer het laden van kritieke assets en gebruik placeholders",
+      "file": "ui-web/src/lib/game/assetLoader.ts",
+      "function": "implementLazyLoading",
+      "type": "modify",
+      "reason": "Verbeter initiële laadtijd",
+      "category": "Performance Engineer",
+      "priority": "medium",
+      "suggestedBy": [
+        "Elena"
+      ],
+      "isConcreteAction": true
+    },
+    {
+      "rank": 13,
+      "id": "concrete_ui_web_src_lib_game_materialManager_ts_10",
+      "action": "Roep material.freeze() aan na configuratie",
+      "file": "ui-web/src/lib/game/materialManager.ts",
+      "function": "freezeMaterialsAfterSetup",
+      "type": "modify",
+      "reason": "Minimaliseer rendering overhead",
+      "category": "Performance Engineer",
+      "priority": "medium",
+      "suggestedBy": [
+        "Elena"
+      ],
+      "isConcreteAction": true
+    },
+    {
+      "rank": 14,
+      "id": "concrete_ui_web_src_lib_game_meshManager_ts_9",
+      "action": "Gebruik mesh.createInstance voor herhaalde objecten",
+      "file": "ui-web/src/lib/game/meshManager.ts",
+      "function": "optimizeMeshInstances",
+      "type": "modify",
+      "reason": "Verminder draw calls en verbeter rendering efficiëntie",
+      "category": "Performance Engineer",
+      "priority": "high",
+      "suggestedBy": [
+        "Elena"
+      ],
+      "isConcreteAction": true
+    },
+    {
+      "rank": 15,
+      "id": "concrete_ui_web_src_lib_ad_adPlacement_ts_8",
+      "action": "Verplaats en optimaliseer advertenties om de gebruiker minder te storen",
+      "file": "ui-web/src/lib/ad/adPlacement.ts",
+      "function": "optimizeAdPlacements",
+      "type": "modify",
+      "reason": "Om de spelerervaring te verbeteren en toch inkomsten te genereren",
+      "category": "Monetization & Business Strategy",
+      "priority": "medium",
+      "suggestedBy": [
+        "Marcus"
+      ],
+      "isConcreteAction": true
+    },
+    {
+      "rank": 16,
+      "id": "concrete_ui_web_src_lib_game_battlePassManager_ts_7",
+      "action": "Introduceer een beloningssysteem met unieke skins en power-ups",
+      "file": "ui-web/src/lib/game/battlePassManager.ts",
+      "function": "implementBattlePassRewards",
+      "type": "create",
+      "reason": "Om spelers aan te moedigen de battle pass te kopen",
+      "category": "Monetization & Business Strategy",
+      "priority": "medium",
+      "suggestedBy": [
+        "Marcus"
+      ],
+      "isConcreteAction": true
+    },
+    {
+      "rank": 17,
+      "id": "concrete_ui_web_src_lib_ui_shopInterface_ts_6",
+      "action": "Voeg een nieuwe sectie toe voor dagelijkse aanbiedingen met countdown timers",
+      "file": "ui-web/src/lib/ui/shopInterface.ts",
+      "function": "updateShopLayout",
+      "type": "modify",
+      "reason": "Om FOMO en conversie te verhogen",
+      "category": "Monetization & Business Strategy",
+      "priority": "high",
+      "suggestedBy": [
+        "Marcus"
+      ],
+      "isConcreteAction": true
+    },
+    {
+      "rank": 18,
+      "id": "concrete_ui_web_src_lib_game_characterAnimations_ts_5",
+      "action": "Voeg meer anticipatie en follow-through toe aan character animaties",
+      "file": "ui-web/src/lib/game/characterAnimations.ts",
+      "function": "enhanceCharacterAnimations",
+      "type": "modify",
+      "reason": "Om animaties dynamischer te maken",
+      "category": "Visual Artist & Sprite Designer",
+      "priority": "medium",
+      "suggestedBy": [
+        "Yuki"
+      ],
+      "isConcreteAction": true
+    },
+    {
+      "rank": 19,
+      "id": "concrete_ui_web_src_assets_particleEffects_ts_4",
+      "action": "Voeg meer variatie en intensiteit toe aan de bestaande particle effecten",
+      "file": "ui-web/src/assets/particleEffects.ts",
+      "function": "createNewParticleEffects",
+      "type": "create",
+      "reason": "Om de visuele impact van effecten te vergroten",
+      "category": "Visual Artist & Sprite Designer",
+      "priority": "medium",
+      "suggestedBy": [
+        "Yuki"
+      ],
+      "isConcreteAction": true
+    },
+    {
+      "rank": 20,
+      "id": "concrete_ui_web_src_lib_ui_buttonStyles_ts_3",
+      "action": "Pas de knoppen aan met ronde hoeken en hover-effecten",
+      "file": "ui-web/src/lib/ui/buttonStyles.ts",
+      "function": "updateButtonStyles",
+      "type": "modify",
+      "reason": "Om de UI consistent te maken met de nieuwe visuele stijl",
+      "category": "Visual Artist & Sprite Designer",
+      "priority": "high",
+      "suggestedBy": [
+        "Yuki"
+      ],
+      "isConcreteAction": true
+    }
+  ],
+  "items": {
+    "criticalFixes": [
+      {
+        "id": "p0_0",
+        "type": "critical_fix",
+        "name": "Verbindingsverlies zonder herstelpoging",
+        "description": "1. **Verbindingsverlies zonder herstelpoging** - Alex: Implementeer herstelroutine voor netwerkverlies.\n2. **Chaser approach audio cues zijn niet duidelijk** - Kenji: Verbeter directionele audio cues voor Chasers.\n3. **Incorrecte camera synchronisatie bij hoge snelheden** - Alex: Pas camera-instellingen aan.",
+        "priority": 10,
+        "priorityLevel": "P0",
+        "source": "team_dialogue"
+      }
+    ],
+    "visualUpgrades": [
+      {
+        "id": "p1_visual_overhaul",
+        "type": "visual",
+        "name": "Visual Art Overhaul",
+        "description": "P1 - VISUELE UPGRADE (Complete Art Overhaul)\n\n### CHARACTER REDESIGNS:\n- **Runner:** Cirkelvormig, helder geel met expressieve ogen en glow effect.\n- **Chasers:** Drie varianten met unieke vormen en kleuren, elk met specifieke animaties.\n- **Animatie specs:** Soepele squash & stretch, meer anticipatie.\n\n### ENVIRONMENT & TILES:\n- **Muur redesign:** Glanzend met neon glow.\n- **Vloer en decoratie:** Hexagonaal patroon, futuristische look.\n- **Per-thema variaties:** Neon Night, Cyber Arcade, Sunset Maze, Shadow Forest.\n\n### UI OVERHAUL:\n- **Button designs:** Ronde rechthoeken met hover effecten.\n- **Score/HUD:** Modern font, duidelijke visuele feedback.\n- **Panels en modals:** Semi-transparant met glow.\n\n### VFX & PARTICLES:\n- **Pellet collect effects:** Korte burst met fonkeling.\n- **Power-up activatie:** Unieke effecten per type.\n- **Chaser caught effects:** Poof met slierten.\n\n### ELEMENTEN TE VERWIJDEREN:\n- Texture-heavy assets en UI elementen met harde lijnen.\n\n### PRIORITEIT VOLGORD",
+        "priority": 8,
+        "priorityLevel": "P1",
+        "source": "team_dialogue"
+      }
+    ],
+    "monetizationFeatures": [
+      {
+        "id": "p1_monetization",
+        "type": "monetization",
+        "name": "Monetization Features",
+        "description": "P1 - VISUELE UPGRADE (Complete Art Overhaul)\n\n### CHARACTER REDESIGNS:\n- **Runner:** Cirkelvormig, helder geel met expressieve ogen en glow effect.\n- **Chasers:** Drie varianten met unieke vormen en kleuren, elk met specifieke animaties.\n- **Animatie specs:** Soepele squash & stretch, meer anticipatie.\n\n### ENVIRONMENT & TILES:\n- **Muur redesign:** Glanzend met neon glow.\n- **Vloer en decoratie:** Hexagonaal patroon, futuristische look.\n- **Per-thema variaties:** Neon Night, Cyber Arcade, Sunset Maze, Shadow Forest.\n\n### UI OVERHAUL:\n- **Button designs:** Ronde rechthoeken met hover effecten.\n- **Score/HUD:** Modern font, duidelijke visuele feedback.\n- **Panels en modals:** Semi-transparant met glow.\n\n### VFX & PARTICLES:\n- **Pellet collect effects:** Korte burst met fonkeling.\n- **Power-up activatie:** Unieke effecten per type.\n- **Chaser caught effects:** Poof met slierten.\n\n### ELEMENTEN TE VERWIJDEREN:\n- Texture-heavy assets en UI elementen met harde lijnen.\n\n### PRIORITEIT VOLGORD",
+        "priority": 7,
+        "priorityLevel": "P1",
+        "source": "team_dialogue"
+      }
+    ],
+    "teamSuggestions": [
+      {
+        "id": "mention_Emma_0",
+        "type": "team_suggestion",
+        "name": "@Kenji, overweeg om schattige elementen toe te voegen die kinderen graag zouden ",
+        "description": "@Kenji, overweeg om schattige elementen toe te voegen die kinderen graag zouden willen verzamelen of ontdekken in het spel, zoals speciale skins voor de ballen.",
+        "priority": 5,
+        "from": "Emma",
+        "source": "team_dialogue"
+      },
+      {
+        "id": "mention_Tim_0",
+        "type": "team_suggestion",
+        "name": "@Kenji, overweeg om de physics en interacties verder te ontwikkelen voor nog rea",
+        "description": "@Kenji, overweeg om de physics en interacties verder te ontwikkelen voor nog realistischer en uitdagender gameplay.",
+        "priority": 5,
+        "from": "Tim",
+        "source": "team_dialogue"
+      },
+      {
+        "id": "mention_Peter_0",
+        "type": "team_suggestion",
+        "name": "@Kenji, overweeg om meer shader effecten te introduceren die de visuals naar een",
+        "description": "@Kenji, overweeg om meer shader effecten te introduceren die de visuals naar een volgend niveau tillen.",
+        "priority": 5,
+        "from": "Peter",
+        "source": "team_dialogue"
+      },
+      {
+        "id": "mention_Yuki_0",
+        "type": "team_suggestion",
+        "name": "@Kenji, overweeg meer variatie in de audiofeedback om de visuele toevoegingen te",
+        "description": "@Kenji, overweeg meer variatie in de audiofeedback om de visuele toevoegingen te versterken.",
+        "priority": 5,
+        "from": "Yuki",
+        "source": "team_dialogue"
+      },
+      {
+        "id": "mention_Marcus_0",
+        "type": "team_suggestion",
+        "name": "@Kenji, overweeg om meer variatie in de audio bij level completion te introducer",
+        "description": "@Kenji, overweeg om meer variatie in de audio bij level completion te introduceren voor een betere belevingswaarde.",
+        "priority": 5,
+        "from": "Marcus",
+        "source": "team_dialogue"
+      },
+      {
+        "id": "mention_Elena_0",
+        "type": "team_suggestion",
+        "name": "@Kenji, overweeg meer variatie in de audiofeedback voor een dynamischere spelere",
+        "description": "@Kenji, overweeg meer variatie in de audiofeedback voor een dynamischere spelerervaring en ",
+        "priority": 5,
+        "from": "Elena",
+        "source": "team_dialogue"
+      },
+      {
+        "id": "mention_Elena_1",
+        "type": "team_suggestion",
+        "name": "@Yuki, meer focus op het integreren van vector graphics voor consistente stijl e",
+        "description": "@Yuki, meer focus op het integreren van vector graphics voor consistente stijl en performance.",
+        "priority": 5,
+        "from": "Elena",
+        "source": "team_dialogue"
+      },
+      {
+        "id": "mention_David_0",
+        "type": "team_suggestion",
+        "name": "@Kenji, overweeg meer unieke geluidseffecten voor power-ups en achievement unloc",
+        "description": "@Kenji, overweeg meer unieke geluidseffecten voor power-ups en achievement unlocks.",
+        "priority": 5,
+        "from": "David",
+        "source": "team_dialogue"
+      },
+      {
+        "id": "mention_David_1",
+        "type": "team_suggestion",
+        "name": "@Marcus, kijk naar manieren om de social engagement te verbeteren met vriend cha",
+        "description": "@Marcus, kijk naar manieren om de social engagement te verbeteren met vriend challenges en leaderboards.",
+        "priority": 5,
+        "from": "David",
+        "source": "team_dialogue"
+      },
+      {
+        "id": "mention_Ava_0",
+        "type": "team_suggestion",
+        "name": "@Kenji, overweeg meer variatie in geluidseffecten voor een dynamischere spelerer",
+        "description": "@Kenji, overweeg meer variatie in geluidseffecten voor een dynamischere spelerervaring. ",
+        "priority": 5,
+        "from": "Ava",
+        "source": "team_dialogue"
+      }
+    ]
+  },
+  "perTester": [
+    {
+      "name": "Sofia",
+      "role": "player",
+      "score": null,
+      "topPriorities": null,
+      "suggestionsCount": 0
+    },
+    {
+      "name": "Emma",
+      "role": "player",
+      "score": null,
+      "topPriorities": null,
+      "suggestionsCount": 1
+    },
+    {
+      "name": "Tim",
+      "role": "player",
+      "score": null,
+      "topPriorities": null,
+      "suggestionsCount": 1
+    },
+    {
+      "name": "Sandra",
+      "role": "player",
+      "score": null,
+      "topPriorities": null,
+      "suggestionsCount": 0
+    },
+    {
+      "name": "Peter",
+      "role": "player",
+      "score": null,
+      "topPriorities": null,
+      "suggestionsCount": 1
+    },
+    {
+      "name": "Yuki",
+      "role": "player",
+      "score": 8,
+      "topPriorities": "TOP 3 PRIORITEITEN:**\n  1. UI-web/src/lib/ui/buttonStyles.ts - Update knopstijlen voor consistentie.\n  2. UI-web/src/assets/particleEffects.ts - Variatie in particle effecten.\n  3. UI-web/src/lib/game/characterAnimations.ts - Verbeter character animaties.\n\n- **QUICK WINS:**\n  1. Voeg lichte pulserende glow toe aan alle power-ups.\n  2. Update kleurcontrasten in UI voor betere zichtbaarheid.\n  3. Pas idle animaties aan met lichte schommelbewegingen.\n\n- **LONG TERM:**\n  1. Ontwikkel een tutorial mo",
+      "suggestionsCount": 2
+    },
+    {
+      "name": "Marcus",
+      "role": "player",
+      "score": 8,
+      "topPriorities": "TOP 3 PRIORITEITEN:**\n  1. `ui-web/src/lib/ui/shopInterface.ts` - Update shop layout voor dagelijkse aanbiedingen.\n  2. `ui-web/src/lib/game/battlePassManager.ts` - Implementeer een battle pass systeem.\n  3. `ui-web/src/lib/ad/adPlacement.ts` - Optimaliseer ad placements.\n\n- **QUICK WINS:**\n  1. Voeg extra kleurcontrasten toe in de UI voor betere zichtbaarheid.\n  2. Implementeer lichte glow effecten op power-ups voor meer visuele aantrekkelijkheid.\n  3. Pas de timing van tutorial meldingen aan o",
+      "suggestionsCount": 2
+    },
+    {
+      "name": "Elena",
+      "role": "player",
+      "score": 7,
+      "topPriorities": "TOP 3 PRIORITEITEN:**\n1. `ui-web/src/lib/game/meshManager.ts` - Optimaliseer mesh instances voor herhaalde objecten.\n2. `ui-web/src/lib/game/materialManager.ts` - Materialen bevriezen na configuratie.\n3. `ui-web/src/lib/game/assetLoader.ts` - Implementeer lazy loading strategie.\n\n**QUICK WINS:**\n1. Verlaag de glow blur kernel size om de performance van glow effecten te verbeteren.\n2. Schakel ongebruikte shader features uit voor verhoogde efficiëntie.\n3. Gebruik een binaire protocol voor positie-",
+      "suggestionsCount": 3
+    },
+    {
+      "name": "David",
+      "role": "player",
+      "score": 7,
+      "topPriorities": "TOP 3 PRIORITEITEN:**\n  1. `ui-web/src/lib/ui/onboarding.ts` - Simplify onboarding process.\n  2. `ui-web/src/lib/game/dailyChallenges.ts` - Add daily challenges.\n  3. `ui-web/src/lib/game/achievementSystem.ts` - Initiate achievement tracking.\n\n- **QUICK WINS:**\n  1. Voeg een visuele indicator toe bij het verzamelen van pellets (#FFE66D glow).\n  2. Pas de tutorial zo aan dat onnodige tekst wordt vervangen door iconen.\n  3. Introduceer een scorepopup bij elke winst om directe feedback te geven.\n\n-",
+      "suggestionsCount": 3
+    },
+    {
+      "name": "Ava",
+      "role": "player",
+      "score": 8,
+      "topPriorities": "TOP 3 PRIORITEITEN:**\n  1. `ui-web/src/lib/ui/socialMediaIntegration.ts` - Zorg voor directe sociale media integratie om shareable content te stimuleren.\n  2. `ui-web/src/lib/ui/communityFeatures.ts` - Bouw een community hub voor spelersinteractie.\n  3. `ui-web/src/lib/game/onboarding.ts` - Verbeter de onboarding ervaring voor nieuwe spelers.\n\n- **QUICK WINS:**\n  1. Voeg een \"deel op sociale media\" button toe bij het behalen van achievements.\n  2. Implementeer een kortere tutorial met duidelijke",
+      "suggestionsCount": 3
+    },
+    {
+      "name": "Grandma Mei",
+      "role": "player",
+      "score": null,
+      "topPriorities": null,
+      "suggestionsCount": 1
+    },
+    {
+      "name": "Alex",
+      "role": "player",
+      "score": 7,
+      "topPriorities": "TOP 3 PRIORITEITEN:** \n  1. `ui-web/src/lib/game/connectionManager.ts` - Automatische reconnect na netwerkverlies.\n  2. `ui-web/src/lib/ui/cameraHandler.ts` - Verbeter camera synchronisatie.\n  3. `ui-web/src/lib/ui/validation.ts` - Implementeren van input validatie.\n\n- **QUICK WINS:**\n  1. Verbeter typografie en leesbaarheid van UI-elementen.\n  2. Voeg visuele feedback toe bij het verzamelen van pellets.\n  3. Simpelere tutorial met iconen in plaats van tekst.\n\n- **LONG TERM:**\n  1. Verbeter het ",
+      "suggestionsCount": 3
+    },
+    {
+      "name": "Kenji",
+      "role": "player",
+      "score": 6,
+      "topPriorities": "TOP 3 AUDIO PRIORITEITEN:**\n1. Verhoog de kwaliteit en variatie van pellet collect sounds - MOET NU\n2. Implementeer duidelijke directionele audio cues voor Chasers - MOET SNEL\n3. Verbeter de muziek voor thema's met meer unieke en herkenbare soundscapes - NICE TO HAVE\n\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n🔄 ZELFREFLECTIE - MAAK JEZELF BETER\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n\n1. **PROMPT KRITIEK:** Ontbrak aan specifieke referentievoo",
+      "suggestionsCount": 3
+    },
+    {
+      "name": "Marcus",
+      "role": "player",
+      "score": 7,
+      "topPriorities": "TOP 3 PRIORITEITEN:**\n  1. `ui-web/src/lib/ws/messageHandler.ts` - WebSocket validatie.\n  2. `core/internal/lobby/rateLimiter.go` - Rate limiting implementatie.\n  3. `ui-web/src/lib/game/gameLoop.ts` - Game loop refactoren naar ECS.\n\n- **QUICK WINS:**\n  1. Inline commentaar toevoegen aan complexe functies.\n  2. Consistente error handling patronen toepassen.\n  3. Basis input validatie toevoegen aan user facing endpoints.\n\n- **LONG TERM:**\n  1. Implementatie van CI/CD met GitHub Actions.\n  2. Test",
+      "suggestionsCount": 4
+    }
+  ],
+  "consensus": {
+    "highPriority": [
+      {
+        "category": "Audio",
+        "expertCount": 13,
+        "mentionedBy": [
+          "Sofia",
+          "Emma",
+          "Tim",
+          "Sandra",
+          "Peter",
+          "Yuki",
+          "Marcus",
+          "Elena",
+          "David",
+          "Ava",
+          "Grandma Mei",
+          "Alex",
+          "Kenji"
+        ],
+        "totalMentions": 132,
+        "severity": 78
+      },
+      {
+        "category": "Visuals",
+        "expertCount": 13,
+        "mentionedBy": [
+          "Sofia",
+          "Emma",
+          "Tim",
+          "Sandra",
+          "Peter",
+          "Yuki",
+          "Elena",
+          "David",
+          "Ava",
+          "Grandma Mei",
+          "Alex",
+          "Kenji",
+          "Marcus"
+        ],
+        "totalMentions": 77,
+        "severity": 70
+      },
+      {
+        "category": "UI/UX",
+        "expertCount": 13,
+        "mentionedBy": [
+          "Sofia",
+          "Emma",
+          "Tim",
+          "Sandra",
+          "Peter",
+          "Yuki",
+          "Marcus",
+          "Elena",
+          "David",
+          "Ava",
+          "Grandma Mei",
+          "Alex",
+          "Kenji"
+        ],
+        "totalMentions": 353,
+        "severity": 39
+      },
+      {
+        "category": "Onboarding",
+        "expertCount": 11,
+        "mentionedBy": [
+          "Sofia",
+          "Emma",
+          "Tim",
+          "Sandra",
+          "Peter",
+          "Yuki",
+          "Marcus",
+          "David",
+          "Ava",
+          "Grandma Mei",
+          "Alex"
+        ],
+        "totalMentions": 47,
+        "severity": 31
+      },
+      {
+        "category": "Animation",
+        "expertCount": 8,
+        "mentionedBy": [
+          "Sofia",
+          "Emma",
+          "Tim",
+          "Sandra",
+          "Peter",
+          "Yuki",
+          "David",
+          "Grandma Mei"
+        ],
+        "totalMentions": 42,
+        "severity": 37
+      },
+      {
+        "category": "Multiplayer",
+        "expertCount": 8,
+        "mentionedBy": [
+          "Sofia",
+          "Sandra",
+          "Yuki",
+          "Marcus",
+          "Elena",
+          "Ava",
+          "Alex",
+          "Kenji"
+        ],
+        "totalMentions": 39,
+        "severity": 34
+      },
+      {
+        "category": "Performance",
+        "expertCount": 6,
+        "mentionedBy": [
+          "Sandra",
+          "Yuki",
+          "Elena",
+          "Alex",
+          "Kenji",
+          "Marcus"
+        ],
+        "totalMentions": 26,
+        "severity": 14
+      },
+      {
+        "category": "Mobile",
+        "expertCount": 4,
+        "mentionedBy": [
+          "Peter",
+          "Elena",
+          "David",
+          "Ava"
+        ],
+        "totalMentions": 14,
+        "severity": 10
+      },
+      {
+        "category": "Bugs",
+        "expertCount": 3,
+        "mentionedBy": [
+          "Elena",
+          "Alex",
+          "Marcus"
+        ],
+        "totalMentions": 27,
+        "severity": 20
+      }
+    ],
+    "mediumPriority": [],
+    "mentioned": [
+      {
+        "category": "Audio",
+        "expertCount": 13,
+        "mentionedBy": [
+          "Sofia",
+          "Emma",
+          "Tim",
+          "Sandra",
+          "Peter",
+          "Yuki",
+          "Marcus",
+          "Elena",
+          "David",
+          "Ava",
+          "Grandma Mei",
+          "Alex",
+          "Kenji"
+        ],
+        "totalMentions": 132,
+        "severity": 78
+      },
+      {
+        "category": "Visuals",
+        "expertCount": 13,
+        "mentionedBy": [
+          "Sofia",
+          "Emma",
+          "Tim",
+          "Sandra",
+          "Peter",
+          "Yuki",
+          "Elena",
+          "David",
+          "Ava",
+          "Grandma Mei",
+          "Alex",
+          "Kenji",
+          "Marcus"
+        ],
+        "totalMentions": 77,
+        "severity": 70
+      },
+      {
+        "category": "UI/UX",
+        "expertCount": 13,
+        "mentionedBy": [
+          "Sofia",
+          "Emma",
+          "Tim",
+          "Sandra",
+          "Peter",
+          "Yuki",
+          "Marcus",
+          "Elena",
+          "David",
+          "Ava",
+          "Grandma Mei",
+          "Alex",
+          "Kenji"
+        ],
+        "totalMentions": 353,
+        "severity": 39
+      },
+      {
+        "category": "Onboarding",
+        "expertCount": 11,
+        "mentionedBy": [
+          "Sofia",
+          "Emma",
+          "Tim",
+          "Sandra",
+          "Peter",
+          "Yuki",
+          "Marcus",
+          "David",
+          "Ava",
+          "Grandma Mei",
+          "Alex"
+        ],
+        "totalMentions": 47,
+        "severity": 31
+      },
+      {
+        "category": "Animation",
+        "expertCount": 8,
+        "mentionedBy": [
+          "Sofia",
+          "Emma",
+          "Tim",
+          "Sandra",
+          "Peter",
+          "Yuki",
+          "David",
+          "Grandma Mei"
+        ],
+        "totalMentions": 42,
+        "severity": 37
+      },
+      {
+        "category": "Multiplayer",
+        "expertCount": 8,
+        "mentionedBy": [
+          "Sofia",
+          "Sandra",
+          "Yuki",
+          "Marcus",
+          "Elena",
+          "Ava",
+          "Alex",
+          "Kenji"
+        ],
+        "totalMentions": 39,
+        "severity": 34
+      },
+      {
+        "category": "Performance",
+        "expertCount": 6,
+        "mentionedBy": [
+          "Sandra",
+          "Yuki",
+          "Elena",
+          "Alex",
+          "Kenji",
+          "Marcus"
+        ],
+        "totalMentions": 26,
+        "severity": 14
+      },
+      {
+        "category": "Mobile",
+        "expertCount": 4,
+        "mentionedBy": [
+          "Peter",
+          "Elena",
+          "David",
+          "Ava"
+        ],
+        "totalMentions": 14,
+        "severity": 10
+      },
+      {
+        "category": "Bugs",
+        "expertCount": 3,
+        "mentionedBy": [
+          "Elena",
+          "Alex",
+          "Marcus"
+        ],
+        "totalMentions": 27,
+        "severity": 20
+      },
+      {
+        "category": "Monetization",
+        "expertCount": 1,
+        "mentionedBy": [
+          "Marcus"
+        ],
+        "totalMentions": 12,
+        "severity": 9
+      }
+    ]
+  },
+  "contraDecisions": [
+    {
+      "topic": "Audio vs Visual - wat is BELANGRIJKER voor de speler?",
+      "winner": "Kenji",
+      "decision": "** We gaan prioriteit geven aan het verbeteren van de geluidseffecten en muziekcompositie om te zorgen voor impactvolle en bevredigende audiofeedback bij elke spelerinteractie, zonder afbreuk te doen aan de bestaande sterke visuele elementen."
+    },
+    {
+      "topic": "Visual flair vs 60 FPS - wat kiezen we?",
+      "winner": "Yuki",
+      "decision": "** We focussen op het versterken van de visuele elementen om een opvallende eerste indruk te maken, terwijl we basisoptimalisaties implementeren om te zorgen voor acceptabele prestaties."
+    },
+    {
+      "topic": "Performance vs Ads - mogen ads de FPS verlagen?",
+      "decision": "** We implementeren geoptimaliseerde ad-rendering technieken en passen ads dynamisch aan op basis van systeemcapaciteit. We gaan experimenteren met niet-storende advertenties die de gameplay niet onderbreken."
+    },
+    {
+      "topic": "Geld verdienen vs Spelers behouden - wat weegt zwaarder?",
+      "winner": "Marcus",
+      "decision": "We gaan onmiddellijk inzetten op de uitbreiding van cosmetische opties en een aantrekkelijke battle pass opzetten. Dit zal ons helpen snel inkomsten te genereren."
+    },
+    {
+      "topic": "Bugs fixen vs Nieuwe features - waar gaat de tijd heen?",
+      "winner": "Alex",
+      "decision": "We zullen ons in de komende sprint richten op het oplossen van kritieke bugs die de gebruikerservaring direct beïnvloeden. Daarna zullen we nieuwe features in kleinere iteraties vrijgeven om stabiliteit te waarborgen."
+    }
+  ]
+}

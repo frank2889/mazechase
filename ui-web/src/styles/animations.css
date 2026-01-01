@@ -1,0 +1,462 @@
+/* 
+ * 🎬 Animation Improvements - Sprint 1
+ * Based on AI Tester Feedback (Yuki, Tim)
+ * 
+ * Issues Fixed:
+ * - Stiff animations need more easing
+ * - Add secondary motion for liveliness
+ * - Smoother transitions throughout
+ */
+
+/* ============================================
+   EASING FUNCTIONS - More natural motion
+   ============================================ */
+:root {
+  /* Custom easing curves for natural motion */
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-out-back: cubic-bezier(0.34, 1.56, 0.64, 1);
+  --ease-in-out-smooth: cubic-bezier(0.45, 0, 0.55, 1);
+  --ease-bounce: cubic-bezier(0.68, -0.55, 0.265, 1.55);
+  --ease-elastic: cubic-bezier(0.68, -0.6, 0.32, 1.6);
+  
+  /* Animation durations */
+  --duration-fast: 150ms;
+  --duration-normal: 300ms;
+  --duration-slow: 500ms;
+}
+
+/* ============================================
+   BUTTON ANIMATIONS - Juicy feedback
+   ============================================ */
+button, .btn {
+  transition: 
+    transform var(--duration-fast) var(--ease-out-back),
+    box-shadow var(--duration-fast) var(--ease-out-expo),
+    background-color var(--duration-fast) ease;
+}
+
+button:hover, .btn:hover {
+  transform: translateY(-3px) scale(1.02);
+  box-shadow: 0 10px 20px -5px rgba(0, 0, 0, 0.4);
+}
+
+button:active, .btn:active {
+  transform: translateY(-1px) scale(0.98);
+  transition-duration: 50ms;
+}
+
+/* Press effect with squish */
+@keyframes button-press {
+  0% { transform: scale(1); }
+  50% { transform: scale(0.95); }
+  100% { transform: scale(1); }
+}
+
+.btn-press {
+  animation: button-press 200ms var(--ease-out-back);
+}
+
+/* ============================================
+   CARD ANIMATIONS - Smooth reveals
+   ============================================ */
+.card, .product-card, .feature-card {
+  transition: 
+    transform var(--duration-normal) var(--ease-out-expo),
+    box-shadow var(--duration-normal) var(--ease-out-expo);
+}
+
+.card:hover, .product-card:hover, .feature-card:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 20px 40px -10px rgba(0, 0, 0, 0.5);
+}
+
+/* Stagger animation for card grids */
+@keyframes card-stagger-in {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.card-grid > *:nth-child(1) { animation: card-stagger-in var(--duration-slow) var(--ease-out-expo) 0ms both; }
+.card-grid > *:nth-child(2) { animation: card-stagger-in var(--duration-slow) var(--ease-out-expo) 80ms both; }
+.card-grid > *:nth-child(3) { animation: card-stagger-in var(--duration-slow) var(--ease-out-expo) 160ms both; }
+.card-grid > *:nth-child(4) { animation: card-stagger-in var(--duration-slow) var(--ease-out-expo) 240ms both; }
+.card-grid > *:nth-child(5) { animation: card-stagger-in var(--duration-slow) var(--ease-out-expo) 320ms both; }
+.card-grid > *:nth-child(6) { animation: card-stagger-in var(--duration-slow) var(--ease-out-expo) 400ms both; }
+
+/* ============================================
+   SCORE/NUMBER ANIMATIONS - Pop effect
+   ============================================ */
+@keyframes score-pop {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.3); }
+  100% { transform: scale(1); }
+}
+
+.score-change {
+  animation: score-pop 300ms var(--ease-out-back);
+}
+
+@keyframes number-increment {
+  0% { transform: translateY(0); opacity: 1; }
+  100% { transform: translateY(-20px); opacity: 0; }
+}
+
+.number-fly {
+  animation: number-increment 500ms var(--ease-out-expo) forwards;
+}
+
+/* ============================================
+   MODAL ANIMATIONS - Smooth entry/exit
+   ============================================ */
+@keyframes modal-backdrop-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes modal-content-in {
+  from {
+    opacity: 0;
+    transform: scale(0.9) translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+.modal-backdrop {
+  animation: modal-backdrop-in var(--duration-normal) ease both;
+}
+
+.modal-content {
+  animation: modal-content-in var(--duration-normal) var(--ease-out-back) both;
+}
+
+/* Exit animations */
+.modal-backdrop.closing {
+  animation: modal-backdrop-in var(--duration-fast) ease reverse both;
+}
+
+.modal-content.closing {
+  animation: modal-content-in var(--duration-fast) ease reverse both;
+}
+
+/* ============================================
+   POWER-UP ANIMATIONS - Exciting effects
+   ============================================ */
+@keyframes power-up-collect {
+  0% { transform: scale(1); filter: brightness(1); }
+  20% { transform: scale(1.5); filter: brightness(2); }
+  100% { transform: scale(0); filter: brightness(3); }
+}
+
+.power-up-collected {
+  animation: power-up-collect 400ms var(--ease-out-expo) forwards;
+}
+
+@keyframes power-up-active {
+  0%, 100% { 
+    filter: drop-shadow(0 0 10px currentColor);
+    transform: scale(1);
+  }
+  50% { 
+    filter: drop-shadow(0 0 20px currentColor);
+    transform: scale(1.05);
+  }
+}
+
+.power-up-active {
+  animation: power-up-active 1s ease-in-out infinite;
+}
+
+/* ============================================
+   STREAK/COMBO ANIMATIONS
+   ============================================ */
+@keyframes streak-fire {
+  0%, 100% { transform: scale(1) rotate(0deg); }
+  25% { transform: scale(1.1) rotate(-3deg); }
+  75% { transform: scale(1.1) rotate(3deg); }
+}
+
+.streak-icon {
+  animation: streak-fire 0.5s ease-in-out infinite;
+}
+
+@keyframes combo-flash {
+  0% { background-position: 0% 50%; }
+  100% { background-position: 200% 50%; }
+}
+
+.combo-active {
+  background: linear-gradient(90deg, #FF6B6B, #FFE66D, #4ECDC4, #FF6B6B);
+  background-size: 200% 100%;
+  animation: combo-flash 2s linear infinite;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+/* ============================================
+   PAGE TRANSITIONS - Smooth navigation
+   ============================================ */
+@keyframes page-in {
+  from {
+    opacity: 0;
+    transform: translateX(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.page-enter {
+  animation: page-in var(--duration-normal) var(--ease-out-expo) both;
+}
+
+/* ============================================
+   LOADING ANIMATIONS - Engaging waits
+   ============================================ */
+@keyframes pulse-glow {
+  0%, 100% { 
+    opacity: 0.6;
+    transform: scale(1);
+  }
+  50% { 
+    opacity: 1;
+    transform: scale(1.05);
+  }
+}
+
+.loading-pulse {
+  animation: pulse-glow 1.5s ease-in-out infinite;
+}
+
+@keyframes spinner-rotate {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+.spinner {
+  animation: spinner-rotate 0.8s linear infinite;
+}
+
+/* ============================================
+   NOTIFICATION ANIMATIONS - Attention grab
+   ============================================ */
+@keyframes notification-slide-in {
+  from {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+.notification-enter {
+  animation: notification-slide-in var(--duration-normal) var(--ease-out-back) both;
+}
+
+@keyframes shake-attention {
+  0%, 100% { transform: translateX(0); }
+  20%, 60% { transform: translateX(-5px); }
+  40%, 80% { transform: translateX(5px); }
+}
+
+.shake {
+  animation: shake-attention 0.4s ease-in-out;
+}
+
+/* ============================================
+   REWARD ANIMATIONS - Dopamine hits
+   ============================================ */
+@keyframes reward-burst {
+  0% {
+    transform: scale(0);
+    opacity: 1;
+  }
+  50% {
+    transform: scale(1.2);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+.reward-appear {
+  animation: reward-burst 500ms var(--ease-elastic) both;
+}
+
+@keyframes confetti-fall {
+  0% {
+    transform: translateY(-100%) rotate(0deg);
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(100vh) rotate(720deg);
+    opacity: 0;
+  }
+}
+
+.confetti-piece {
+  animation: confetti-fall 3s ease-in-out forwards;
+}
+
+/* ============================================
+   SKELETON LOADING - Content placeholders
+   ============================================ */
+@keyframes skeleton-shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+.skeleton {
+  background: linear-gradient(
+    90deg,
+    rgba(255,255,255,0.05) 0%,
+    rgba(255,255,255,0.15) 50%,
+    rgba(255,255,255,0.05) 100%
+  );
+  background-size: 200% 100%;
+  animation: skeleton-shimmer 1.5s ease-in-out infinite;
+  border-radius: 8px;
+}
+
+/* ============================================
+   SPRINT 5: Victory Screen Animations
+   ============================================ */
+
+/* Confetti falling animation */
+@keyframes confetti {
+  0% {
+    transform: translateY(-100vh) rotate(0deg);
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(100vh) rotate(1080deg);
+    opacity: 0;
+  }
+}
+
+.animate-confetti {
+  animation: confetti 4s ease-in-out forwards;
+}
+
+/* Shimmer effect for winner banner */
+@keyframes shimmer {
+  0% {
+    transform: translateX(-200%);
+  }
+  100% {
+    transform: translateX(200%);
+  }
+}
+
+.animate-shimmer {
+  animation: shimmer 2s ease-in-out infinite;
+}
+
+/* Slow bounce for trophy */
+@keyframes bounce-slow {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+.animate-bounce-slow {
+  animation: bounce-slow 2s ease-in-out infinite;
+}
+
+/* Slow pulse for winner name */
+@keyframes pulse-slow {
+  0%, 100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.9;
+    transform: scale(1.02);
+  }
+}
+
+.animate-pulse-slow {
+  animation: pulse-slow 2s ease-in-out infinite;
+}
+
+/* Scale hover for scoreboard items */
+.hover\:scale-102:hover {
+  transform: scale(1.02);
+}
+
+/* Glow pulse for player characters */
+@keyframes glow-pulse {
+  0%, 100% {
+    filter: drop-shadow(0 0 8px currentColor);
+  }
+  50% {
+    filter: drop-shadow(0 0 20px currentColor);
+  }
+}
+
+.animate-glow-pulse {
+  animation: glow-pulse 1.5s ease-in-out infinite;
+}
+
+/* Victory zoom in */
+@keyframes victory-zoom {
+  0% {
+    transform: scale(0);
+    opacity: 0;
+  }
+  60% {
+    transform: scale(1.1);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+.animate-victory-zoom {
+  animation: victory-zoom 0.6s var(--ease-elastic) forwards;
+}
+
+/* Defeat shake */
+@keyframes defeat-shake {
+  0%, 100% { transform: translateX(0); }
+  10%, 30%, 50%, 70%, 90% { transform: translateX(-5px); }
+  20%, 40%, 60%, 80% { transform: translateX(5px); }
+}
+
+.animate-defeat-shake {
+  animation: defeat-shake 0.5s ease-in-out;
+}
+
+/* Score counting up effect */
+@keyframes count-up {
+  0% {
+    transform: scale(1.3);
+    color: #FFD93D;
+  }
+  100% {
+    transform: scale(1);
+    color: inherit;
+  }
+}
+
+.animate-count-up {
+  animation: count-up 0.3s ease-out;
+}

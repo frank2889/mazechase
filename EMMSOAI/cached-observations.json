@@ -1,0 +1,42 @@
+[
+  {
+    "phase": "Lobby creatie",
+    "success": true,
+    "details": "Lobby \"AITest_shared_tester_1767270784295\" aangemaakt (ID: 218)"
+  },
+  {
+    "phase": "Lobby laden",
+    "success": true,
+    "details": "Lobby pagina laadt correct"
+  },
+  {
+    "phase": "Game assets",
+    "success": true,
+    "details": "Map.json laadt correct"
+  },
+  {
+    "phase": "WebSocket",
+    "success": true,
+    "details": "Verbinding gemaakt"
+  },
+  {
+    "phase": "Game State",
+    "success": true,
+    "details": "Ontvangen als runner, isHost: true"
+  },
+  {
+    "phase": "Bot AI",
+    "success": true,
+    "details": "3 bots zijn toegevoegd aan het spel"
+  },
+  {
+    "phase": "Bot Movement",
+    "success": true,
+    "details": "Bots bewegen actief door de maze"
+  },
+  {
+    "phase": "Berichten",
+    "success": true,
+    "details": "47 berichten ontvangen in 3 seconden"
+  }
+]

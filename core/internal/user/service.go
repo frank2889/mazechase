@@ -1,0 +1,201 @@
+package user
+
+import (
+	"errors"
+	"fmt"
+	"net/http"
+
+	"github.com/rs/zerolog/log"
+	"gorm.io/gorm"
+)
+
+type Service struct {
+	Db         *gorm.DB
+	BypassAuth bool
+}
+
+func NewService(db *gorm.DB, bypassAuth bool) *Service {
+	if bypassAuth {
+		log.Warn().Msg("AUTH IS DISABLED DUMB DUMB, HOPE YOU KNOW WHAT YOU ARE DOING")
+	}
+
+	return &Service{
+		Db:         db,
+		BypassAuth: bypassAuth,
+	}
+}
+
+func (auth *Service) Register(username, password string, isGuest bool) error {
+	user := User{
+		Username: username,
+		Password: encryptPassword([]byte(password)),
+		Token:    "",
+		Guest:    isGuest,
+	}
+
+	res := auth.Db.Create(&user)
+	if res.Error != nil {
+		log.Error().Err(res.Error).Msg("Failed to create user")
+		return res.Error
+	}
+
+	log.Info().Any("user", user.Username).Msg("Created user")
+
+	return nil
+}
+
+func (auth *Service) Login(username, inputPassword string) (*User, error) {
+	var user User
+	result := auth.Db.
+		Where("username = ?", username).
+		First(&user)
+
+	if result.Error != nil || user.Username == "" {
+		log.Error().Err(result.Error).Any("user", user).Msg("Failed to login")
+		return &User{}, fmt.Errorf("gebruiker niet gevonden")
+	}
+
+	if !checkPassword(inputPassword, user.Password) {
+		log.Error().Err(result.Error).Msg("invalid user/password")
+		return &User{}, fmt.Errorf("onjuist wachtwoord")
+	}
+
+	finalUser, err := auth.newUserAuthToken(user.ID)
+	if err != nil {
+		log.Error().Err(err).Msg("Failed to update user token")
+		return &User{}, fmt.Errorf("login mislukt, probeer opnieuw")
+	}
+
+	return finalUser, nil
+}
+
+func (auth *Service) Logout(userId uint) (*User, error) {
+	return auth.updateUserAuthToken(userId, "")
+}
+
+func (auth *Service) newUserAuthToken(userId uint) (*User, error) {
+	token := CreateAuthToken(32)
+	hashedToken := hashString(token)
+	
+	log.Debug().
+		Uint("user_id", userId).
+		Str("token_prefix", token[:8]+"...").
+		Str("hashed_prefix", hashedToken[:16]+"...").
+		Msg("newUserAuthToken: storing hashed token")
+	
+	user, err := auth.updateUserAuthToken(userId, hashedToken)
+	if err != nil {
+		return nil, err
+	}
+	// return un-hashed token
+	user.Token = token
+	return user, nil
+}
+
+func (auth *Service) updateUserAuthToken(userId uint, token string) (*User, error) {
+	var user User
+	result := auth.Db.
+		Model(&user).
+		Where("id = ?", userId).
+		Update("token", token).
+		Find(&user)
+
+	if result.Error != nil {
+		log.Error().Err(result.Error).Msg("Failed to update auth token")
+		return &User{}, result.Error
+	}
+
+	return &user, nil
+}
+
+// VerifyAuthHeader will check for direct auth header then cookie
+func (auth *Service) VerifyAuthHeader(headers http.Header) (*User, error) {
+	if auth.BypassAuth {
+		// development test user
+		return &User{
+			Username: "test-user",
+			Password: "",
+			Token:    "",
+			Guest:    false,
+		}, nil
+	}
+
+	// Debug: log all received headers
+	log.Debug().
+		Str("cookie_header", headers.Get("Cookie")).
+		Str("auth_header", headers.Get(AuthHeaderKey)).
+		Msg("VerifyAuthHeader: checking headers")
+
+	clientToken := headers.Get(AuthHeaderKey)
+	if clientToken != "" {
+		log.Debug().Msg("Found token in auth header")
+		return auth.verifyToken(clientToken)
+	}
+
+	// for flutter clients
+	clientToken = headers.Get("Sec-Websocket-Protocol")
+	if clientToken != "" {
+		return auth.verifyToken(clientToken)
+	}
+
+	req := http.Request{Header: headers}
+	authCookie, err := req.Cookie(AuthHeaderKey)
+	if err != nil {
+		log.Warn().
+			Str("reason", "missing_auth_cookie").
+			Str("cookie_name", AuthHeaderKey).
+			Str("cookie_header_raw", headers.Get("Cookie")).
+			Msg("Auth failed: no auth cookie found")
+		return nil, fmt.Errorf("niet ingelogd")
+	}
+
+	log.Debug().Str("cookie_value", authCookie.Value[:8]+"...").Msg("Found auth cookie")
+	return auth.verifyToken(authCookie.Value)
+}
+
+func (auth *Service) verifyToken(token string) (*User, error) {
+	user := User{}
+	hashedToken := hashString(token)
+	
+	log.Debug().
+		Str("token_prefix", token[:8]+"...").
+		Str("hashed_prefix", hashedToken[:16]+"...").
+		Msg("verifyToken: looking up token in database")
+
+	result := auth.Db.
+		Where("token = ?", hashedToken).
+		Find(&user)
+
+	if result.Error != nil {
+		log.Error().Err(result.Error).Msg("verifyToken: database error")
+		return &User{}, errors.New("sessie verlopen, log opnieuw in")
+	}
+
+	log.Debug().
+		Uint("user_id", user.ID).
+		Str("username", user.Username).
+		Int64("rows_found", result.RowsAffected).
+		Msg("verifyToken: query result")
+
+	if user.ID == 0 || user.Username == "" {
+		log.Warn().Msg("verifyToken: no user found for token")
+		return &User{}, errors.New("sessie verlopen, log opnieuw in")
+	}
+
+	// return un-hashed token
+	user.Token = token
+	return &user, nil
+}
+
+func (auth *Service) retrieveUser(username string) (User, error) {
+	var user User
+	result := auth.Db.Where("username = ?", username).First(&user)
+
+	// Check if the query was successful
+	if result.Error != nil {
+		log.Error().Err(result.Error).Msg("Failed to retrieve user")
+		return User{}, fmt.Errorf("gebruiker niet gevonden")
+	}
+
+	return user, nil
+}

@@ -66,18 +66,43 @@
           "path": "/models/dungeon/Dungeon Set 2/",
           "author": "Keith at Fertile Soil Productions",
           "license": "CC0",
-          "includes": ["walls", "floors", "pillars", "props", "traps", "doors"]
+          "includes": ["walls", "floors", "pillars", "props", "traps", "doors"],
+          "status": "DOWNLOADED_NOT_INTEGRATED",
+          "priority": "HIGH"
         },
         "skydome": {
           "path": "/models/environment/",
           "author": "GGBotNet",
-          "license": "CC0"
+          "license": "CC0",
+          "status": "DOWNLOADED_NOT_INTEGRATED"
         },
         "decorations": {
           "path": "/models/decorations/",
           "author": "Yughues",
           "license": "CC0",
-          "includes": ["weeds", "rocks", "ivy"]
+          "includes": ["weeds", "rocks", "ivy"],
+          "status": "DOWNLOADED_NOT_INTEGRATED"
+        },
+        "rocks": {
+          "path": "/models/rocks/",
+          "license": "CC0",
+          "status": "DOWNLOADED_NOT_INTEGRATED",
+          "note": "226MB of rock models"
+        },
+        "weeds": {
+          "path": "/models/weeds/",
+          "license": "CC0",
+          "status": "DOWNLOADED_NOT_INTEGRATED",
+          "includes": ["01", "02", "03", "ivy"]
+        },
+        "sounds": {
+          "path": "/models/sounds/The Essential Retro Video Game Sound Effects Collection [512 sounds] By Juhani Junkala/",
+          "author": "Juhani Junkala",
+          "license": "CC0",
+          "status": "DOWNLOADED_NOT_INTEGRATED",
+          "priority": "HIGH",
+          "categories": ["Explosions", "Coins", "Jumps", "Menu", "Powerups", "Weapons", "Movement"],
+          "count": 512
         }
       },
       "loadedAssets": {
@@ -162,6 +187,45 @@
   ],
   
   "features": {
+    "currentPriorities": {
+      "description": "Jan 2026 - Focus op VISUAL QUALITY met beschikbare assets",
+      "items": [
+        {
+          "id": 1,
+          "task": "Integrate dungeon wall models into maze.ts",
+          "status": "TODO",
+          "impact": "HIGH",
+          "files": ["ui-web/src/lib/game3d/maze.ts", "ui-web/src/lib/assets/modelLoader.ts"]
+        },
+        {
+          "id": 2,
+          "task": "Add sound effects for coins, jumps, powerups",
+          "status": "TODO",
+          "impact": "HIGH",
+          "soundPath": "/models/sounds/",
+          "files": ["ui-web/src/lib/game3d/audio.ts"]
+        },
+        {
+          "id": 3,
+          "task": "Add decorative rocks/weeds around arena edges",
+          "status": "TODO",
+          "impact": "MEDIUM",
+          "files": ["ui-web/src/lib/game3d/scene.ts"]
+        },
+        {
+          "id": 4,
+          "task": "Enable skydome environment",
+          "status": "TODO",
+          "impact": "MEDIUM",
+          "files": ["ui-web/src/lib/game3d/scene.ts"]
+        }
+      ],
+      "removedAssets": {
+        "note": "Old Kurzgesagt sprites removed Jan 2026",
+        "removed": ["runner.png", "chaser_*.png", "floor_tile.png", "wall_tile.png"],
+        "reason": "Using procedural neon colors + 3D models instead"
+      }
+    },
     "knowledgeExtraction": {
       "enabled": true,
       "minMentionsToExtract": 2,

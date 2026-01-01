@@ -13,6 +13,8 @@
  * - ModelLoader integration for dungeon walls/floors
  * - Wall orientation detection (straight, corner, end)
  * - Skydome and decoration models
+ * 
+ * Jan 2026: Removed sprite textures, using procedural neon colors
  */
 
 import {
@@ -27,8 +29,7 @@ import {
     GlowLayer,
     Animation,
     Matrix,
-    Quaternion,
-    Texture
+    Quaternion
 } from '@babylonjs/core';
 import { getModelLoader, ModelLoader } from '../assets/modelLoader';
 import { 
@@ -157,8 +158,8 @@ export class Maze3D {
     /**
      * Create unique materials for each quadrant
      * SIMPLIFIED: All quadrants use same theme now
-     * SPRINT 2: Enhanced with metallic reflections and better texturing
-     * NOW USES TEXTURE SPRITES from /sprites/ folder!
+     * SPRINT 2: Enhanced with metallic reflections
+     * Jan 2026: Using procedural neon colors (no sprite textures)
      */
     private createQuadrantMaterials(): void {
         // Use only unified theme - all quadrants are the same now
@@ -167,32 +168,16 @@ export class Maze3D {
         for (const theme of allThemes) {
             const key = theme.name;
             
-            // Wall material with TEXTURE from /sprites/wall_tile.png
+            // Wall material - procedural neon purple
             const wallMat = new StandardMaterial(`wall_${key}`, this.scene);
-            try {
-                const wallTexture = new Texture('/sprites/wall_tile.png', this.scene);
-                wallTexture.uScale = 1;
-                wallTexture.vScale = 1;
-                wallMat.diffuseTexture = wallTexture;
-            } catch (e) {
-                console.warn('Wall texture not loaded, using color fallback');
-                wallMat.diffuseColor = theme.wallPrimary;
-            }
+            wallMat.diffuseColor = theme.wallPrimary;
             wallMat.specularColor = new Color3(0.6, 0.4, 0.8); // Metallic purple reflection
             wallMat.emissiveColor = theme.wallEmissive;
             wallMat.specularPower = 64; // Sharper highlights for glossy look
             
-            // Floor material with TEXTURE from /sprites/floor_tile.png
+            // Floor material - procedural dark with subtle glow
             const floorMat = new StandardMaterial(`floor_${key}`, this.scene);
-            try {
-                const floorTexture = new Texture('/sprites/floor_tile.png', this.scene);
-                floorTexture.uScale = 1;
-                floorTexture.vScale = 1;
-                floorMat.diffuseTexture = floorTexture;
-            } catch (e) {
-                console.warn('Floor texture not loaded, using color fallback');
-                floorMat.diffuseColor = theme.floorColor;
-            }
+            floorMat.diffuseColor = theme.floorColor;
             floorMat.emissiveColor = theme.floorEmissive;
             floorMat.specularColor = new Color3(0.15, 0.1, 0.2); // Subtle reflection
             floorMat.specularPower = 8; // Matte finish (rough for grip)
